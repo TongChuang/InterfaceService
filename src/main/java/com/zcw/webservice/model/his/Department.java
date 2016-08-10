@@ -1,0 +1,69 @@
+package com.zcw.webservice.model.his;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+/**
+ * Title: Department
+ * Description:科室
+ *
+ * @Author:zhou
+ * @Date:2016/8/3 14:26
+ * @Version:
+ */
+public class Department {
+
+    @JSONField(name = "Id")
+    private String id;          //ID
+
+    @JSONField(name = "ParentId")
+    private String parentId;    //父级ID
+
+    @JSONField(name = "Code")
+    private String code;        //编号
+
+    @JSONField(name = "Name")
+    private String name;        //名称
+
+    @JSONField(name = "Department")
+    private String department;  //所属科室
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+}

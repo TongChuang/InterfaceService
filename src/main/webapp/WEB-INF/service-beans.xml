@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans.xsd
+                    http://cxf.apache.org/jaxws
+                    http://cxf.apache.org/schemas/jaxws.xsd
+                    http://cxf.apache.org/jaxrs
+                    http://cxf.apache.org/schemas/jaxrs.xsd
+                    http://cxf.apache.org/core
+                    http://cxf.apache.org/schemas/core.xsd">
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    <!-- 第一种发布方式：没有接口的发布(简单发布) -->
+    <!--
+    id:唯一标识
+    address：访问url
+    implementor：提供服务的类型
+    -->
+    <bean id="lisInfoService2" class="com.zcw.webservice.impl.LisInfoServiceImpl"></bean>
+    <jaxws:endpoint id="WebService" implementor="#lisInfoService2" address="/soap"></jaxws:endpoint>
+
+    <!-- REST WebService 接口-->
+    <bean id="lisInfoService1" class="com.zcw.webservice.impl.LisInfoServiceImpl"/>
+    <jaxrs:server id="RestService" address="/rest">
+        <jaxrs:serviceBeans>
+            <ref bean="lisInfoService1"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:inInterceptors>
+            <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+        </jaxrs:inInterceptors>
+        <jaxrs:outInterceptors>
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+        </jaxrs:outInterceptors>
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+            <entry key="xml" value="application/xml"/>
+        </jaxrs:extensionMappings>
+        <jaxrs:languageMappings>
+            <entry key="en" value="en-gb"/>
+        </jaxrs:languageMappings>
+    </jaxrs:server>
+</beans>

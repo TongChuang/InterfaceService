@@ -1,0 +1,17 @@
+/target/
+
+.classpath
+*.prefs
+.settings/.jsdtscope
+.settings/org.eclipse.wst.jsdt.ui.superType.name
+.settings/org.eclipse.wst.common.component
+.project
+*.container
+velocity.log
+*.1
+k101ffgk.5je.txt
+lab.iml
+src/main/resources/applicationContext-resources.xml
+src/main/resources/applicationContext-resources.xml
+test/
+.idea/

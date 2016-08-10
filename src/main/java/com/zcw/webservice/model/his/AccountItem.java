@@ -1,0 +1,227 @@
+/**
+ * 杭州同烁信息技术有限公司
+ * Copyright (C) 2004-2016 All Rights Reserved.
+ */
+package com.zcw.webservice.model.his;
+
+/**
+ * Title: AccountItem2
+ * Description:收费相关信息
+ *
+ * @version  AccountItem2.java, v 0.1 2016-08-08 16:15 zhou
+ * @author:zhou
+ * @date:2016/8/8 16:15
+ */
+public class AccountItem {
+
+    private String patientCode;     //病人住院序号
+    private String patientName;     //病人姓名
+    private String testPurposes;    //检验目的
+    private String dateTime;        //费用发生日期
+    private int quantity;           //费用发生数量
+    private double price;           //费用发生单价
+    //private String costSource;      //费用途径序号    12 用血 14 LIS 15 物资
+    private String billingDoctorNo;	//开单医生序号
+    private String billingDeptNo;	//开单科室序号
+    private String testDoctorNo;	//执行用户序号
+    private String testDoctorDeptNo;//执行科室序号
+    private String operatorNo;	    //操作用户序号
+
+    /**
+     * Getter method for property <tt>patientCode</tt>.
+     *
+     * @return property value of patientCode
+     */
+    public String getPatientCode() {
+        return patientCode;
+    }
+
+    /**
+     * Setter method for property <tt>patientCode</tt>.
+     *
+     * @param patientCode value to be assigned to property patientCode
+     */
+    public void setPatientCode(String patientCode) {
+        this.patientCode = patientCode;
+    }
+
+    /**
+     * Getter method for property <tt>patientName</tt>.
+     *
+     * @return property value of patientName
+     */
+    public String getPatientName() {
+        return patientName;
+    }
+
+    /**
+     * Setter method for property <tt>patientName</tt>.
+     *
+     * @param patientName value to be assigned to property patientName
+     */
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    /**
+     * Getter method for property <tt>testPurposes</tt>.
+     *
+     * @return property value of testPurposes
+     */
+    public String getTestPurposes() {
+        return testPurposes;
+    }
+
+    /**
+     * Setter method for property <tt>testPurposes</tt>.
+     *
+     * @param testPurposes value to be assigned to property testPurposes
+     */
+    public void setTestPurposes(String testPurposes) {
+        this.testPurposes = testPurposes;
+    }
+
+    /**
+     * Getter method for property <tt>dateTime</tt>.
+     *
+     * @return property value of dateTime
+     */
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    /**
+     * Setter method for property <tt>dateTime</tt>.
+     *
+     * @param dateTime value to be assigned to property dateTime
+     */
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    /**
+     * Getter method for property <tt>quantity</tt>.
+     *
+     * @return property value of quantity
+     */
+    public int getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * Setter method for property <tt>quantity</tt>.
+     *
+     * @param quantity value to be assigned to property quantity
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * Getter method for property <tt>price</tt>.
+     *
+     * @return property value of price
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    /**
+     * Setter method for property <tt>price</tt>.
+     *
+     * @param price value to be assigned to property price
+     */
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    /**
+     * Getter method for property <tt>billingDoctorNo</tt>.
+     *
+     * @return property value of billingDoctorNo
+     */
+    public String getBillingDoctorNo() {
+        return billingDoctorNo;
+    }
+
+    /**
+     * Setter method for property <tt>billingDoctorNo</tt>.
+     *
+     * @param billingDoctorNo value to be assigned to property billingDoctorNo
+     */
+    public void setBillingDoctorNo(String billingDoctorNo) {
+        this.billingDoctorNo = billingDoctorNo;
+    }
+
+    /**
+     * Getter method for property <tt>billingDeptNo</tt>.
+     *
+     * @return property value of billingDeptNo
+     */
+    public String getBillingDeptNo() {
+        return billingDeptNo;
+    }
+
+    /**
+     * Setter method for property <tt>billingDeptNo</tt>.
+     *
+     * @param billingDeptNo value to be assigned to property billingDeptNo
+     */
+    public void setBillingDeptNo(String billingDeptNo) {
+        this.billingDeptNo = billingDeptNo;
+    }
+
+    /**
+     * Getter method for property <tt>testDoctorNo</tt>.
+     *
+     * @return property value of testDoctorNo
+     */
+    public String getTestDoctorNo() {
+        return testDoctorNo;
+    }
+
+    /**
+     * Setter method for property <tt>testDoctorNo</tt>.
+     *
+     * @param testDoctorNo value to be assigned to property testDoctorNo
+     */
+    public void setTestDoctorNo(String testDoctorNo) {
+        this.testDoctorNo = testDoctorNo;
+    }
+
+    /**
+     * Getter method for property <tt>testDoctorDeptNo</tt>.
+     *
+     * @return property value of testDoctorDeptNo
+     */
+    public String getTestDoctorDeptNo() {
+        return testDoctorDeptNo;
+    }
+
+    /**
+     * Setter method for property <tt>testDoctorDeptNo</tt>.
+     *
+     * @param testDoctorDeptNo value to be assigned to property testDoctorDeptNo
+     */
+    public void setTestDoctorDeptNo(String testDoctorDeptNo) {
+        this.testDoctorDeptNo = testDoctorDeptNo;
+    }
+
+    /**
+     * Getter method for property <tt>operatorNo</tt>.
+     *
+     * @return property value of operatorNo
+     */
+    public String getOperatorNo() {
+        return operatorNo;
+    }
+
+    /**
+     * Setter method for property <tt>operatorNo</tt>.
+     *
+     * @param operatorNo value to be assigned to property operatorNo
+     */
+    public void setOperatorNo(String operatorNo) {
+        this.operatorNo = operatorNo;
+    }
+}
