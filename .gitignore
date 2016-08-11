@@ -15,3 +15,4 @@ src/main/resources/applicationContext-resources.xml
 src/main/resources/applicationContext-resources.xml
 test/
 .idea/
+lisservice.iml
