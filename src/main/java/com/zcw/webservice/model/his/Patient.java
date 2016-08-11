@@ -2,6 +2,8 @@ package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
+
 /**
  * Title: Patient
  * Description:病人信息
@@ -10,7 +12,8 @@ import com.alibaba.fastjson.annotation.JSONField;
  * @date:2016/8/3 17:49
  * @version:
  */
-public class Patient {
+public class Patient  implements Serializable {
+    private static final long serialVersionUID = 565777468382249546L;
     @JSONField(name = "PatientCode")
     private String patientCode;     //住院号（病历号）
 

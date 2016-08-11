@@ -4,6 +4,7 @@
  */
 package com.zcw.webservice.model.lis;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ import java.util.List;
  * @author:zhou
  * @date:2016/8/8 10:33
  */
-public class TestResult {
+public class TestResult  implements Serializable {
+    private static final long serialVersionUID = 4720976893579075173L;
     private SampleInfo sampleInfo;  //标本信息
     private List<TestResultDetail> testResultDetailList;    //结果信息
 

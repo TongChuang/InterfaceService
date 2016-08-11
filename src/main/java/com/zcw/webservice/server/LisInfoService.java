@@ -5,6 +5,7 @@ import com.zcw.webservice.model.lis.SampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.lis.TestResult;
 import com.zcw.webservice.model.vo.Report;
+import com.zcw.webservice.model.vo.ReturnMsg;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -179,7 +180,7 @@ public interface LisInfoService {
 
     /**
      * 标本退回
-     * @param sampleInfo        标本信息
+     * @param barcode        标本信息
      * @param reason            退回原因
      * @param returnTime        退回时间
      * @param operator          操作人式呈
@@ -188,8 +189,8 @@ public interface LisInfoService {
     @POST
     @Produces({"application/xml","application/json"})
     @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
-    @Path(value = "/returnSample/{reason}{returnTime}{operator}")
-    String returnSample(@PathParam("reason") String reason,@PathParam("returnTime")Date returnTime,@PathParam("operator")String operator,SampleInfo sampleInfo);
+    @Path(value = "/returnSample/{reason}{returnTime}{operator}{barcode}")
+    String returnSample(@PathParam("reason") String reason,@PathParam("returnTime")Date returnTime,@PathParam("operator")String operator,@PathParam("barcode")String barcode);
 
     /**
      *  收费

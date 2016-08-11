@@ -9,6 +9,7 @@ import com.zcw.webservice.model.lis.SampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.lis.TestResult;
 import com.zcw.webservice.model.vo.Report;
+import com.zcw.webservice.model.vo.ReturnMsg;
 import com.zcw.webservice.server.LisInfoService;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,18 +45,21 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getTestInfo(String barcode) {
-        JSONObject error = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         if(barcode == null ||  barcode.equals("")){
-            error.put("error","条码不能为空");
-            return error.toJSONString();
+            msg.setState(0);
+            msg.setMessage("条码号不存在");
+            return JSON.toJSONString(msg);
         }
         try {
-            return lisInfoDao.getTestInfo(barcode);
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getTestInfo(barcode));
         } catch (Exception e) {
-            e.printStackTrace();
-            error.put("error",e.getMessage());
-            return error.toJSONString();
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -63,14 +67,17 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getBacteriaList() {
-        JSONObject obj = new JSONObject();
+        log.info("getBacteriaList================================START");
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return lisInfoDao.getBacteriaList();
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getBacteriaList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取细菌信息列表异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -78,14 +85,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getTestPurposeList() {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return lisInfoDao.getTestPurposeList();
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getTestPurposeList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -93,14 +102,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getDrugList() {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return lisInfoDao.getDrugList();
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getDrugList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取药敏信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -108,14 +119,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getSampleTypeList() {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return lisInfoDao.getSampleTypeList();
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getSampleTypeList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取标本类型信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -123,14 +136,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getPatientTypeList() {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return lisInfoDao.getPatientTypeList();
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getPatientTypeList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取病人类型信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -138,14 +153,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getWardList() {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return hisInfoDao.getWardList();
+            msg.setState(1);
+            msg.setInfo(hisInfoDao.getWardList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取病区信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -153,35 +170,68 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getDepartMentList() {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();;
         try {
-            return hisInfoDao.getDepartmentList();
+            msg.setState(1);
+            msg.setInfo(hisInfoDao.getDepartmentList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取科室信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
+    /**
+     * 获取样本号
+     * @param barcode
+     * @return
+     */
     public String getSampleNo(String barcode) {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return hisInfoDao.getDepartmentList();
+            msg.setState(1);
+            msg.setInfo(hisInfoDao.getDepartmentList());
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取获取样本号信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     @Override
     public String getCollectedSampleList(String signStartDate, String signEndDate) {
-        return null;
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setInfo("");
+        } catch (Exception e) {
+            log.error("获取获取样本号信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg);
     }
 
-    @Override
+    /**
+     * LIS已签收标本信息
+     *
+     * @param signStartDate
+     * @param signEndDate
+     * @return
+     */
     public String getReceivedSampleList(String signStartDate, String signEndDate) {
-        return null;
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setInfo(lisInfoDao.getReceivedSampleList(signStartDate,signEndDate));
+        } catch (Exception e) {
+            log.error("获取获取样本号信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -189,14 +239,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String getPatientInfoList(String patientType,String patientCode) {
-        JSONObject obj = new JSONObject();
+        ReturnMsg msg = new ReturnMsg();
         try {
-            return hisInfoDao.getPatientInfo(patientType, patientCode);
+            msg.setState(1);
+            msg.setInfo(hisInfoDao.getPatientInfo(patientType, patientCode));
         } catch (Exception e) {
-            e.printStackTrace();
-            obj.put("error",e.getMessage());
-            return obj.toJSONString();
+            log.error("获取获取样本号信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg);
     }
 
     /**
@@ -207,33 +259,51 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     public String saveTestResult(Report report) {
         log.info("saveTestResult================================START");
         log.info(JSON.toJSONString(report));
+        System.out.println(JSON.toJSONString(report));
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = lisInfoDao.saveTestResult(report);
+        }catch (Exception e){
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        System.out.println(JSON.toJSONString(msg));
         log.info("saveTestResult================================END");
-        return null;
+
+        return JSON.toJSONString(msg);
     }
 
+    /**
+     * 记录标本流转日志
+     * @param sampleLog 标本日志
+     * @return
+     */
     public String saveSampleFlowLog(SampleLog sampleLog) {
+        ReturnMsg msg = new ReturnMsg();
         log.info("saveSampleFlowLog================================START");
         log.info(JSON.toJSONString(sampleLog));
         log.info("saveSampleFlowLog================================END");
-        return null;
+        return JSON.toJSONString(msg);
     }
 
-    @Override
-    public String returnSample(String reason, Date returnTime, String operator, SampleInfo sampleInfo) {
+
+    public String returnSample(String reason, Date returnTime, String operator,String barcode) {
+        ReturnMsg msg = new ReturnMsg();
         log.info("returnSample================================START");
         log.info(JSON.toJSONString(reason));
         log.info(JSON.toJSONString(returnTime));
         log.info(JSON.toJSONString(operator));
-        log.info(JSON.toJSONString(sampleInfo));
+        log.info(JSON.toJSONString(barcode));
         log.info("returnSample================================END");
-        return null;
+        return JSON.toJSONString(msg);
     }
 
     @Override
     public String booking(AccountItem accountItem) {
+        ReturnMsg msg = new ReturnMsg();
         log.info("booking================================START");
         log.info(JSON.toJSONString(accountItem));
         log.info("booking================================END");
-        return null;
+        return JSON.toJSONString(msg);
     }
 }

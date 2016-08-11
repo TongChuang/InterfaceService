@@ -2,6 +2,8 @@ package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
+
 /**
  * Title: Bacteria
  * Description:细菌信息
@@ -10,8 +12,9 @@ import com.alibaba.fastjson.annotation.JSONField;
  * @date:2016/8/2 15:34
  * @version:
  */
-public class Bacteria {
+public class Bacteria  implements Serializable {
 
+    private static final long serialVersionUID = 2952674011347452920L;
     @JSONField(name = "Code")
     private String code;            //编号
 

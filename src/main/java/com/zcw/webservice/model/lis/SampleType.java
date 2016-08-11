@@ -5,16 +5,10 @@ import com.alibaba.fastjson.annotation.JSONField;
 import java.io.Serializable;
 
 /**
- * Title: DrugResult
- * Description: 药敏
- *
- * @Author:zhou
- * @Date:2016/8/2 15:19
- * @Version:
+ * Created by zcw on 2016/8/10.
  */
-public class Drug  implements Serializable {
-
-    private static final long serialVersionUID = 6093437929331890906L;
+public class SampleType implements Serializable {
+    private static final long serialVersionUID = 2688482825396356720L;
     @JSONField(name="Code")
     private String code;            //编号
 

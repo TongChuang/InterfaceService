@@ -2,6 +2,8 @@ package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
+
 /**
  * Title: Ward
  * Description:病区信息
@@ -10,8 +12,9 @@ import com.alibaba.fastjson.annotation.JSONField;
  * @Date:2016/8/3 12:59
  * @Version:
  */
-public class Ward {
+public class Ward  implements Serializable {
 
+    private static final long serialVersionUID = 4878790668776478543L;
     @JSONField(name = "Id")
     private String id;          //ID
 

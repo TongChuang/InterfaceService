@@ -4,6 +4,7 @@
  */
 package com.zcw.webservice.model.lis;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,8 @@ import java.util.Date;
  * @author:zhou
  * @date:2016/8/8 9:47
  */
-public class SampleInfo {
+public class SampleInfo  implements Serializable {
+    private static final long serialVersionUID = 3168127784272973173L;
     private String barcode;             //条码号
     private String samleId;             //样本号
     private String patientCode;         //住院号、门诊号

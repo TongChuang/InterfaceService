@@ -4,6 +4,7 @@
  */
 package com.zcw.webservice.model.lis;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,8 @@ import java.util.Date;
  * @author:zhou
  * @date:2016/8/8 11:38
  */
-public class SampleLog {
+public class SampleLog  implements Serializable {
+    private static final long serialVersionUID = 1364357784521294238L;
     private String sysName;         //系统名称
     private String sampleNo;        //样本编号
     private Date recordTime;        //记录时间

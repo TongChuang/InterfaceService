@@ -4,6 +4,8 @@
  */
 package com.zcw.webservice.model.his;
 
+import java.io.Serializable;
+
 /**
  * Title: AccountItem2
  * Description:收费相关信息
@@ -12,15 +14,19 @@ package com.zcw.webservice.model.his;
  * @author:zhou
  * @date:2016/8/8 16:15
  */
-public class AccountItem {
+public class AccountItem  implements Serializable {
 
+    private static final long serialVersionUID = -4040025415801341888L;
     private String patientCode;     //病人住院序号
     private String patientName;     //病人姓名
+    private String testPurposesCode;    //检验目的编号
     private String testPurposes;    //检验目的
     private String dateTime;        //费用发生日期
     private int quantity;           //费用发生数量
     private double price;           //费用发生单价
-    //private String costSource;      //费用途径序号    12 用血 14 LIS 15 物资
+    private String feeItemCode;     //费用项目序号
+    private String feeItemName;     //费用项目名称
+    //private String costSource;    //费用途径序号    12 用血 14 LIS 15 物资
     private String billingDoctorNo;	//开单医生序号
     private String billingDeptNo;	//开单科室序号
     private String testDoctorNo;	//执行用户序号
@@ -223,5 +229,29 @@ public class AccountItem {
      */
     public void setOperatorNo(String operatorNo) {
         this.operatorNo = operatorNo;
+    }
+
+    public String getTestPurposesCode() {
+        return testPurposesCode;
+    }
+
+    public void setTestPurposesCode(String testPurposesCode) {
+        this.testPurposesCode = testPurposesCode;
+    }
+
+    public String getFeeItemCode() {
+        return feeItemCode;
+    }
+
+    public void setFeeItemCode(String feeItemCode) {
+        this.feeItemCode = feeItemCode;
+    }
+
+    public String getFeeItemName() {
+        return feeItemName;
+    }
+
+    public void setFeeItemName(String feeItemName) {
+        this.feeItemName = feeItemName;
     }
 }

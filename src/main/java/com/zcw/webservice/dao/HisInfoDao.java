@@ -2,14 +2,23 @@ package com.zcw.webservice.dao;
 
 import com.alibaba.fastjson.JSON;
 import com.zcw.webservice.common.Util;
+import com.zcw.webservice.model.his.AccountItem;
 import com.zcw.webservice.model.his.Department;
 import com.zcw.webservice.model.his.Patient;
 import com.zcw.webservice.model.his.Ward;
+import com.zcw.webservice.model.lis.PatientType;
+import com.zcw.webservice.model.vo.ReturnMsg;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,11 +33,8 @@ import java.util.Map;
  * @version:
  */
 @Repository
-public class HisInfoDao {
-
-    @Autowired
-    private JdbcTemplate hisJdbcTemplate;        //LIS系统连接池
-
+public class HisInfoDao extends BaseDao{
+    private static Logger log = Logger.getLogger(LisInfoDao.class);
     /**
      * 获取His病区信息
      * @return
@@ -57,7 +63,7 @@ public class HisInfoDao {
      * 获取His科室信息
      * @return
      */
-    public String getDepartmentList() throws Exception{
+    public List<Department> getDepartmentList() throws Exception{
         String sql ="select * from V_HSBHI_DEPTINFO";
         List<Map<String, Object>> list = hisJdbcTemplate.queryForList(sql);
         Object[] params = new Object[] {};
@@ -74,7 +80,7 @@ public class HisInfoDao {
                     }
                 });
 
-        return JSON.toJSONString(departmentList);
+        return departmentList;
     }
 
     /**
@@ -83,7 +89,7 @@ public class HisInfoDao {
      * @param patientCode       住院、门诊号
      * @return 返回病人信息
      */
-    public String getPatientInfo(String patientType,String patientCode){
+    public List<Patient> getPatientInfo(String patientType,String patientCode){
         if(patientType.equals("1")){
             //住院病人信息
             return getInPatientInfo(patientCode);
@@ -92,15 +98,17 @@ public class HisInfoDao {
             //门诊病人信息
             return getOutPatientInfo(patientCode);
         }
-        return "";
+        return null;
     }
+
+
 
     /**
      * 获取住院病人信息
      * @param patientCode
      * @return 返回住院病人信息
      */
-    private String getInPatientInfo(String patientCode){
+    private List<Patient> getInPatientInfo(String patientCode){
         List<Patient> patientList = null;
         String sql = "select * from V_HSBBI_RECORDHOME where BRJZHM ='" +patientCode +"'";
         patientList = hisJdbcTemplate.query(sql,
@@ -128,7 +136,7 @@ public class HisInfoDao {
                     }
                 });
 
-        return JSON.toJSONString(patientList);
+        return patientList;
     }
 
     /**
@@ -136,7 +144,7 @@ public class HisInfoDao {
      * @param patientCode
      * @return 返回门诊病人信息
      */
-    private String getOutPatientInfo(String patientCode){
+    private List<Patient> getOutPatientInfo(String patientCode){
 
         List<Patient> patientList = null;
         String sql = "select * from V_HSBCI_TREATINFO where BRJZHM ='" +patientCode +"'";
@@ -165,6 +173,56 @@ public class HisInfoDao {
                     }
                 });
 
-        return JSON.toJSONString(patientList);
+        return patientList;
+    }
+
+    /**
+     * MILS 补计费、退费
+     * @param accountItem
+     * @return
+     */
+    public ReturnMsg booking(final AccountItem accountItem){
+        ReturnMsg msg = new ReturnMsg();
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(hisJdbcTemplate.getDataSource());
+        TransactionStatus status = transactionManager.getTransaction(def);
+
+        final String hisUserID = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?",new Object[]{accountItem.getOperatorNo()}, String.class);
+        if(hisUserID.equals("")){
+            msg.setState(0);
+            msg.setMessage("HIS用户不存在，请检查。");
+            return msg;
+        }
+
+        String sql="select JZJLID from SEQ_II_INPATICHARGE_JZJLID";
+        final Long seqId = hisJdbcTemplate.queryForObject(sql,Long.class);
+        sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,YPCDID,FYTJID," +
+                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            hisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps) throws SQLException {
+                    ps.setLong(1, seqId);           //记账记录序号
+                    ps.setObject(2, accountItem.getPatientCode());          //病人住院序号
+                    // ps.setObject(3, accountItem.pa());      //组织机构代码
+                    ps.setLong(3, 2);       //药品诊疗判别 1 药品 2 诊疗
+                    ps.setString(4, accountItem.getFeeItemCode());               //费用项目序号 代码11266
+                    //ps.setObject(6, accountItem.getAge());               //药品产地序号 诊疗不需要，药品需传入
+                    ps.setLong(5, 14);           //费用途径序号 12 用血 14 LIS 15 物资
+                    ps.setString(6, accountItem.getDateTime());       //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+                    ps.setObject(7, accountItem.getQuantity());             //费用发生数量
+                    ps.setObject(8, hisUserID);     //开单医生序号
+                    ps.setObject(9, 21);       //开单科室序号
+                    ps.setObject(10, hisUserID);       //执行用户序号
+                    ps.setObject(11, 21);   //执行科室序号
+                    ps.setObject(12, hisUserID);        //操作用户序号
+                }
+            });
+        }catch (Exception e){
+            log.error("计费异常",e);
+            msg.setState(1);
+            msg.setMessage("计费异常:"+e.getMessage());
+        }
+        return msg;
     }
 }

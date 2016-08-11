@@ -2,6 +2,7 @@ package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,8 +13,9 @@ import java.util.List;
  * @Date:2016/8/3 10:07
  * @Version:
  */
-public class TestInfo {
+public class TestInfo  implements Serializable {
 
+    private static final long serialVersionUID = -4880781712636992389L;
     @JSONField(name = "Barcode")
     private String barcode; //申请单号
 
@@ -100,6 +102,12 @@ public class TestInfo {
 
     @JSONField(name = "IsToll")
     private String isToll;  //是否收费 1：已收 2：未收
+
+    @JSONField(name = "PatientFileNo")
+    private String patientFileNo;  //病人档案号
+
+    @JSONField(name = "PatientPhone")
+    private String patientPhone;  //病人电话
 
     /**
      * Getter method for property <tt>barcode</tt>.
@@ -621,5 +629,21 @@ public class TestInfo {
      */
     public void setIsToll(String isToll) {
         this.isToll = isToll;
+    }
+
+    public String getPatientFileNo() {
+        return patientFileNo;
+    }
+
+    public void setPatientFileNo(String patientFileNo) {
+        this.patientFileNo = patientFileNo;
+    }
+
+    public String getPatientPhone() {
+        return patientPhone;
+    }
+
+    public void setPatientPhone(String patientPhone) {
+        this.patientPhone = patientPhone;
     }
 }
