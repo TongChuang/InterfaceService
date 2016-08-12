@@ -355,7 +355,7 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(20, sampleInfo.getPatientPhone());      //病人电话
                 //ps.setObject(22, sampleInfo.getCreateTime());        //创建日期
                 ps.setString(21, "A5");
-                ps.setString(22, sampleInfo.getPatientTypeCode());      //病人类别编号
+                ps.setString(22, sampleInfo.getPatientCode());      //病人类别编号
                 ps.setString(23, "d");                                  //样本状态
                 ps.setString(24, custName);
                 ps.setString(25,"外观正常");
