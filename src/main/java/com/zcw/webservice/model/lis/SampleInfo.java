@@ -4,6 +4,8 @@
  */
 package com.zcw.webservice.model.lis;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,9 +20,10 @@ import java.util.Date;
 public class SampleInfo  implements Serializable {
     private static final long serialVersionUID = 3168127784272973173L;
     private String barcode;             //条码号
-    private String samleId;             //样本号
+    private String sampleId;             //样本号
     private String patientCode;         //住院号、门诊号
     private String patientId;           //就诊卡号（唯一号、病历号会重复）
+    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date testDateTime;          //测定日期
     private String patientName;         //病人姓名
     private String sex;                 //性别
@@ -29,24 +32,29 @@ public class SampleInfo  implements Serializable {
     private String departmentCode;      //病人就诊科室代码
     private String department;          //病人就诊科室
     private String bedNo;               //床号
+    private String sampleTypeCode;      //标本类型代码
     private String sampleType;          //标本类型
     private String sampleStatus;        //标本状态
+    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date samplingTime;          //采样时间
     private String clinicalDiagnosis;   //临床诊断
     private String hosSectionCode;      //送检科室代码
     private String hosSection;          //送检科室
-    private String inspectCode;         //送检医生
-    private String inspectDoctor;       //送检医生
+    private String inspectCode;         //送检医生代码
+    private String inspectDoctor;       //送检医生名称
     private String testDoctorCode;      //检验医生
     private String testDoctor;          //检验医生
     private String operatorCode;        //操作人
     private String operator;            //操作人
+    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date operateTime;           //操作时间
     private String auditDoctorCode;     //审核医生
     private String auditDoctor;         //审核医生
+    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date auditTime;             //审核时间
     private String reportDoctorCode;    //报告医生
     private String reportDoctor;        //报告医生
+    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date reportDateTime;        //报告日期
     private String testDestinationNo;   //检验目的编号
     private String testDestinationName; //检验目的名称
@@ -55,7 +63,8 @@ public class SampleInfo  implements Serializable {
     private String sampleNote;          //标本性状
     private String sampleDescription;   //标本描述
     private String count;               //采集数量
-    private String requestmode;         //申请方式:普通、急诊
+    private String patientTypeCode;      //病人类型申请方式:普通、急诊
+    private String patientTypeName;      //病人类型申请方式:普通、急诊
     private Double fee;                 //费用
     private String feeStatus;           //收费状态
     private String cycle;               //生理周期
@@ -74,6 +83,29 @@ public class SampleInfo  implements Serializable {
     private Date createTime;            //创建时间      now
     private String deviceId;            //设备ID      微生物
 
+    public String getSampleTypeCode() {
+        return sampleTypeCode;
+    }
+
+    public void setSampleTypeCode(String sampleTypeCode) {
+        this.sampleTypeCode = sampleTypeCode;
+    }
+
+    public String getPatientTypeCode() {
+        return patientTypeCode;
+    }
+
+    public void setPatientTypeCode(String patientTypeCode) {
+        this.patientTypeCode = patientTypeCode;
+    }
+
+    public String getPatientTypeName() {
+        return patientTypeName;
+    }
+
+    public void setPatientTypeName(String patientTypeName) {
+        this.patientTypeName = patientTypeName;
+    }
 
     /**
      * Getter method for property <tt>barcode</tt>.
@@ -94,21 +126,21 @@ public class SampleInfo  implements Serializable {
     }
 
     /**
-     * Getter method for property <tt>samleId</tt>.
+     * Getter method for property <tt>sampleId</tt>.
      *
-     * @return property value of samleId
+     * @return property value of sampleId
      */
-    public String getSamleId() {
-        return samleId;
+    public String getSampleId() {
+        return sampleId;
     }
 
     /**
-     * Setter method for property <tt>samleId</tt>.
+     * Setter method for property <tt>sampleId</tt>.
      *
-     * @param samleId value to be assigned to property samleId
+     * @param sampleId value to be assigned to property sampleId
      */
-    public void setSamleId(String samleId) {
-        this.samleId = samleId;
+    public void setSampleId(String sampleId) {
+        this.sampleId = sampleId;
     }
 
     /**
@@ -541,24 +573,6 @@ public class SampleInfo  implements Serializable {
      */
     public void setCount(String count) {
         this.count = count;
-    }
-
-    /**
-     * Getter method for property <tt>requestmode</tt>.
-     *
-     * @return property value of requestmode
-     */
-    public String getRequestmode() {
-        return requestmode;
-    }
-
-    /**
-     * Setter method for property <tt>requestmode</tt>.
-     *
-     * @param requestmode value to be assigned to property requestmode
-     */
-    public void setRequestmode(String requestmode) {
-        this.requestmode = requestmode;
     }
 
     /**

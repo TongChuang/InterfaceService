@@ -1,24 +1,19 @@
 package com.zcw.webservice.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.zcw.webservice.dao.HisInfoDao;
 import com.zcw.webservice.dao.LisInfoDao;
 import com.zcw.webservice.model.his.AccountItem;
-import com.zcw.webservice.model.lis.SampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
-import com.zcw.webservice.model.lis.TestResult;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
 import com.zcw.webservice.server.LisInfoService;
 import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebService;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Title:LisInfoServiceImpl

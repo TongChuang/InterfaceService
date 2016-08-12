@@ -31,7 +31,7 @@ public interface LisInfoService {
      * @return 返回Json检验信息[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=UTF-8"})
     @Path(value = "/getTestInfo/{barcode}")
     String getTestInfo(@PathParam("barcode") String barcode);
 
