@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class BaseDao {
     @Autowired
-    protected JdbcTemplate hisJdbcTemplate;        //LIS系统连接池
+    protected JdbcTemplate hisJdbcTemplate;        //HIS系统连接池
 
     @Autowired
     protected JdbcTemplate lisJdbcTemplate;        //LIS系统连接池

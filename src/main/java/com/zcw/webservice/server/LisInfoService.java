@@ -1,13 +1,9 @@
 package com.zcw.webservice.server;
 
 import com.zcw.webservice.model.his.AccountItem;
-import com.zcw.webservice.model.lis.SampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
-import com.zcw.webservice.model.lis.TestResult;
 import com.zcw.webservice.model.vo.Report;
-import com.zcw.webservice.model.vo.ReturnMsg;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -202,4 +198,12 @@ public interface LisInfoService {
     @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
     @Path(value = "/booking")
     String booking (AccountItem accountItem);
+
+    /**
+     * 获取LIS相关检测结果
+     * @param barcode
+     * @param patientId
+     * @return
+     */
+    String getListTestResult(String barcode,String patientId);
 }

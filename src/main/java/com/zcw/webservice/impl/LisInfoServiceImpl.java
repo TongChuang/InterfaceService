@@ -195,7 +195,13 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return JSON.toJSONString(msg);
     }
 
-    @Override
+    /**
+     * Lis已采集未签收
+     *
+     * @param signStartDate //开始时间
+     * @param signEndDate   //结束时间
+     * @return
+     */
     public String getCollectedSampleList(String signStartDate, String signEndDate) {
         ReturnMsg msg = new ReturnMsg();
         try {
@@ -259,6 +265,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         try{
             msg = lisInfoDao.saveTestResult(report);
         }catch (Exception e){
+            e.printStackTrace();
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
@@ -300,5 +307,10 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         log.info(JSON.toJSONString(accountItem));
         log.info("booking================================END");
         return JSON.toJSONString(msg);
+    }
+
+    @Override
+    public String getListTestResult(String barcode, String patientId) {
+        return null;
     }
 }

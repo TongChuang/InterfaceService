@@ -8,12 +8,8 @@ import com.zcw.webservice.model.vo.TestResult;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +26,7 @@ import java.util.List;
  */
 @Repository
 public class LisInfoDao extends BaseDao {
+
     private static Logger log = Logger.getLogger(LisInfoDao.class);
 
     /**
@@ -40,9 +37,9 @@ public class LisInfoDao extends BaseDao {
      */
     public List<TestInfo> getTestInfo(String barcode) {
         //SELECT * FROM t_lis_sampletransPro where ybid ='' and Trans='已计费' 已经计费 状态
-        String sql = "select * from vw_testinfo_micro where Barcode ='" + barcode + "'";
+        String sql = "select * from vw_testinfo_micro where Barcode =?";
         List<TestInfo> testInfoList = null;
-        testInfoList = lisJdbcTemplate.query(sql,
+        testInfoList = lisJdbcTemplate.query(sql,new Object[]{barcode},
                 new RowMapper<TestInfo>() {
                     public TestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         TestInfo testInfo = new TestInfo();
@@ -76,7 +73,6 @@ public class LisInfoDao extends BaseDao {
                             if (tmpItemCode.lastIndexOf(",") > 0) {
                                 tmpItemCode = tmpItemCode.substring(0, tmpItemCode.lastIndexOf(","));
                             }
-                            // tmpItemCode = tmpItemCode.substring(0, tmpItemCode.lastIndexOf(","));
                             TestItem testItem = new TestItem();
                             testItem.setId(tmpItemCode);
                             testItem.setCode(tmpItemCode);
@@ -94,11 +90,10 @@ public class LisInfoDao extends BaseDao {
                     }
                 });
         return testInfoList;
-        //List<TestInfo> list = lisJdbcTemplate.query(sql, new BeanPropertyRowMapper<TestInfo>(TestInfo.class));
     }
 
     /**
-     * 细菌列表
+     * 获取细菌列表
      *
      * @return
      */
@@ -213,13 +208,9 @@ public class LisInfoDao extends BaseDao {
      * @return
      */
     public List<TestInfo> getReceivedSampleList(String signStartDate, String signEndDate) {
-//        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-//        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(lisJdbcTemplate.getDataSource());
-//        TransactionStatus status = transactionManager.getTransaction(def);
         List<TestInfo> testInfoList = null;
-        String sql = "select  * from vw_testinfo_micro where status='1' and  CollectDate>='" + signStartDate + "' and CollectDate<='" + signEndDate + "'";
-
-        testInfoList = lisJdbcTemplate.query(sql,
+        String sql = "select  * from vw_testinfo_micro where status='1' and  CollectDate>=? and CollectDate<=?";
+        testInfoList = lisJdbcTemplate.query(sql, new Object[]{signStartDate, signEndDate},
                 new RowMapper<TestInfo>() {
                     public TestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         TestInfo testInfo = new TestInfo();
@@ -302,9 +293,10 @@ public class LisInfoDao extends BaseDao {
         }
 
         if (info.getReportType() == 0) {
-            ;
+            //普通培养报告
             msg = saveTestResult1(info);
         } else {
+            //真菌D、内毒素报告
             msg = saveTestResult2(info);
         }
         return msg;
@@ -318,11 +310,11 @@ public class LisInfoDao extends BaseDao {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    private ReturnMsg saveTestResult1(Report report) {
+    private ReturnMsg saveTestResult1(Report report) throws Exception {
         final SampleInfo sampleInfo = report.getSampleInfo();
         final int sex = (sampleInfo.getSex().equals("女")) ? 2 : 1;
 
-        //获取医院、客户名称
+        //获取医院(客户名称)
         String custCode = sampleInfo.getBarcode().length() > 6 ? sampleInfo.getBarcode().substring(0, 6) : "";
         final String custName = lisJdbcTemplate.queryForObject("select mc from xt_yymc_print where dh=?", new Object[]{custCode}, String.class);
 
@@ -350,16 +342,16 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(15, sampleInfo.getTestDestinationNo());   //检验目的编号
                 ps.setString(16, sampleInfo.getTestDestinationName());  //检验目的
                 ps.setDate(17, new java.sql.Date(sampleInfo.getReportDateTime().getTime()));       //报告日期
-                ps.setString(18, sampleInfo.getPatientCode());     //住院号
+                ps.setString(18, sampleInfo.getPatientCode());       //住院号
                 ps.setString(19, sampleInfo.getBillDepartment());    //开单科室
                 ps.setString(20, sampleInfo.getPatientPhone());      //病人电话
-                //ps.setObject(22, sampleInfo.getCreateTime());        //创建日期
-                ps.setString(21, "A5");
+                //ps.setObject(22, sampleInfo.getCreateTime());      //创建日期
+                ps.setString(21, "A5");                              //纸张大小
                 ps.setString(22, sampleInfo.getPatientCode());      //病人类别编号
-                ps.setString(23, "d");                                  //样本状态
-                ps.setString(24, custName);
-                ps.setString(25,"外观正常");
-                ps.setDate(26,new java.sql.Date(sampleInfo.getSamplingTime().getTime()));
+                ps.setString(23, "d");                              //样本状态(初审)
+                ps.setString(24, custName);                         //客户名称(医院名称)
+                ps.setString(25, "外观正常");                       //标本外观
+                ps.setDate(26, new java.sql.Date(sampleInfo.getSamplingTime().getTime()));
             }
         });
 
@@ -369,7 +361,6 @@ public class LisInfoDao extends BaseDao {
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 int length = results.size();
-                //ps.getConnection().setAutoCommit(false);
                 for (int i = 0; i < length; i++) {
                     ps.setString(1, sampleInfo.getSampleId());               //样本号
                     ps.setString(2, results.get(i).getResultType());        //结果类型
@@ -380,11 +371,13 @@ public class LisInfoDao extends BaseDao {
                     ps.addBatch();
                 }
                 Object o = ps.executeBatch();
-                //ps.getConnection().commit();
                 return o;
             }
         });
-
+        //异常测试
+        if (1 == 1) {
+            throw new Exception("错误！！！");
+        }
         //更新药敏信息
         final List<DrugResult> drugResults = report.getDrugResults();
         if (drugResults.size() > 0) {
@@ -393,14 +386,14 @@ public class LisInfoDao extends BaseDao {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                     int length = drugResults.size();
                     boolean flag = false;
-                    if(length>0){
+                    if (length > 0) {
                         int orderNo = Util.getIntValue(drugResults.get(0).getResultCode());
-                        if(orderNo>1) flag = true;
+                        if (orderNo > 1) flag = true;
                     }
                     for (int i = 0; i < length; i++) {
                         int OrderId = Util.getIntValue(drugResults.get(i).getResultCode());
-                        if(flag) {
-                            OrderId --;
+                        if (flag) {
+                            OrderId--;
                         }
                         ps.setString(1, sampleInfo.getSampleId());               //样本号
                         ps.setString(2, "ym");                                   //结果类型
@@ -413,7 +406,6 @@ public class LisInfoDao extends BaseDao {
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
-                    //ps.getConnection().commit();
                     return o;
                 }
             });
@@ -428,7 +420,7 @@ public class LisInfoDao extends BaseDao {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    private ReturnMsg saveTestResult2(Report report) {
+    private ReturnMsg saveTestResult2(Report report) throws Exception {
         String sql = "insert into lis_ybxx(yqdh,ybid,ybbh,byh,cdrq,brxm,brxb," +
                 "brnl,nllx,brkb,brch,bbzl,cyrq,lczd,sjys,jyys,shys,jymd" +
                 ",jymdmc,bgrq,brbq,khks,brphone,papersize) " +
@@ -486,10 +478,9 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(9, results.get(i).getUnit());                                   //单位
                     ps.addBatch();
                 }
+
                 Object o = ps.executeBatch();
-                ps.getConnection().commit();
-                //ps.getConnection().setAutoCommit(true);
-                //如果用<aop:config>  来控制事务，需要把上一行注掉，否则会报错
+                //ps.getConnection().commit();
                 return o;
             }
         });

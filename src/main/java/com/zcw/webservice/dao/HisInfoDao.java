@@ -112,8 +112,8 @@ public class HisInfoDao extends BaseDao {
      */
     private List<Patient> getInPatientInfo(String patientCode) {
         List<Patient> patientList = null;
-        String sql = "select * from V_HSBBI_RECORDHOME where BRJZHM ='" + patientCode + "'";
-        patientList = hisJdbcTemplate.query(sql,
+        String sql = "select * from V_HSBBI_RECORDHOME where BRJZHM =?";
+        patientList = hisJdbcTemplate.query(sql,new Object[]{patientCode},
                 new RowMapper<Patient>() {
                     public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Patient patient = new Patient();
@@ -149,8 +149,8 @@ public class HisInfoDao extends BaseDao {
      */
     private List<Patient> getOutPatientInfo(String patientCode) {
         List<Patient> patientList = null;
-        String sql = "select * from V_HSBCI_TREATINFO where BRJZHM ='" + patientCode + "'";
-        patientList = hisJdbcTemplate.query(sql,
+        String sql = "select * from V_HSBCI_TREATINFO where BRJZHM =?";
+        patientList = hisJdbcTemplate.query(sql,new Object[]{patientCode},
                 new RowMapper<Patient>() {
                     public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Patient patient = new Patient();
@@ -189,9 +189,7 @@ public class HisInfoDao extends BaseDao {
         ReturnMsg msg = new ReturnMsg();
         final String hisUserID = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItem.getOperatorNo()}, String.class);
         if (hisUserID.equals("")) {
-            msg.setState(0);
-            msg.setMessage("HIS用户不存在，请检查。");
-            return msg;
+            return new ReturnMsg(0,"HIS用户不存在，请检查。","");
         }
 
         String sql = "select JZJLID from SEQ_II_INPATICHARGE_JZJLID";
