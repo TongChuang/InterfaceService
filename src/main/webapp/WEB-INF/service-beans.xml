@@ -21,7 +21,7 @@
     -->
     <bean id="lisInfoService2" class="com.zcw.webservice.impl.LisInfoServiceImpl"></bean>
     <jaxws:endpoint id="WebService" implementor="#lisInfoService2" address="/soap"></jaxws:endpoint>
-
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
     <!-- REST WebService 接口-->
     <bean id="lisInfoService1" class="com.zcw.webservice.impl.LisInfoServiceImpl"/>
     <jaxrs:server id="RestService" address="/rest">
@@ -38,6 +38,9 @@
             <entry key="json" value="application/json"/>
             <entry key="xml" value="application/xml"/>
         </jaxrs:extensionMappings>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
         <jaxrs:languageMappings>
             <entry key="en" value="en-gb"/>
         </jaxrs:languageMappings>

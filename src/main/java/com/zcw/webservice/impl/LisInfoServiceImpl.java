@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.zcw.webservice.dao.HisInfoDao;
 import com.zcw.webservice.dao.LisInfoDao;
 import com.zcw.webservice.model.his.AccountItem;
+import com.zcw.webservice.model.his.PatientRequestInfo;
+import com.zcw.webservice.model.lis.Bacteria;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
@@ -14,6 +16,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebService;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Title:LisInfoServiceImpl
@@ -48,7 +51,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         }
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getTestInfo(barcode));
+            msg.setMessage(lisInfoDao.getTestInfo(barcode));
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);
@@ -61,18 +64,18 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * 获取细菌信息列表
      * @return
      */
-    public String getBacteriaList() {
+    public ReturnMsg getBacteriaList() {
         log.info("getBacteriaList================================START");
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getBacteriaList());
+            msg.setMessage(lisInfoDao.getBacteriaList());
         } catch (Exception e) {
             log.error("获取细菌信息列表异常",e);
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return msg;
     }
 
     /**
@@ -83,7 +86,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getTestPurposeList());
+            msg.setMessage(lisInfoDao.getTestPurposeList());
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);
@@ -100,7 +103,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getDrugList());
+            msg.setMessage(lisInfoDao.getDrugList());
         } catch (Exception e) {
             log.error("获取药敏信息异常",e);
             msg.setState(0);
@@ -117,7 +120,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getSampleTypeList());
+            msg.setMessage(lisInfoDao.getSampleTypeList());
         } catch (Exception e) {
             log.error("获取标本类型信息异常",e);
             msg.setState(0);
@@ -134,7 +137,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getPatientTypeList());
+            msg.setMessage(lisInfoDao.getPatientTypeList());
         } catch (Exception e) {
             log.error("获取病人类型信息异常",e);
             msg.setState(0);
@@ -151,7 +154,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(hisInfoDao.getWardList());
+            msg.setMessage(hisInfoDao.getWardList());
         } catch (Exception e) {
             log.error("获取病区信息异常",e);
             msg.setState(0);
@@ -168,7 +171,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();;
         try {
             msg.setState(1);
-            msg.setInfo(hisInfoDao.getDepartmentList());
+            msg.setMessage(hisInfoDao.getDepartmentList());
         } catch (Exception e) {
             log.error("获取科室信息异常",e);
             msg.setState(0);
@@ -186,7 +189,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(hisInfoDao.getDepartmentList());
+            msg.setMessage(hisInfoDao.getDepartmentList());
         } catch (Exception e) {
             log.error("获取获取样本号信息异常",e);
             msg.setState(0);
@@ -206,7 +209,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo("");
+            msg.setMessage("");
         } catch (Exception e) {
             log.error("获取获取样本号信息异常",e);
             msg.setState(0);
@@ -226,7 +229,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(lisInfoDao.getReceivedSampleList(signStartDate,signEndDate));
+            msg.setMessage(lisInfoDao.getReceivedSampleList(signStartDate,signEndDate));
         } catch (Exception e) {
             log.error("获取获取样本号信息异常",e);
             msg.setState(0);
@@ -243,7 +246,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setInfo(hisInfoDao.getPatientInfo(patientType, patientCode));
+            msg.setMessage(hisInfoDao.getPatientInfo(patientType, patientCode));
         } catch (Exception e) {
             log.error("获取获取样本号信息异常",e);
             msg.setState(0);
@@ -302,15 +305,39 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
 
     @Override
     public String booking(AccountItem accountItem) {
-        ReturnMsg msg = new ReturnMsg();
-        log.info("booking================================START");
+        log.info("saveTestResult================================START");
         log.info(JSON.toJSONString(accountItem));
-        log.info("booking================================END");
+        System.out.println(JSON.toJSONString(accountItem));
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = hisInfoDao.saveBooking(accountItem);
+        }catch (Exception e){
+            e.printStackTrace();
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        System.out.println(JSON.toJSONString(msg));
+        log.info("saveTestResult================================END");
+
         return JSON.toJSONString(msg);
     }
 
     @Override
     public String getListTestResult(String barcode, String patientId) {
         return null;
+    }
+
+    @Override
+    public String  getPatientRequestInfo(String patientType, String patientId, String fromDate, String toDate) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(hisInfoDao.getPatientRequestInfo(patientType, patientId, fromDate, toDate));
+        } catch (Exception e) {
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg);
     }
 }

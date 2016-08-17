@@ -1,6 +1,7 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 
@@ -15,13 +16,14 @@ import java.io.Serializable;
 public class Drug  implements Serializable {
 
     private static final long serialVersionUID = 6093437929331890906L;
-    @JSONField(name="Code")
+
+    @JsonProperty(value = "Code")
     private String code;            //编号
 
-    @JSONField(name="Name")
+    @JsonProperty(value = "Name")
     private String name;            //名称
 
-    @JSONField(name="Alias")
+    @JsonProperty(value = "Alias")
     private String alias;           //别名
 
     public String getCode() {

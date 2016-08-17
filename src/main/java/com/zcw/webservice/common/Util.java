@@ -1,5 +1,8 @@
 package com.zcw.webservice.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Title: Util
  * Description:工具类
@@ -47,4 +50,16 @@ public final class Util {
             return def;
         }
     }
+
+    public static java.sql.Date toSqlDate  (String dateTime){
+        try {
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  //格式化时间
+            Date sDate= sdf.parse(dateTime); //格式化startDate 开始时间为 Date类型
+            java.sql.Date staDate = new java.sql.Date(sDate.getTime()); //开始时间 转换成sqldate类型
+            return staDate;
+        }catch (Exception e){
+        }
+        return null;
+    }
+
 }

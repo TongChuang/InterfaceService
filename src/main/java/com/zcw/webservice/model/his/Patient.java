@@ -1,6 +1,7 @@
 package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 
@@ -14,59 +15,70 @@ import java.io.Serializable;
  */
 public class Patient  implements Serializable {
     private static final long serialVersionUID = 565777468382249546L;
-    @JSONField(name = "PatientCode")
+    @JsonProperty(value = "PatientCode")
     private String patientCode;     //住院号（病历号）
 
-    @JSONField(name = "PatientUniqueId")
+    @JsonProperty(value = "PatientUniqueId")
     private String parentId;    //门诊唯一号
 
-    @JSONField(name = "ChargeType")
+    @JsonProperty(value = "ChargeType")
     private String chargeType;        //收费类别
 
-    @JSONField(name = "Name")
+    @JsonProperty(value = "Name")
     private String name;        //姓名
 
-    @JSONField(name = "Sex")
+    @JsonProperty(value = "Sex")
     private String sex;        //性别
 
-    @JSONField(name = "Birthday")
+    @JsonProperty(value = "Birthday")
     private String birthday;        //出生日期
 
-    @JSONField(name = "Age")
+    @JsonProperty(value = "Age")
     private String age;        //病人就诊年龄
 
-    @JSONField(name = "Department")
+    @JsonProperty(value = "Department")
     private String department;        //就诊科室
 
-    @JSONField(name = "Doctor")
+    @JsonProperty(value = "Doctor")
     private String doctor;        //就诊医生
 
-    @JSONField(name = "Company")
+    @JsonProperty(value = "Company")
     private String company;        //单位信息
 
-    @JSONField(name = "IdCard")
+    @JsonProperty(value = "IdCard")
     private String IdCard;        //身份证号码
 
-    @JSONField(name = "AdmissionDepartment")
+    @JsonProperty(value = "AdmissionDepartment")
     private String admissionDepartment;   //入院科室
 
-    @JSONField(name = "HospitalWard")
+    @JsonProperty(value = "HospitalWard")
     private String hospitalWard;        //入院病区
 
-    @JSONField(name = "InpatientDepartment")
+    @JsonProperty(value = "InpatientDepartment")
     private String inpatientDepartment; //住院科室
 
-    @JSONField(name = "InpatientWard")
+    @JsonProperty(value = "InpatientWard")
     private String InpatientWard;        //住院病区
 
-    @JSONField(name = "Bedno")
+    @JsonProperty(value = "Bedno")
     private String bedno;        //住院床号
 
-    @JSONField(name = "Status")
+    @JsonProperty(value = "Status")
     private String status;        //住院状态 1-取消登记 ；0-已预约；1-尚未入科；2-已经入科；3-已预出院；4-已出院
 
-    @JSONField(name = "PatientType")
+    @JsonProperty(value = "PatientType")
     private String patientType;        //病人类别 医保类别
+
+    @JsonProperty(value = "PatientFileCode")
+    private String patientFileCode;        //病人档案编号
+
+    public String getPatientFileCode() {
+        return patientFileCode;
+    }
+
+    public void setPatientFileCode(String patientFileCode) {
+        this.patientFileCode = patientFileCode;
+    }
 
     public String getPatientCode() {
         return patientCode;

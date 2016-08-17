@@ -1,13 +1,17 @@
 package com.zcw.webservice.server;
 
 import com.zcw.webservice.model.his.AccountItem;
+import com.zcw.webservice.model.his.PatientRequestInfo;
+import com.zcw.webservice.model.lis.Bacteria;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
+import com.zcw.webservice.model.vo.ReturnMsg;
 
 import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Title: LisInfoService
@@ -18,6 +22,7 @@ import java.util.Date;
  * @Version:
  */
 @WebService
+@Path("/")
 public interface LisInfoService {
 
     /**
@@ -40,9 +45,9 @@ public interface LisInfoService {
      * Alias别名<BR/>
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getBacteriaList")
-    String getBacteriaList();
+    ReturnMsg  getBacteriaList();
 
     /**
      * 获取检验目的列表
@@ -50,7 +55,7 @@ public interface LisInfoService {
      * @return 返回Json检验目的[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getTestPurposeList")
     String getTestPurposeList();
 
@@ -60,7 +65,7 @@ public interface LisInfoService {
      * @return 返回Json药敏信息[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getDrugList")
     String getDrugList();
 
@@ -70,7 +75,7 @@ public interface LisInfoService {
      * @return 返回Json标本种类信息[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getSampleTypeList")
     String getSampleTypeList();
 
@@ -80,7 +85,7 @@ public interface LisInfoService {
      * @return 返回Json病人类别[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getPatientTypeList")
     String getPatientTypeList();
 
@@ -102,7 +107,7 @@ public interface LisInfoService {
      * @return 返回Json病区信息[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getWardList")
     String getWardList();
 
@@ -112,7 +117,7 @@ public interface LisInfoService {
      * @return 返回Json科室信息[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getDepartMentList")
     String getDepartMentList();
 
@@ -122,7 +127,7 @@ public interface LisInfoService {
      * @return 返回Json样本号[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getSampleNo/{barcode}")
     String getSampleNo(@PathParam("barcode") String barcode);
 
@@ -134,7 +139,7 @@ public interface LisInfoService {
      * @return
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getCollectedSampleList/{signStartDate}{signEndDate}")
     String getCollectedSampleList(@PathParam("signStartDate") String signStartDate, @PathParam("signEndDate") String signEndDate);
 
@@ -146,7 +151,7 @@ public interface LisInfoService {
      * @return
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getReceivedSampleList/{signStartDate}{signEndDate}")
     String getReceivedSampleList(@PathParam("signStartDate") String signStartDate, @PathParam("signEndDate") String signEndDate);
 
@@ -157,7 +162,7 @@ public interface LisInfoService {
      * @return 返回Json成功失败信息[{key:value},{...}]
      */
     @POST
-    @Produces({"application/xml","application/json"})
+    @Produces({"application/xml","application/json"+ ";charset=UTF-8"})
     @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
     @Path(value = "/saveTestResult")
     String saveTestResult(Report report);
@@ -169,7 +174,7 @@ public interface LisInfoService {
      * @return
      */
     @POST
-    @Produces({"application/xml","application/json"})
+    @Produces({"application/xml","application/json"+ ";charset=UTF-8"})
     @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
     @Path(value = "/saveSampleFlowLog")
     String saveSampleFlowLog(SampleLog sampleLog);
@@ -183,7 +188,7 @@ public interface LisInfoService {
      * @return
      */
     @POST
-    @Produces({"application/xml","application/json"})
+    @Produces({"application/xml","application/json"+ ";charset=UTF-8"})
     @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
     @Path(value = "/returnSample/{reason}{returnTime}{operator}{barcode}")
     String returnSample(@PathParam("reason") String reason,@PathParam("returnTime")Date returnTime,@PathParam("operator")String operator,@PathParam("barcode")String barcode);
@@ -194,7 +199,7 @@ public interface LisInfoService {
      * @return
      */
     @POST
-    @Produces({"application/xml","application/json"})
+    @Produces({"application/xml","application/json"+ ";charset=UTF-8"})
     @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
     @Path(value = "/booking")
     String booking (AccountItem accountItem);
@@ -206,4 +211,8 @@ public interface LisInfoService {
      * @return
      */
     String getListTestResult(String barcode,String patientId);
+
+    @GET
+    @Produces({"application/xml","application/json"+ ";charset=UTF-8"})
+    String getPatientRequestInfo(@PathParam("patientType") String patientType, @PathParam("patientId")String patientId,@PathParam("fromDate")String fromDate, @PathParam("toDate")String toDate);
 }

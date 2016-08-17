@@ -1,6 +1,8 @@
 package com.zcw.webservice.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import sun.util.cldr.CLDRLocaleDataMetaInfo;
+
 import java.io.Serializable;
 
 /**
@@ -12,17 +14,14 @@ public  class ReturnMsg implements Serializable{
     @JSONField(name = "State")
     private int state;          //状态值
     @JSONField(name = "Message")
-    private String message;     //消息
-    @JSONField(name = "Info")
-    private Object info;         //内容
+    private Object message;     //消息
 
     public ReturnMsg() {
     }
 
-    public ReturnMsg(int state, String message, Object info) {
+    public ReturnMsg(int state, Object message) {
         this.state = state;
         this.message = message;
-        this.info = info;
     }
 
     public int getState() {
@@ -33,19 +32,12 @@ public  class ReturnMsg implements Serializable{
         this.state = state;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(Object message) {
         this.message = message;
     }
 
-    public Object getInfo() {
-        return info;
-    }
-
-    public void setInfo(Object info) {
-        this.info = info;
-    }
 }

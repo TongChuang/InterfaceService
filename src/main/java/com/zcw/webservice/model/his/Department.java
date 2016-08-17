@@ -1,6 +1,7 @@
 package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 
@@ -15,19 +16,19 @@ import java.io.Serializable;
 public class Department  implements Serializable {
 
     private static final long serialVersionUID = 4728135225309467951L;
-    @JSONField(name = "Id")
+    @JsonProperty(value = "Id")
     private String id;          //ID
 
-    @JSONField(name = "ParentId")
+    @JsonProperty(value = "ParentId")
     private String parentId;    //父级ID
 
-    @JSONField(name = "Code")
+    @JsonProperty(value = "Code")
     private String code;        //编号
 
-    @JSONField(name = "Name")
+    @JsonProperty(value = "Name")
     private String name;        //名称
 
-    @JSONField(name = "Department")
+    @JsonProperty(value = "Department")
     private String department;  //所属科室
 
     public String getId() {

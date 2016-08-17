@@ -165,5 +165,8 @@
     <orderEntry type="library" name="Maven: net.sourceforge.jtds:jtds:1.2.4" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.15" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ws.xmlschema:xmlschema-core:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.9.13" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
   </component>
 </module>

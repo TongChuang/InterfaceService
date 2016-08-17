@@ -4,6 +4,8 @@
  */
 package com.zcw.webservice.model.his;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -15,23 +17,57 @@ import java.io.Serializable;
  * @date:2016/8/8 16:15
  */
 public class AccountItem  implements Serializable {
-
     private static final long serialVersionUID = -4040025415801341888L;
+    @JsonProperty(value = "PatientCode")
     private String patientCode;     //病人住院序号
+    @JsonProperty(value = "PatientType")
+    private String patientType;     //病人类型 住院 1、门诊 2
+    @JsonProperty(value = "PatientName")
     private String patientName;     //病人姓名
-    private String testPurposesCode;    //检验目的编号
+    @JsonProperty(value = "TestPurposesCode")
+    private String testPurposesCode;  //检验目的编号
+    @JsonProperty(value = "TestPurposes")
     private String testPurposes;    //检验目的
+    @JsonProperty(value = "DateTime")
     private String dateTime;        //费用发生日期
+    @JsonProperty(value = "Quantity")
     private int quantity;           //费用发生数量
+    @JsonProperty(value = "Price")
     private double price;           //费用发生单价
+    @JsonProperty(value = "FeeItemCode")
     private String feeItemCode;     //费用项目序号
+    @JsonProperty(value = "FeeItemName")
     private String feeItemName;     //费用项目名称
+
     //private String costSource;    //费用途径序号    12 用血 14 LIS 15 物资
+    @JsonProperty(value = "BillingDoctorNo")
     private String billingDoctorNo;	//开单医生序号
+    @JsonProperty(value = "BillingDeptNo")
     private String billingDeptNo;	//开单科室序号
+    @JsonProperty(value = "TestDoctorNo")
     private String testDoctorNo;	//执行用户序号
+    @JsonProperty(value = "TestDoctorDeptNo")
     private String testDoctorDeptNo;//执行科室序号
+    @JsonProperty(value = "OperatorNo")
     private String operatorNo;	    //操作用户序号
+    @JsonProperty(value = "AccountId")
+    private Long accountId;         //记账序号
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getPatientType() {
+        return patientType;
+    }
+
+    public void setPatientType(String patientType) {
+        this.patientType = patientType;
+    }
 
     /**
      * Getter method for property <tt>patientCode</tt>.

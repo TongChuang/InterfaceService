@@ -280,7 +280,7 @@ public class LisInfoDao extends BaseDao {
         log.info(JSON.toJSONString(info));
 
         if (info == null) {
-            return new ReturnMsg(0, "参数不能为空！", "");
+            return new ReturnMsg(0, "参数不能为空！");
         }
         //判断病人是否相同
         sql = "select count(0) as cnt from f_k_ybxx " +
@@ -289,7 +289,7 @@ public class LisInfoDao extends BaseDao {
         Long count = lisJdbcTemplate.queryForObject(sql, new Object[]{barcode, patientName, sex, sampleType, partientCode}, Long.class);
         if (count <= 0) {
             log.info("没有记录或病人信息不一致！");
-            return new ReturnMsg(0, "没有记录或病人信息不一致！", "");
+            return new ReturnMsg(0, "没有记录或病人信息不一致！");
         }
 
         if (info.getReportType() == 0) {
@@ -325,31 +325,30 @@ public class LisInfoDao extends BaseDao {
         lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, sampleInfo.getBarcode());           //条码号
-                ps.setString(2, sampleInfo.getSampleId());          //样本ID
+                ps.setString(1, Util.null2String(sampleInfo.getBarcode()));           //条码号
+                ps.setString(2, Util.null2String(sampleInfo.getSampleId()));          //样本ID
                 ps.setDate(3, new java.sql.Date(sampleInfo.getTestDateTime().getTime()));      //测定日期
                 ps.setString(4, sampleInfo.getPatientName());       //病人姓名
                 ps.setInt(5, sex);                                  //病人性别
-                ps.setString(6, sampleInfo.getAge());               //年龄
-                ps.setString(7, sampleInfo.getAgeType());           //年龄类型
-                ps.setString(8, sampleInfo.getBedNo());             //病人床号
-                ps.setString(9, sampleInfo.getSampleType());        //标本类型
+                ps.setString(6, Util.null2String(sampleInfo.getAge()));               //年龄
+                ps.setString(7, Util.null2String(sampleInfo.getAgeType()));           //年龄类型
+                ps.setString(8, Util.null2String(sampleInfo.getBedNo()));             //病人床号
+                ps.setString(9, Util.null2String((sampleInfo.getSampleType())));        //标本类型
                 ps.setDate(10, new java.sql.Date(sampleInfo.getSamplingTime().getTime()));      //采样时间
-                ps.setString(11, sampleInfo.getClinicalDiagnosis()); //临床诊断
-                ps.setString(12, sampleInfo.getInspectDoctor());     //送检医生
-                ps.setString(13, sampleInfo.getTestDoctor());        //检验医生
-                ps.setString(14, sampleInfo.getAuditDoctor());       //审核医生
-                ps.setString(15, sampleInfo.getTestDestinationNo());   //检验目的编号
-                ps.setString(16, sampleInfo.getTestDestinationName());  //检验目的
+                ps.setString(11, Util.null2String(sampleInfo.getClinicalDiagnosis())); //临床诊断
+                ps.setString(12, Util.null2String(sampleInfo.getInspectDoctor()));     //送检医生
+                ps.setString(13, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
+                ps.setString(14, Util.null2String(sampleInfo.getAuditDoctor()));       //审核医生
+                ps.setString(15, Util.null2String(sampleInfo.getTestDestinationNo()));   //检验目的编号
+                ps.setString(16, Util.null2String(sampleInfo.getTestDestinationName()));  //检验目的
                 ps.setDate(17, new java.sql.Date(sampleInfo.getReportDateTime().getTime()));       //报告日期
-                ps.setString(18, sampleInfo.getPatientCode());       //住院号
-                ps.setString(19, sampleInfo.getBillDepartment());    //开单科室
-                ps.setString(20, sampleInfo.getPatientPhone());      //病人电话
-                //ps.setObject(22, sampleInfo.getCreateTime());      //创建日期
+                ps.setString(18, Util.null2String(sampleInfo.getPatientCode()));       //住院号
+                ps.setString(19, Util.null2String(sampleInfo.getBillDepartment()));    //开单科室
+                ps.setString(20, Util.null2String(sampleInfo.getPatientPhone()));      //病人电话
                 ps.setString(21, "A5");                              //纸张大小
-                ps.setString(22, sampleInfo.getPatientCode());      //病人类别编号
+                ps.setString(22, Util.null2String(sampleInfo.getPatientCode()));      //病人类别编号
                 ps.setString(23, "d");                              //样本状态(初审)
-                ps.setString(24, custName);                         //客户名称(医院名称)
+                ps.setString(24, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setString(25, "外观正常");                       //标本外观
                 ps.setDate(26, new java.sql.Date(sampleInfo.getSamplingTime().getTime()));
             }
@@ -410,7 +409,7 @@ public class LisInfoDao extends BaseDao {
                 }
             });
         }
-        return new ReturnMsg(1, "保存成功", "");
+        return new ReturnMsg(1, "保存成功");
     }
 
     /**
@@ -484,7 +483,7 @@ public class LisInfoDao extends BaseDao {
                 return o;
             }
         });
-        return new ReturnMsg(1, "保存成功", "");
+        return new ReturnMsg(1, "保存成功");
     }
 }
 

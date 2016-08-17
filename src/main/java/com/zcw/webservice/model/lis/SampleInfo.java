@@ -5,6 +5,9 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.zcw.webservice.common.CustomJsonDateDeserializer;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +26,7 @@ public class SampleInfo  implements Serializable {
     private String sampleId;             //样本号
     private String patientCode;         //住院号、门诊号
     private String patientId;           //就诊卡号（唯一号、病历号会重复）
-    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = CustomJsonDateDeserializer.class)
     private Date testDateTime;          //测定日期
     private String patientName;         //病人姓名
     private String sex;                 //性别
@@ -35,7 +38,7 @@ public class SampleInfo  implements Serializable {
     private String sampleTypeCode;      //标本类型代码
     private String sampleType;          //标本类型
     private String sampleStatus;        //标本状态
-    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = CustomJsonDateDeserializer.class)
     private Date samplingTime;          //采样时间
     private String clinicalDiagnosis;   //临床诊断
     private String hosSectionCode;      //送检科室代码
@@ -46,15 +49,15 @@ public class SampleInfo  implements Serializable {
     private String testDoctor;          //检验医生
     private String operatorCode;        //操作人
     private String operator;            //操作人
-    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = CustomJsonDateDeserializer.class)
     private Date operateTime;           //操作时间
     private String auditDoctorCode;     //审核医生
     private String auditDoctor;         //审核医生
-    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = CustomJsonDateDeserializer.class)
     private Date auditTime;             //审核时间
     private String reportDoctorCode;    //报告医生
     private String reportDoctor;        //报告医生
-    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = CustomJsonDateDeserializer.class)
     private Date reportDateTime;        //报告日期
     private String testDestinationNo;   //检验目的编号
     private String testDestinationName; //检验目的名称
