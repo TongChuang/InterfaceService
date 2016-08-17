@@ -277,11 +277,11 @@ public class HisInfoDao extends BaseDao {
      */
     public List<PatientRequestInfo> getPatientRequestInfo(String patientType, String patientId,String fromDate, String toDate) {
 
-        if (patientType.equals("1")) {
+        if (patientType.equals("2")) {
             //住院病人信息
             return getInPatientRequestInfo(patientId,fromDate, toDate);
         }
-        if (patientType.equals("2")) {
+        if (patientType.equals("1")) {
             //门诊病人信息
             return getOutPatientRequestInfo(patientId,fromDate, toDate);
         }
@@ -297,9 +297,9 @@ public class HisInfoDao extends BaseDao {
      */
     private List<PatientRequestInfo> getInPatientRequestInfo(final String patientId, final String fromDate, final String toDate) {
         List<PatientRequestInfo> patientRequestInfoList = null;
-        String sql = "select * from V_HSBDI_REQUESTINFO where (BRJZHM =? or BRZYID=?) and BRSQLX=1 and  (SQKDRQ=>? and SQKDRQ<=?) ";
+        String sql = "select * from V_HSBDI_REQUESTINFO where  BRZYID=? and BRSQLX=1 and  (SQKDRQ>=to_date(?,'yyyy-MM-dd') and SQKDRQ<=to_date(?,'yyyy-MM-dd')) ";
         patientRequestInfoList = hisJdbcTemplate.query(sql,
-                new Object[]{patientId,patientId,fromDate,toDate},
+                new Object[]{patientId,fromDate,toDate},
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         PatientRequestInfo info = new PatientRequestInfo();
@@ -345,24 +345,24 @@ public class HisInfoDao extends BaseDao {
      */
     private List<PatientRequestInfo> getOutPatientRequestInfo(String patientId, String fromDate, String toDate) {
         List<PatientRequestInfo> patientRequestInfoList = null;
-        String sql = "select * from V_HSBCI_REQUESTINFO where BRJZHM =?  and BRSQLX=1 and  (SQKDRQ=>? and SQKDRQ<=?) ";
+        String sql = "select * from V_HSBCI_REQUESTINFO where BRJZHM =?  and BRSQLX=1 and  (SQKDRQ>=to_date(?,'yyyy-MM-dd') and SQKDRQ<=to_date(?,'yyyy-MM-dd')) ";
         patientRequestInfoList = hisJdbcTemplate.query(sql,
-                new Object[]{patientId,patientId,fromDate,toDate},
+                new Object[]{patientId,fromDate,toDate},
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         PatientRequestInfo info = new PatientRequestInfo();
                         info.setRequestId(Util.getLongValue(rs.getString("SQJLID")));
                         info.setRequestDetailId(Util.getLongValue(rs.getString("SQMXID")));
                         info.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
-                        info.setParentId(Util.null2String(rs.getString("BRZYID")));
+                        info.setParentId(Util.null2String(rs.getString("BRJZXH")));
                         info.setPartientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
                         info.setSex(Util.null2String(rs.getString("BRDAXB")));
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
-                        info.setDepartment(Util.null2String(rs.getString("DQKSID")));
+                        //info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
                         info.setRequestType(Util.null2String(rs.getString("BRSQLX")));
-                        info.setRequestItemType(Util.null2String(rs.getString("SQXMLX")));
+                        //info.setRequestItemType(Util.null2String(rs.getString("SQXMLX")));
                         info.setRequestDoctor(Util.null2String(rs.getString("KDYSID")));
                         info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
                         info.setRequestDateTime(rs.getDate("SQKDRQ"));
