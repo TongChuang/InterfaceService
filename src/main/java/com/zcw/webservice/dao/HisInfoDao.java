@@ -8,6 +8,7 @@ import oracle.jdbc.driver.OracleTypes;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.CallableStatementCallback;
+import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,14 +92,14 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode 住院、门诊号
      * @return 返回病人信息
      */
-    public List<Patient> getPatientInfo(String patientType, String patientCode) {
+    public List<Patient> getPatientInfo(String patientType, String patientCode, String patientId) {
         if (patientType.equals("1")) {
-            //住院病人信息
-            return getInPatientInfo(patientCode);
+            //门诊病人信息
+            return getOutPatientInfo(patientCode,patientId);
         }
         if (patientType.equals("2")) {
-            //门诊病人信息
-            return getOutPatientInfo(patientCode);
+            //住院病人信息
+            return getInPatientInfo(patientCode,patientId);
         }
         return null;
     }
@@ -107,20 +110,20 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode
      * @return 返回住院病人信息
      */
-    private List<Patient> getInPatientInfo(String patientCode) {
+    private List<Patient> getInPatientInfo(String patientCode,String patientId) {
         List<Patient> patientList = null;
-        String sql = "select * from V_HSBBI_RECORDHOME where BRJZHM =?";
-        patientList = hisJdbcTemplate.query(sql,new Object[]{patientCode},
+        String sql = "select * from V_HSBBI_RECORDHOME where BRJZHM =? and BRZYID=?  ";
+        patientList = hisJdbcTemplate.query(sql,new Object[]{patientCode,patientId},
                 new RowMapper<Patient>() {
                     public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Patient patient = new Patient();
                         patient.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
-                        patient.setParentId(Util.null2String(rs.getString("BRZYID")));
+                        patient.setPatientId(Util.null2String(rs.getString("BRZYID")));
                         patient.setName(Util.null2String(rs.getString("BRDAXM")));
                         patient.setSex(Util.null2String(rs.getString("BRDAXB")));
                         patient.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         patient.setAge(Util.null2String(rs.getString("BRJZNL")));
-                        patient.setDepartment("");
+                        patient.setDepartment(Util.null2String(rs.getString("RYKSID"))); //入院科室
                         patient.setDoctor(Util.null2String(rs.getString("ZZYSID")));
                         patient.setCompany(Util.null2String(rs.getString("BRDWMC")));
                         patient.setIdCard(Util.null2String(rs.getString("BRSFZH")));
@@ -130,13 +133,15 @@ public class HisInfoDao extends BaseDao {
                         patient.setInpatientWard(Util.null2String(rs.getString("ZYBQID")));
                         patient.setBedno(Util.null2String(rs.getString("ZYCWHM")));
                         patient.setStatus(Util.null2String(rs.getString("BRZYZT")));
-                        patient.setPatientType(Util.null2String(rs.getString("BRLBID")));
+                        patient.setPatientType("2");
                         patient.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
                         patient.setChargeType(Util.null2String(rs.getString("BRLBID")));
+                        patient.setInDateTime(rs.getDate("BRJZRQ"));
+                        patient.setPatientPhone(Util.null2String(rs.getString("BRLXDH")));
+                        patient.setPatientAddress(Util.null2String(rs.getString("BRJTDZ")));
                         return patient;
                     }
                 });
-
         return patientList;
     }
 
@@ -146,14 +151,16 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode
      * @return 返回门诊病人信息
      */
-    private List<Patient> getOutPatientInfo(String patientCode) {
+    private List<Patient> getOutPatientInfo(String patientCode,String patientId) {
         List<Patient> patientList = null;
-        String sql = "select * from V_HSBCI_TREATINFO where BRJZHM =?";
-        patientList = hisJdbcTemplate.query(sql,new Object[]{patientCode},
+        //String sql = "select * from V_HSBCI_TREATINFO where BRJZHM =?";
+        String sql = "select * from V_HSBCI_TREATINFO where BRJZHM =?  and BRJZXH=?";
+        patientList = hisJdbcTemplate.query(sql,new Object[]{patientCode,patientId},
                 new RowMapper<Patient>() {
                     public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Patient patient = new Patient();
                         patient.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
+                        patient.setPatientId(Util.null2String(rs.getString("BRJZXH")));
                         patient.setChargeType(Util.null2String(rs.getString("BRLBID")));
                         patient.setName(Util.null2String(rs.getString("BRDAXM")));
                         patient.setSex(Util.null2String(rs.getString("BRDAXB")));
@@ -163,14 +170,17 @@ public class HisInfoDao extends BaseDao {
                         patient.setDoctor(Util.null2String(rs.getString("JZYSID")));
                         patient.setCompany(Util.null2String(rs.getString("BRDWMC")));
                         patient.setIdCard(Util.null2String(rs.getString("BRSFZH")));
+                        patient.setInDateTime(rs.getDate("BRJZRQ"));
 //                        patient.setAdmissionDepartment(Util.null2String(rs.getString("RYKSID")));
 //                        patient.setHospitalWard(Util.null2String(rs.getString("RYBQID")));
 //                        patient.setInpatientDepartment(Util.null2String(rs.getString("ZYKSID")));
 //                        patient.setInpatientWard(Util.null2String(rs.getString("ZYBQID")));
 //                        patient.setBedno(Util.null2String(rs.getString("ZYCWHM")));
 //                        patient.setStatus(Util.null2String(rs.getString("BRZYZT")));
-                        patient.setPatientType(Util.null2String(rs.getString("BRLBID")));
+                        patient.setPatientType("1");
                         patient.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
+                        patient.setPatientPhone(Util.null2String(rs.getString("BRLXDH")));
+                        patient.setPatientAddress(Util.null2String(rs.getString("BRJTDZ")));
                         return patient;
                     }
                 });
@@ -192,15 +202,18 @@ public class HisInfoDao extends BaseDao {
             return new ReturnMsg(0,"HIS用户不存在，请检查。");
         }
         final String hisUserID = userids.get(0);
-        String sql = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
-        final Long seqId = hisJdbcTemplate.queryForObject(sql, Long.class);
-        accountItem.setAccountId(seqId);
-        //获取病人唯一号
-        List<Patient> patientList = getPatientInfo(accountItem.getPatientType(),accountItem.getPatientCode());
-        if(patientList.size()<=0){
-            return new ReturnMsg(0,"病人信息不存在，请检查。");
+        String sql = "";
+        if(accountItem.getAccountId()==null || accountItem.getAccountId().equals("")) {
+            sql = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
+            final Long seqId = hisJdbcTemplate.queryForObject(sql, Long.class);
+            accountItem.setAccountId(seqId);
         }
-        final  String patientId = patientList.get(0).getParentId();
+        //获取病人唯一号
+//        List<Patient> patientList = getPatientInfo(accountItem.getPatientType(),accountItem.getPatientCode(),"");
+//        if(patientList.size()<=0){
+//            return new ReturnMsg(0,"病人信息不存在，请检查。");
+//        }
+//        final  String patientId = patientList.get(0).getParentId();
 
         //插入收费记录
         sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
@@ -209,14 +222,13 @@ public class HisInfoDao extends BaseDao {
             hisJdbcTemplate.update(sql, new PreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setLong(1, accountItem.getAccountId());                                       //记账记录序号
-                    ps.setObject(2, patientId);          //病人住院序号
-                    // ps.setObject(3, accountItem.pa());                       //组织机构代码
+                ps.setLong(1, accountItem.getAccountId());                       //记账记录序号
+                    ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
                     ps.setLong(3, 2);                                           //药品诊疗判别 1 药品 2 诊疗
                     ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
                     //ps.setObject(6, accountItem.getAge());                    //药品产地序号 诊疗不需要，药品需传入
                     ps.setLong(5, 14);                                          //费用途径序号 12 用血 14 LIS 15 物资
-                    ps.setDate(6, Util.toSqlDate(accountItem.getDateTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+                    ps.setTimestamp(6, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
                     ps.setInt(7, accountItem.getQuantity());                    //费用发生数量
                     ps.setString(8, hisUserID);                                 //开单医生序号
                     ps.setString(9, "21");                                      //开单科室序号
@@ -234,38 +246,40 @@ public class HisInfoDao extends BaseDao {
         return msg;
     }
 
-    public ReturnMsg requestUpdate(final RequestUpdateParam param){
-
-        int appCode=-1;
-        String outData ="";
-
+    /**
+     * 申请状态更新
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    public ReturnMsg requestUpdate(final RequestUpdateParam param) throws Exception{
         String sql = "{call Etrack_Interface.Prc_RequestUpdate(?,?,?,?,?,?,?,?,?)}";
-        Object obj = hisJdbcTemplate.execute(sql,
+        Map mapR = (Map)hisJdbcTemplate.execute(sql,
                 new CallableStatementCallback() {
-                    public Object[] doInCallableStatement(CallableStatement cs)
-                            throws SQLException, DataAccessException {
-//前面9个是输入参数，后面4个是输出参数
+                    public Map doInCallableStatement(CallableStatement cs)  throws SQLException, DataAccessException {
+                        //前面7个是输入参数，后面2个是输出参数
                         cs.setInt(1, param.getRequestType());
                         cs.setString(2, param.getItemId());
                         cs.setInt(3, param.getExeType());
                         cs.setString(4, param.getExeDeptCode());
-                        cs.setString(5, "PREMIUMMODE_Y");
-                        cs.setString(6, "C042525");
-                        cs.setDouble(7, 45);
-                        cs.setInt(8, 1);
-                        cs.setString(9, null);
-                        cs.registerOutParameter(10, OracleTypes.VARCHAR);
-                        cs.registerOutParameter(11, Types.VARCHAR);
-                        cs.registerOutParameter(12, Types.FLOAT);
-                        cs.registerOutParameter(13, Types.FLOAT);
+                        cs.setString(5, param.getExeDoctorCode());
+                        cs.setTimestamp(6, new java.sql.Timestamp(param.getExeDate().getTime()));
+                        cs.setString(7, param.getExpand());
+                        cs.registerOutParameter(8, OracleTypes.NUMBER);
+                        cs.registerOutParameter(9, Types.VARCHAR);
                         cs.execute();
-                        return new Object[] { cs.getString(10),
-                                cs.getString(11), cs.getDouble(12),
-                                cs.getDouble(13) };
+                        Map map = new HashMap();
+                        map.put("appCode", cs.getString(8)); // 错误代码 成功返回0  失败返回 -1
+                        map.put("outDate", cs.getString(9)); // 错误返回消息
+                        return map;
                     }
                 });
+        if(mapR.get("appCode").equals("0")){
+            return new ReturnMsg(1,"操作成功");
+        }else {
+            return new ReturnMsg(0,mapR.get("outDate"));
+        }
 
-        return null;
     }
 
     /**

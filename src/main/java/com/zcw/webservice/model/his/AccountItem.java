@@ -4,9 +4,11 @@
  */
 package com.zcw.webservice.model.his;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Title: AccountItem2
@@ -17,41 +19,52 @@ import java.io.Serializable;
  * @date:2016/8/8 16:15
  */
 public class AccountItem  implements Serializable {
+
     private static final long serialVersionUID = -4040025415801341888L;
-    @JsonProperty(value = "PatientCode")
+    @JSONField(name = "patientCode")
     private String patientCode;     //病人住院序号
-    @JsonProperty(value = "PatientType")
+    @JSONField(name = "PatientId")
+    private String patientId;     //病人就诊ID
+    @JSONField(name = "patientType")
     private String patientType;     //病人类型 住院 1、门诊 2
-    @JsonProperty(value = "PatientName")
+    @JSONField(name = "patientName")
     private String patientName;     //病人姓名
-    @JsonProperty(value = "TestPurposesCode")
+    @JSONField(name = "testPurposesCode")
     private String testPurposesCode;  //检验目的编号
-    @JsonProperty(value = "TestPurposes")
+    @JSONField(name = "testPurposes")
     private String testPurposes;    //检验目的
-    @JsonProperty(value = "DateTime")
-    private String dateTime;        //费用发生日期
-    @JsonProperty(value = "Quantity")
+    @JSONField(name = "DateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
+    private Date dateTime;        //费用发生日期
+    @JSONField(name = "Quantity")
     private int quantity;           //费用发生数量
-    @JsonProperty(value = "Price")
+    @JSONField(name = "Price")
     private double price;           //费用发生单价
-    @JsonProperty(value = "FeeItemCode")
+    @JSONField(name = "FeeItemCode")
     private String feeItemCode;     //费用项目序号
-    @JsonProperty(value = "FeeItemName")
+    @JSONField(name = "FeeItemName")
     private String feeItemName;     //费用项目名称
 
     //private String costSource;    //费用途径序号    12 用血 14 LIS 15 物资
-    @JsonProperty(value = "BillingDoctorNo")
+    @JSONField(name = "BillingDoctorNo")
     private String billingDoctorNo;	//开单医生序号
-    @JsonProperty(value = "BillingDeptNo")
+    @JSONField(name = "BillingDeptNo")
     private String billingDeptNo;	//开单科室序号
-    @JsonProperty(value = "TestDoctorNo")
+    @JSONField(name = "TestDoctorNo")
     private String testDoctorNo;	//执行用户序号
-    @JsonProperty(value = "TestDoctorDeptNo")
+    @JSONField(name = "TestDoctorDeptNo")
     private String testDoctorDeptNo;//执行科室序号
-    @JsonProperty(value = "OperatorNo")
+    @JSONField(name = "OperatorNo")
     private String operatorNo;	    //操作用户序号
-    @JsonProperty(value = "AccountId")
+    @JSONField(name = "AccountId")
     private Long accountId;         //记账序号
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     public Long getAccountId() {
         return accountId;
@@ -128,7 +141,7 @@ public class AccountItem  implements Serializable {
      *
      * @return property value of dateTime
      */
-    public String getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
 
@@ -137,7 +150,7 @@ public class AccountItem  implements Serializable {
      *
      * @param dateTime value to be assigned to property dateTime
      */
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 

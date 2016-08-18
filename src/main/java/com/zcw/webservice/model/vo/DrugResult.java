@@ -19,14 +19,31 @@ import java.io.Serializable;
 public class DrugResult implements Serializable {
     private static final long serialVersionUID = -2637337896044509658L;
 
+    @JSONField(name = "Code")
     private String code;            //编号
+
+    @JSONField(name = "Name")
     private String name;            //名称
+
+    @JSONField(name = "Alias")
     private String alias;           //别名
+
+    @JSONField(name = "ResultValue")
     private String resultValue;     //药敏结果值(R/S/I)
+
+    @JSONField(name = "Reference")
     private String reference;       //参考值(药敏：K/B参考范围\真菌D：参考值)
+
+    @JSONField(name = "AbnormalResult")
     private String abnormalResult;  //异常结果值（异菌范围）
+
+    @JSONField(name = "OrderNo")
     private String orderNo;         //排序号
+
+    @JSONField(name = "ResultCode")
     private String resultCode;      //对应细菌结果序号
+
+    @JSONField(name = "Method")
     private int method;             //MAC:0 KB:1
 
     public String getCode() {

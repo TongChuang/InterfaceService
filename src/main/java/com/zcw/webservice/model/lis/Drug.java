@@ -17,13 +17,13 @@ public class Drug  implements Serializable {
 
     private static final long serialVersionUID = 6093437929331890906L;
 
-    @JsonProperty(value = "Code")
+    @JSONField(name = "Code")
     private String code;            //编号
 
-    @JsonProperty(value = "Name")
+    @JSONField(name = "Name")
     private String name;            //名称
 
-    @JsonProperty(value = "Alias")
+    @JSONField(name = "Alias")
     private String alias;           //别名
 
     public String getCode() {

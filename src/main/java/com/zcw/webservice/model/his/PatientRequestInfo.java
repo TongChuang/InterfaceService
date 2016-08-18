@@ -1,5 +1,7 @@
 package com.zcw.webservice.model.his;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,6 +26,7 @@ public class PatientRequestInfo implements Serializable{
     private String requestItemType;//申请项目类型
     private String requestDoctor;        //申请医生
     private String requestDepartment;        //申请科室
+    @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date requestDateTime;          //申请日期
     private String itemCode;                //项目代码
     private String itemName;                //项目名称

@@ -4,6 +4,8 @@
  */
 package com.zcw.webservice.model.lis;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,11 +19,22 @@ import java.util.Date;
  */
 public class SampleLog  implements Serializable {
     private static final long serialVersionUID = 1364357784521294238L;
+    @JSONField(name = "SysName")
     private String sysName;         //系统名称
+
+    @JSONField(name = "SampleNo")
     private String sampleNo;        //样本编号
+
+    @JSONField(name = "RecordTime",format="yyyy-MM-dd HH:mm:ss")
     private Date recordTime;        //记录时间
+
+    @JSONField(name = "OperatorNo")
     private String operatorNo;    //操作人工号
+
+    @JSONField(name = "OperatorName")
     private String operatorName;  //操作人姓名
+
+    @JSONField(name = "Remark")
     private String remark;        //操作内容
 
     /**

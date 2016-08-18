@@ -5,6 +5,7 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 

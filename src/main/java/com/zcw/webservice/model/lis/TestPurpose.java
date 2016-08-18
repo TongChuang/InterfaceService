@@ -1,6 +1,7 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 
@@ -14,7 +15,6 @@ import java.io.Serializable;
  */
 public class TestPurpose  implements Serializable {
     private static final long serialVersionUID = -3231507851521340081L;
-
     @JSONField(name = "Code")
     private String code;                //编号
 

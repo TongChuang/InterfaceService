@@ -4,6 +4,8 @@
  */
 package com.zcw.webservice.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 
 /**
@@ -16,16 +18,37 @@ import java.io.Serializable;
  */
 public class TestResult implements Serializable {
     private static final long serialVersionUID = 5683008316110610339L;
+    @JSONField(name = "TestItemCode")
     private String testItemCode;    //检测项目编号
+
+    @JSONField(name = "TestItemOrder")
     private String testItemOrder;   //检测项目排序号
+
+    @JSONField(name = "ResultTypeId")
     private int resultTypeId;       //结果类型序号  阳性、药敏 :1 、其他:0
+
+    @JSONField(name = "ResultType")
     private String resultType;      //结果类型：培养阴性(jc)、培养阳性(ya)、药敏(ym)、涂片(tp)、检测结果(jc)
+
+    @JSONField(name = "Code")
     private String code;            //结果编号
+
+    @JSONField(name = "Result")
     private String result;          //结果
+
+    @JSONField(name = "DrugResistance")
     private String drugResistance;  //耐药标志(MRSA...)
+
+    @JSONField(name = "Unit")
     private String unit;            //单位
+
+    @JSONField(name = "AbnormalFlag")
     private String abnormalFlag;    //异常标志
+
+    @JSONField(name = "Reference")
     private String reference;       //真菌D/内毒素 参考范围
+
+    @JSONField(name = "Count")
     private String count;           //菌量计数
 
     public String getTestItemCode() {

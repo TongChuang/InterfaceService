@@ -5,9 +5,6 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.zcw.webservice.common.CustomJsonDateDeserializer;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,61 +19,157 @@ import java.util.Date;
  */
 public class SampleInfo  implements Serializable {
     private static final long serialVersionUID = 3168127784272973173L;
+    @JSONField(name = "Barcode")
     private String barcode;             //条码号
+
+    @JSONField(name = "SampleId")
     private String sampleId;             //样本号
+
+    @JSONField(name = "PatientCode")
     private String patientCode;         //住院号、门诊号
+
+    @JSONField(name = "PatientId")
     private String patientId;           //就诊卡号（唯一号、病历号会重复）
-    @JsonSerialize(using = CustomJsonDateDeserializer.class)
+
+    @JSONField(name = "TestDateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date testDateTime;          //测定日期
+
+    @JSONField(name = "PatientName")
     private String patientName;         //病人姓名
+
+    @JSONField(name = "Sex")
     private String sex;                 //性别
+
+    @JSONField(name = "Age")
     private String age;                 //年龄
+
+    @JSONField(name = "AgeType")
     private String ageType;             //年龄单位(类型)
+
+    @JSONField(name = "DepartmentCode")
     private String departmentCode;      //病人就诊科室代码
+
+    @JSONField(name = "Department")
     private String department;          //病人就诊科室
+
+    @JSONField(name = "BedNo")
     private String bedNo;               //床号
+
+    @JSONField(name = "SampleTypeCode")
     private String sampleTypeCode;      //标本类型代码
+
+    @JSONField(name = "SampleType")
     private String sampleType;          //标本类型
+
+    @JSONField(name = "SampleStatus")
     private String sampleStatus;        //标本状态
-    @JsonSerialize(using = CustomJsonDateDeserializer.class)
+
+    @JSONField(name = "SamplingTime",format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date samplingTime;          //采样时间
+
+    @JSONField(name = "ClinicalDiagnosis")
     private String clinicalDiagnosis;   //临床诊断
+
+    @JSONField(name = "HosSectionCode")
     private String hosSectionCode;      //送检科室代码
+
+    @JSONField(name = "HosSection")
     private String hosSection;          //送检科室
+
+    @JSONField(name = "InspectCode")
     private String inspectCode;         //送检医生代码
+
+    @JSONField(name = "InspectDoctor")
     private String inspectDoctor;       //送检医生名称
+
+    @JSONField(name = "TestDoctorCode")
     private String testDoctorCode;      //检验医生
+
+    @JSONField(name = "TestDoctor")
     private String testDoctor;          //检验医生
+
+    @JSONField(name = "OperatorCode")
     private String operatorCode;        //操作人
+
+    @JSONField(name = "Operator")
     private String operator;            //操作人
-    @JsonSerialize(using = CustomJsonDateDeserializer.class)
+
+    @JSONField(name = "OperateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date operateTime;           //操作时间
+
+    @JSONField(name = "AuditDoctorCode")
     private String auditDoctorCode;     //审核医生
+
+    @JSONField(name = "AuditDoctor")
     private String auditDoctor;         //审核医生
-    @JsonSerialize(using = CustomJsonDateDeserializer.class)
+
+    @JSONField(name = "AuditTime",format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date auditTime;             //审核时间
+
+    @JSONField(name = "ReportDoctorCode")
     private String reportDoctorCode;    //报告医生
+
+    @JSONField(name = "ReportDoctor")
     private String reportDoctor;        //报告医生
-    @JsonSerialize(using = CustomJsonDateDeserializer.class)
+
+    @JSONField(name ="ReportDateTime" ,format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date reportDateTime;        //报告日期
+
+    @JSONField(name = "TestDestinationNo")
     private String testDestinationNo;   //检验目的编号
+
+    @JSONField(name = "TestDestinationName")
     private String testDestinationName; //检验目的名称
+
+    @JSONField(name = "Birthday")
     private String birthday;            //出生日期
+
+    @JSONField(name = "SamplingPart")
     private String samplingPart;        //采集部位
+
+    @JSONField(name = "SampleNote")
     private String sampleNote;          //标本性状
+
+    @JSONField(name = "SampleDescription")
     private String sampleDescription;   //标本描述
+
+    @JSONField(name = "Count")
     private String count;               //采集数量
+
+    @JSONField(name = "PatientTypeCode")
     private String patientTypeCode;      //病人类型申请方式:普通、急诊
+
+    @JSONField(name = "PatientTypeName")
     private String patientTypeName;      //病人类型申请方式:普通、急诊
+
+    @JSONField(name = "Fee")
     private Double fee;                 //费用
+
+    @JSONField(name = "FeeStatus")
     private String feeStatus;           //收费状态
+
+    @JSONField(name = "Cycle")
     private String cycle;               //生理周期
+
+    @JSONField(name = "InvoiceNum")
     private String invoiceNum;          //发票号
+
+    @JSONField(name = "SectionId")
     private String sectionId;           //实验室部门
+
+    @JSONField(name = "Section")
     private String section;             //实验室部门
+
+    @JSONField(name = "PatientFileNo")
     private String patientFileNo;       //病人档案号
+
+    @JSONField(name = "BillDepartmentCode")
     private String billDepartmentCode;  //开单科室编号
+
+    @JSONField(name = "BillDepartment")
     private String billDepartment;      //开单科室
+
+    @JSONField(name = "PatientPhone")
     private String patientPhone;        //病人联系电话
 
     /*

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Title: Patient
@@ -15,62 +16,103 @@ import java.io.Serializable;
  */
 public class Patient  implements Serializable {
     private static final long serialVersionUID = 565777468382249546L;
-    @JsonProperty(value = "PatientCode")
+    @JSONField(name = "PatientCode")
     private String patientCode;     //住院号（病历号）
 
-    @JsonProperty(value = "PatientUniqueId")
-    private String parentId;    //门诊唯一号
+    @JSONField(name = "PatientId")
+    private String patientId;    //门诊唯一号
 
-    @JsonProperty(value = "ChargeType")
+    @JSONField(name = "ChargeType")
     private String chargeType;        //收费类别
 
-    @JsonProperty(value = "Name")
+    @JSONField(name = "Name")
     private String name;        //姓名
 
-    @JsonProperty(value = "Sex")
+    @JSONField(name = "Sex")
     private String sex;        //性别
 
-    @JsonProperty(value = "Birthday")
+    @JSONField(name = "Birthday")
     private String birthday;        //出生日期
 
-    @JsonProperty(value = "Age")
+    @JSONField(name = "Age")
     private String age;        //病人就诊年龄
 
-    @JsonProperty(value = "Department")
+    @JSONField(name = "Department")
     private String department;        //就诊科室
 
-    @JsonProperty(value = "Doctor")
+    @JSONField(name = "Doctor")
     private String doctor;        //就诊医生
 
-    @JsonProperty(value = "Company")
+    @JSONField(name = "Company")
     private String company;        //单位信息
 
-    @JsonProperty(value = "IdCard")
-    private String IdCard;        //身份证号码
+    @JSONField(name = "IdCard")
+    private String idCard;        //身份证号码
 
-    @JsonProperty(value = "AdmissionDepartment")
+    @JSONField(name = "AdmissionDepartment")
     private String admissionDepartment;   //入院科室
 
-    @JsonProperty(value = "HospitalWard")
+    @JSONField(name = "HospitalWard")
     private String hospitalWard;        //入院病区
 
-    @JsonProperty(value = "InpatientDepartment")
+    @JSONField(name = "InpatientDepartment")
     private String inpatientDepartment; //住院科室
 
-    @JsonProperty(value = "InpatientWard")
-    private String InpatientWard;        //住院病区
+    @JSONField(name = "InpatientWard")
+    private String inpatientWard;        //住院病区
 
-    @JsonProperty(value = "Bedno")
+    @JSONField(name = "Bedno")
     private String bedno;        //住院床号
 
-    @JsonProperty(value = "Status")
+    @JSONField(name = "Status")
     private String status;        //住院状态 1-取消登记 ；0-已预约；1-尚未入科；2-已经入科；3-已预出院；4-已出院
 
-    @JsonProperty(value = "PatientType")
+    @JSONField(name = "PatientType")
     private String patientType;        //病人类别 医保类别
 
-    @JsonProperty(value = "PatientFileCode")
+    @JSONField(name = "PatientFileCode")
     private String patientFileCode;        //病人档案编号
+
+    @JSONField(name = "InDateTime",format = "yyyy-MM-dd hh:mm:ss.SSS")
+    private Date inDateTime;        //就诊时间
+
+    @JSONField(name = "PatientAddress")
+    private String patientAddress;        //病人地址
+
+    @JSONField(name = "PatientPhone")
+    private String patientPhone;        //病人电话
+
+    public String getInpatientWard() {
+        return inpatientWard;
+    }
+
+    public void setInpatientWard(String inpatientWard) {
+        this.inpatientWard = inpatientWard;
+    }
+
+    public String getPatientAddress() {
+        return patientAddress;
+    }
+
+    public void setPatientAddress(String patientAddress) {
+        this.patientAddress = patientAddress;
+    }
+
+    public String getPatientPhone() {
+        return patientPhone;
+    }
+
+    public void setPatientPhone(String patientPhone) {
+        this.patientPhone = patientPhone;
+    }
+
+    public Date getInDateTime() {
+        return inDateTime;
+    }
+
+    public void setInDateTime(Date inDateTime) {
+        this.inDateTime = inDateTime;
+    }
 
     public String getPatientFileCode() {
         return patientFileCode;
@@ -88,12 +130,12 @@ public class Patient  implements Serializable {
         this.patientCode = patientCode;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public String getChargeType() {
@@ -161,11 +203,11 @@ public class Patient  implements Serializable {
     }
 
     public String getIdCard() {
-        return IdCard;
+        return idCard;
     }
 
     public void setIdCard(String idCard) {
-        IdCard = idCard;
+        this.idCard = idCard;
     }
 
     public String getAdmissionDepartment() {
@@ -190,14 +232,6 @@ public class Patient  implements Serializable {
 
     public void setInpatientDepartment(String inpatientDepartment) {
         this.inpatientDepartment = inpatientDepartment;
-    }
-
-    public String getInpatientWard() {
-        return InpatientWard;
-    }
-
-    public void setInpatientWard(String inpatientWard) {
-        InpatientWard = inpatientWard;
     }
 
     public String getBedno() {

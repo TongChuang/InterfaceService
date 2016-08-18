@@ -86,6 +86,7 @@ public class LisInfoDao extends BaseDao {
                         testInfo.setPatientFileNo(Util.null2String(rs.getString("patientFileNo")));
                         testInfo.setPatientPhone(Util.null2String(rs.getString("patientPhone")));
                         testInfo.setIsToll(Util.null2String(rs.getString("patientPhone")));
+                        testInfo.setPatientId(Util.null2String(rs.getString("patientid")));
                         return testInfo;
                     }
                 });
@@ -327,21 +328,21 @@ public class LisInfoDao extends BaseDao {
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, Util.null2String(sampleInfo.getBarcode()));           //条码号
                 ps.setString(2, Util.null2String(sampleInfo.getSampleId()));          //样本ID
-                ps.setDate(3, new java.sql.Date(sampleInfo.getTestDateTime().getTime()));      //测定日期
+                ps.setTimestamp(3, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
                 ps.setString(4, sampleInfo.getPatientName());       //病人姓名
                 ps.setInt(5, sex);                                  //病人性别
                 ps.setString(6, Util.null2String(sampleInfo.getAge()));               //年龄
                 ps.setString(7, Util.null2String(sampleInfo.getAgeType()));           //年龄类型
                 ps.setString(8, Util.null2String(sampleInfo.getBedNo()));             //病人床号
                 ps.setString(9, Util.null2String((sampleInfo.getSampleType())));        //标本类型
-                ps.setDate(10, new java.sql.Date(sampleInfo.getSamplingTime().getTime()));      //采样时间
+                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //采样时间
                 ps.setString(11, Util.null2String(sampleInfo.getClinicalDiagnosis())); //临床诊断
                 ps.setString(12, Util.null2String(sampleInfo.getInspectDoctor()));     //送检医生
                 ps.setString(13, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
                 ps.setString(14, Util.null2String(sampleInfo.getAuditDoctor()));       //审核医生
                 ps.setString(15, Util.null2String(sampleInfo.getTestDestinationNo()));   //检验目的编号
                 ps.setString(16, Util.null2String(sampleInfo.getTestDestinationName()));  //检验目的
-                ps.setDate(17, new java.sql.Date(sampleInfo.getReportDateTime().getTime()));       //报告日期
+                ps.setTimestamp(17, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime()));       //报告日期
                 ps.setString(18, Util.null2String(sampleInfo.getPatientCode()));       //住院号
                 ps.setString(19, Util.null2String(sampleInfo.getBillDepartment()));    //开单科室
                 ps.setString(20, Util.null2String(sampleInfo.getPatientPhone()));      //病人电话
@@ -350,7 +351,7 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(23, "d");                              //样本状态(初审)
                 ps.setString(24, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setString(25, "外观正常");                       //标本外观
-                ps.setDate(26, new java.sql.Date(sampleInfo.getSamplingTime().getTime()));
+                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));
             }
         });
 
@@ -434,7 +435,7 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(2, sampleInfo.getBarcode());                                       //条码号
                 ps.setString(3, sampleInfo.getSampleId());                                       //样本ID
                 ps.setString(4, sampleInfo.getPatientCode());                                   //病历号
-                ps.setDate(5, new java.sql.Date(sampleInfo.getTestDateTime().getTime()));      //测定日期
+                ps.setTimestamp(5, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
                 ps.setString(6, sampleInfo.getPatientName());                                   //病人姓名
                 ps.setInt(7, sex);                                                              //病人性别
                 ps.setObject(8, sampleInfo.getAge());                                           //年龄
@@ -442,14 +443,14 @@ public class LisInfoDao extends BaseDao {
                 ps.setObject(10, sampleInfo.getDepartment());                                    //病人科别
                 ps.setObject(11, sampleInfo.getBedNo());                                         //病人床号
                 ps.setObject(12, sampleInfo.getSampleTypeCode());                               //标本类型
-                ps.setDate(13, new java.sql.Date(sampleInfo.getSamplingTime().getTime()));      //采样时间
+                ps.setTimestamp(13, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //采样时间
                 ps.setObject(14, sampleInfo.getClinicalDiagnosis());                            //临床诊断
                 ps.setObject(15, sampleInfo.getInspectDoctor());                                //送检医生
                 ps.setObject(16, sampleInfo.getTestDoctor());                                   //检验医生
                 ps.setObject(17, sampleInfo.getAuditDoctor());                                  //审核医生
                 ps.setObject(18, sampleInfo.getTestDestinationNo());                            //检验目的编号
                 ps.setObject(19, sampleInfo.getTestDestinationName());                          //检验目的
-                ps.setDate(20, new java.sql.Date(sampleInfo.getReportDateTime().getTime()));    //报告日期
+                ps.setTimestamp(20, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime()));    //报告日期
                 ps.setObject(21, sampleInfo.getPatientCode());                                  //病人档案号
                 ps.setObject(22, sampleInfo.getBillDepartment());                               //开单科室
                 ps.setObject(23, sampleInfo.getPatientPhone());                                 //病人电话
@@ -467,7 +468,7 @@ public class LisInfoDao extends BaseDao {
                 //ps.getConnection().setAutoCommit(false);
                 for (int i = 0; i < length; i++) {
                     ps.setString(1, "微生物");                                                 //仪器代号
-                    ps.setDate(2, new java.sql.Date(sampleInfo.getReportDateTime().getTime())); //测定日期
+                    ps.setTimestamp(2, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime())); //测定日期
                     ps.setString(3, sampleInfo.getSampleId());                                   //样本编号
                     ps.setString(4, results.get(i).getTestItemCode());                          //结果类型序号
                     ps.setString(5, results.get(i).getTestItemCode());                          //结果
@@ -477,10 +478,31 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(9, results.get(i).getUnit());                                   //单位
                     ps.addBatch();
                 }
-
                 Object o = ps.executeBatch();
                 //ps.getConnection().commit();
                 return o;
+            }
+        });
+        return new ReturnMsg(1, "保存成功");
+    }
+
+    /**
+     * 日志记录
+     * @return
+     */
+    public ReturnMsg saveSampleFlowLog(final SampleLog sampleLog)throws Exception{
+        if(sampleLog ==null)
+            return new ReturnMsg(0,"参数不能为空");
+        if(sampleLog.getSampleNo()==null || sampleLog.getSampleNo().equals(""))
+            return new ReturnMsg(0,"样本号不能为空");
+        String sql = "insert into t_lis_sampletransPro(ybid,recordtime,operator,trans)values(?,?,?,?) " ;
+        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, Util.null2String(sampleLog.getSampleNo()));                 //样本号
+                ps.setTimestamp(2, new java.sql.Timestamp(sampleLog.getRecordTime().getTime()));      //操作日期
+                ps.setString(3, Util.null2String(sampleLog.getOperatorName()));             //操作人
+                ps.setString(4, Util.null2String(sampleLog.getRemark()));                   //内容
             }
         });
         return new ReturnMsg(1, "保存成功");

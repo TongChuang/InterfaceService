@@ -1,18 +1,34 @@
 package com.zcw.webservice.model.his;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * Created by zcw on 2016/8/17.
  */
-public class RequestUpdateParam {
-    int  requestType;
-    String itemId;
-    int exeType;
-    String  exeDeptCode;
+public class RequestUpdateParam  implements Serializable{
+
+    private static final long serialVersionUID = -2021077548820602298L;
+    @JSONField(name = "RequestType")
+    int  requestType;       //项目申请类型 11 门诊检验  12 门诊检查 21 住院检验  22 住院检查
+    @JSONField(name = "ItemId")
+    String itemId;          //项目明细ID   多个用“|”分隔
+    @JSONField(name = "ExeType")
+    int exeType;            //执行状态  1 执行(门诊)  2 取消执行(门诊)  3 接受计费(住院) 4 退费(住院)  5 打印 (住院)  6 取消打印7 预约时间
+    @JSONField(name = "ExeDeptCode")
+    String  exeDeptCode;    //执行科室
+    @JSONField(name = "ExeDeptName")
     String exeDeptName;
-    String exeDoctorCode;
+    @JSONField(name = "ExeDoctorCode")
+    String exeDoctorCode;   //执行医生
+    @JSONField(name = "ExeDoctorName")
     String exeDoctorName;
-    String exeDate;
-    String expand;
+    @JSONField(name = "ExeDate",format="yyyy-MM-dd HH:mm:ss")
+    Date exeDate;           //执行时间 (预约时间)
+    @JSONField(name = "Expand")
+    String expand;          //扩展内容  打印时打印编号、预约注意事项
 
     public int getRequestType() {
         return requestType;
@@ -70,11 +86,11 @@ public class RequestUpdateParam {
         this.exeDoctorName = exeDoctorName;
     }
 
-    public String getExeDate() {
+    public Date getExeDate() {
         return exeDate;
     }
 
-    public void setExeDate(String exeDate) {
+    public void setExeDate(Date exeDate) {
         this.exeDate = exeDate;
     }
 

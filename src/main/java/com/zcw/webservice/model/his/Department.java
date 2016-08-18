@@ -16,19 +16,19 @@ import java.io.Serializable;
 public class Department  implements Serializable {
 
     private static final long serialVersionUID = 4728135225309467951L;
-    @JsonProperty(value = "Id")
+    @JSONField(name = "Id")
     private String id;          //ID
 
-    @JsonProperty(value = "ParentId")
+    @JSONField(name = "ParentId")
     private String parentId;    //父级ID
 
-    @JsonProperty(value = "Code")
+    @JSONField(name = "Code")
     private String code;        //编号
 
-    @JsonProperty(value = "Name")
+    @JSONField(name = "Name")
     private String name;        //名称
 
-    @JsonProperty(value = "Department")
+    @JSONField(name = "Department")
     private String department;  //所属科室
 
     public String getId() {

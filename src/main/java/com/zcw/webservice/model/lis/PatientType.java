@@ -12,14 +12,13 @@ public class PatientType implements Serializable {
 
     private static final long serialVersionUID = 1028021596329452815L;
 
-    @JsonProperty(value = "Code")
+    @JSONField(name = "Code")
     private String code;            //编号
 
-    @JsonProperty(value = "Name")
+    @JSONField(name = "Name")
     private String name;            //名称
 
-    @JSONField(name="Alias")
-    @JsonProperty(value = "Alias")
+    @JSONField(name = "Alias")
     private String alias;           //别名
 
     public String getCode() {

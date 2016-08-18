@@ -24,7 +24,6 @@ import java.util.List;
 @WebService
 @Path("/")
 public interface LisInfoService {
-
     /**
      * 获取检验信息
      *
@@ -47,7 +46,7 @@ public interface LisInfoService {
     @GET
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getBacteriaList")
-    ReturnMsg  getBacteriaList();
+    String  getBacteriaList();
 
     /**
      * 获取检验目的列表
@@ -97,9 +96,9 @@ public interface LisInfoService {
      * @return 返回Json病人信息[{key:value},{...}]
      */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path(value = "/getPatientTypeList/{patientType}/{patientCode}")
-    String getPatientInfoList(@PathParam("patientType") String patientType, @PathParam("patientCode") String patientCode);
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getPatientInfoList/{patientType}/{patientCode}/{patientId}")
+    String getPatientInfoList(@PathParam("patientType") String patientType, @PathParam("patientCode") String patientCode, @PathParam("patientId") String patientId);
 
     /**
      * 获取病区信息列表
@@ -163,7 +162,7 @@ public interface LisInfoService {
      */
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/saveTestResult")
     String saveTestResult(Report report);
 
@@ -175,7 +174,7 @@ public interface LisInfoService {
      */
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/saveSampleFlowLog")
     String saveSampleFlowLog(SampleLog sampleLog);
 
@@ -189,7 +188,7 @@ public interface LisInfoService {
      */
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/returnSample/{reason}/{returnTime}/{operator}/{barcode}")
     String returnSample(@PathParam("reason") String reason,@PathParam("returnTime")Date returnTime,@PathParam("operator")String operator,@PathParam("barcode")String barcode);
 
@@ -200,7 +199,7 @@ public interface LisInfoService {
      */
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Consumes({"application/xml","application/json","application/x-www-form-urlencoded"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/booking")
     String booking (AccountItem accountItem);
 

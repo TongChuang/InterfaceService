@@ -4,6 +4,7 @@
  */
 package com.zcw.webservice.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.zcw.webservice.model.lis.SampleInfo;
 import com.zcw.webservice.model.lis.TestItem;
 
@@ -21,9 +22,17 @@ import java.util.List;
  */
 public class Report implements Serializable {
     private static final long serialVersionUID = -2923351759486827410L;
+
+    @JSONField(name = "SampleInfo")
     private SampleInfo sampleInfo;
+
+    @JSONField(name = "Results")
     private List<TestResult> results;       //结果信息
+
+    @JSONField(name = "DrugResults")
     private List<DrugResult> drugResults;   //结果信息
+
+    @JSONField(name = "ReportType")
     private int reportType;                 //报告类型 培养类型报告:0 真菌D/内毒素:1
     public SampleInfo getSampleInfo() {
         return sampleInfo;

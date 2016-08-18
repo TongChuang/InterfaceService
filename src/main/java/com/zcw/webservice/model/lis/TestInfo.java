@@ -1,6 +1,7 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,6 +28,9 @@ public class TestInfo  implements Serializable {
 
     @JSONField(name = "PatientCode")
     private String patientCode;//病人编号
+
+    @JSONField(name = "PatientId")
+    private String patientId;//就诊号
 
     @JSONField(name = "PatientName")
     private String patientName;//病人姓名
@@ -108,6 +112,14 @@ public class TestInfo  implements Serializable {
 
     @JSONField(name = "PatientPhone")
     private String patientPhone;  //病人电话
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     /**
      * Getter method for property <tt>barcode</tt>.

@@ -1,11 +1,12 @@
 package com.zcw.webservice.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.serializer.ValueFilter;
 import com.zcw.webservice.dao.HisInfoDao;
 import com.zcw.webservice.dao.LisInfoDao;
 import com.zcw.webservice.model.his.AccountItem;
-import com.zcw.webservice.model.his.PatientRequestInfo;
-import com.zcw.webservice.model.lis.Bacteria;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
@@ -16,7 +17,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebService;
 import java.util.Date;
-import java.util.List;
+
 
 /**
  * Title:LisInfoServiceImpl
@@ -28,7 +29,26 @@ import java.util.List;
  */
 @WebService(endpointInterface = "com.zcw.webservice.server.LisInfoService",serviceName = "LisInfoService")
 public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements LisInfoService {
+    /**
+     * 用于解决JSON 字段值NULL不显示
+     */
+    private ValueFilter filter = new ValueFilter() {
+        @Override
+        public Object process(Object obj, String s, Object v) {
+            if(v==null)
+                return "";
+            return v;
+        }
+    };
 
+//    private static final SerializerFeature[] CONFIG = new SerializerFeature[]{
+//        SerializerFeature.WriteNullBooleanAsFalse,//boolean为null时输出false
+//        SerializerFeature.WriteMapNullValue, //输出空置的字段
+//        SerializerFeature.WriteNonStringKeyAsString,//如果key不为String 则转换为String 比如Map的key为Integer
+//        SerializerFeature.WriteNullListAsEmpty,//list为null时输出[]
+//        SerializerFeature.WriteNullNumberAsZero,//number为null时输出0
+//        SerializerFeature.WriteNullStringAsEmpty//String为null时输出""
+//    };
     private static Logger log = Logger.getLogger(LisInfoServiceImpl.class);
 
     @Autowired
@@ -57,14 +77,14 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
      * 获取细菌信息列表
      * @return
      */
-    public ReturnMsg getBacteriaList() {
+    public String getBacteriaList() {
         log.info("getBacteriaList================================START");
         ReturnMsg msg = new ReturnMsg();
         try {
@@ -75,7 +95,8 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return msg;
+        //JSONSerializer.config(SerializerFeature.SortField,false);
+        return JSON.toJSONString(msg,filter,SerializerFeature.SortField);
     }
 
     /**
@@ -92,7 +113,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -109,7 +130,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -126,7 +147,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -143,7 +164,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -160,7 +181,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -177,7 +198,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -191,11 +212,11 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(1);
             msg.setMessage(hisInfoDao.getDepartmentList());
         } catch (Exception e) {
-            log.error("获取获取样本号信息异常",e);
+            log.error("获取样本信息异常",e);
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -211,11 +232,11 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(1);
             msg.setMessage("");
         } catch (Exception e) {
-            log.error("获取获取样本号信息异常",e);
+            log.error("获取信息异常",e);
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -231,28 +252,28 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(1);
             msg.setMessage(lisInfoDao.getReceivedSampleList(signStartDate,signEndDate));
         } catch (Exception e) {
-            log.error("获取获取样本号信息异常",e);
+            log.error("获取信息异常",e);
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
      * 获取病人信息
      * @return
      */
-    public String getPatientInfoList(String patientType,String patientCode) {
+    public String getPatientInfoList(String patientType,String patientCode,String patientId) {
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setMessage(hisInfoDao.getPatientInfo(patientType, patientCode));
+            msg.setMessage(hisInfoDao.getPatientInfo(patientType, patientCode,patientId));
         } catch (Exception e) {
-            log.error("获取获取样本号信息异常",e);
+            log.error("获取信息异常",e);
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -275,7 +296,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         System.out.println(JSON.toJSONString(msg));
         log.info("saveTestResult================================END");
 
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     /**
@@ -284,11 +305,19 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String saveSampleFlowLog(SampleLog sampleLog) {
-        ReturnMsg msg = new ReturnMsg();
-        log.info("saveSampleFlowLog================================START");
+        log.info("saveTestResult================================START");
         log.info(JSON.toJSONString(sampleLog));
-        log.info("saveSampleFlowLog================================END");
-        return JSON.toJSONString(msg);
+        //{"OperatorName":"邵晓丽","OperatorNo":"77008","RecordTime":"2016-08-17 19:37:25","Remark":"入库打印条码","SampleNo":"A12008812374","SysName":"微生物系统"}
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = lisInfoDao.saveSampleFlowLog(sampleLog);
+        }catch (Exception e){
+            e.printStackTrace();
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info("saveTestResult================================END");
+        return JSON.toJSONString(msg,filter);
     }
 
 
@@ -300,7 +329,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         log.info(JSON.toJSONString(operator));
         log.info(JSON.toJSONString(barcode));
         log.info("returnSample================================END");
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     @Override
@@ -319,7 +348,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         System.out.println(JSON.toJSONString(msg));
         log.info("saveTestResult================================END");
 
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 
     @Override
@@ -338,6 +367,6 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        return JSON.toJSONString(msg);
+        return JSON.toJSONString(msg,filter);
     }
 }
