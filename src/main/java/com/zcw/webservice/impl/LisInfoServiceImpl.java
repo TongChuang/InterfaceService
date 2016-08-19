@@ -323,8 +323,16 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return JSON.toJSONString(msg,filter);
     }
 
-    @Override
-    public String returnSample(String barcode,Date returnTime, String operator, String reason) {
+    /**
+     * 标本退回
+     * @param barcode        条码号
+     * @param patientId      病人就诊序号
+     * @param returnTime    退回时间
+     * @param operator      操作人式呈
+     * @param reason        退回原因
+     * @return
+     */
+    public String returnSample(String barcode,String patientId,Date returnTime, String operator, String reason) {
         ReturnMsg msg = new ReturnMsg(0,"退回成功");
         return JSON.toJSONString(msg,filter);
     }
@@ -391,10 +399,38 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    public String returnReport(String reason, Date returnTime, String operator, String barcode) {
+    public String returnReport(String barcode,
+                               String operator,
+                               Date returnTime,
+                               String reason) {
         ReturnMsg msg = new ReturnMsg();
         try {
-            msg = lisInfoDao.returnReport(reason,returnTime,operator, barcode);
+            msg = lisInfoDao.returnReport(barcode,operator,returnTime, reason);
+        } catch (Exception e) {
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     * 获取报告状态
+     * @param reportType    //报告类型 0 普通 1真菌D内毒素
+     * @param barcode
+     * @return
+     */
+    public String getReportStatus(int reportType,String barcode) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            int status=lisInfoDao.getReportStatus(reportType,barcode);
+            if(status<0){
+                msg.setState(0);
+                msg.setMessage("未能或取到正确的状态值");
+            }else {
+                msg.setState(1);
+                msg.setMessage(status);
+            }
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);

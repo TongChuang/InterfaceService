@@ -26,16 +26,14 @@ import java.util.*;
  */
 @Repository
 public class LisInfoDao extends BaseDao {
-
     private static Logger log = Logger.getLogger(LisInfoDao.class);
-
     /**
      * 获取检验信息
      *
      * @param barcode //申请条码
      * @return
      */
-    public List<TestInfo> getTestInfo(String barcode) {
+    public List<TestInfo> getTestInfo(String barcode) throws Exception{
         //SELECT * FROM t_lis_sampletransPro where ybid ='' and Trans='已计费' 已经计费 状态
         String sql = "select * from vw_testinfo_micro where Barcode =?";
         List<TestInfo> testInfoList = null;
@@ -80,7 +78,6 @@ public class LisInfoDao extends BaseDao {
                             testItem.setRequestItemId(Util.null2String(rs.getString("requestItemId")));
                             List<TestItem> testItems = new ArrayList<TestItem>();
                             testItems.add(testItem);
-
                             testInfo.setTestItems(testItems);
 
                         }
@@ -91,7 +88,7 @@ public class LisInfoDao extends BaseDao {
                         //testInfo.setIsToll(Util.null2String(rs.getString("patientPhone")));
                         testInfo.setPatientId(Util.null2String(rs.getString("patientid")));
                         testInfo.setRequestId(Util.null2String(rs.getString("requestId")));
-                        //testInfo.setRequestItemId(Util.null2String(rs.getString("requestItemId")));
+                        //testInfo.setRequestItemId(Util.null2String(rs.getString("req uestItemId")));
                         return testInfo;
                     }
                 });
@@ -250,7 +247,7 @@ public class LisInfoDao extends BaseDao {
      * @param signEndDate
      * @return
      */
-    public List<TestInfo> getReceivedSampleList(String signStartDate, String signEndDate) {
+    public List<TestInfo> getReceivedSampleList(String signStartDate, String signEndDate) throws Exception{
         List<TestInfo> testInfoList = null;
         String sql = "select  * from vw_testinfo_micro where status='1' and  CollectDate>=? and CollectDate<=?";
         testInfoList = lisJdbcTemplate.query(sql, new Object[]{signStartDate, signEndDate},
@@ -561,10 +558,46 @@ public class LisInfoDao extends BaseDao {
      * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg returnReport(String reason, Date returnTime, String operator, String barcode)throws Exception{
+    public ReturnMsg returnReport(String barcode,
+                                  String operator,
+                                  Date returnTime,
+                                  String reason)throws Exception{
         if(barcode==null || barcode.equals(""))
             return new ReturnMsg(0,"样本号不能为空");
         return new ReturnMsg(1, "保存成功");
+    }
+
+    /**
+     * 获取报告状态
+     * @param reportType
+     * @param barcode
+     * @return
+     */
+    public int getReportStatus(int reportType,String barcode) throws  Exception{
+        String sql= "";
+        int returnValue = -1;   //0 未审 1 初审 2已审 3已打 -1 其他
+        if(reportType ==0){
+            sql = "select ybzt from xj_ybxx where byh = ?";
+        }else if(reportType ==1){
+            sql = "select ybzt from lis_ybxx where byh = ?";
+        }
+        String status = "";
+        try {
+            status = lisJdbcTemplate.queryForObject(sql,new Object[]{barcode},String.class);
+            if(status.equals("")){
+                returnValue=0;
+            }else if(status.equals("d")){
+                returnValue=1;
+            }else if(status.equals("s")){
+                returnValue=2;
+            }else if(status.equals("p")){
+                returnValue=3;
+            }
+        }catch (EmptyResultDataAccessException e){
+            e.printStackTrace();
+            returnValue =-1;
+        }
+        return returnValue;
     }
 }
 

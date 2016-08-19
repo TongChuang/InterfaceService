@@ -191,6 +191,7 @@ public interface LisInfoService {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/returnSample")
     String returnSample(@QueryParam("barcode") String barcode,
+                        @QueryParam("patientId") String patientId,
                         @QueryParam("returnTime") Date returnTime,
                         @QueryParam("operator") String operator,
                         @QueryParam("reason")@DefaultValue("")String reason);
@@ -244,9 +245,16 @@ public interface LisInfoService {
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/returnReport")
-    String returnReport(@QueryParam("reason") @DefaultValue("")String reason,
-                        @QueryParam("returnTime")Date returnTime,
+    String returnReport(@QueryParam("barcode")String barcode,
                         @QueryParam("operator")String operator,
-                        @QueryParam("barcode")String barcode);
+                        @QueryParam("returnTime")Date returnTime,
+                        @QueryParam("reason") @DefaultValue("")String reason);
 
+    /**
+     * 标本报告状态
+     * @param reportType    //报告类型 0 普通 1真菌D内毒素
+     * @param barcode
+     * @return
+     */
+    String getReportStatus(@QueryParam("reportType")int reportType,@QueryParam("barcode")String barcode);
 }

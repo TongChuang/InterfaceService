@@ -24,7 +24,7 @@ public class AccountItem  implements Serializable {
     @JSONField(name = "patientCode")
     private String patientCode;     //病人住院序号
     @JSONField(name = "PatientId")
-    private String patientId;     //病人就诊ID
+    private String patientId;       //病人就诊ID
     @JSONField(name = "patientType")
     private String patientType;     //病人类型 住院 1、门诊 2
     @JSONField(name = "patientName")

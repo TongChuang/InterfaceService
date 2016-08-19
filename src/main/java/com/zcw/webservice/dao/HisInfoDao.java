@@ -89,7 +89,7 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode 住院、门诊号
      * @return 返回病人信息
      */
-    public List<Patient> getPatientInfo(String patientType, String patientCode, String patientId) {
+    public List<Patient> getPatientInfo(String patientType, String patientCode, String patientId) throws Exception{
         if (patientType.equals("1")) {
             //门诊病人信息
             return getOutPatientInfo(patientCode, patientId);
@@ -107,7 +107,7 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode
      * @return 返回住院病人信息
      */
-    private List<Patient> getInPatientInfo(String patientCode, String patientId) {
+    private List<Patient> getInPatientInfo(String patientCode, String patientId) throws Exception{
         List<Patient> patientList = null;
         String sql = "";
         Object[] parms = null;
@@ -157,7 +157,7 @@ public class HisInfoDao extends BaseDao {
      * @return 返回门诊病人信息
      */
 
-    private List<Patient> getOutPatientInfo(String patientCode, String patientId) {
+    private List<Patient> getOutPatientInfo(String patientCode, String patientId) throws Exception{
         List<Patient> patientList = null;
         //String sql = "select * from V_HSBCI_TREATINFO where BRJZHM =?";
         String sql = "";
@@ -210,7 +210,7 @@ public class HisInfoDao extends BaseDao {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveBooking(final List<AccountItem> accountItem) {
+    public ReturnMsg saveBooking(final List<AccountItem> accountItem) throws Exception{
         ReturnMsg msg = new ReturnMsg();
         String userids = "";
         try {
@@ -226,7 +226,7 @@ public class HisInfoDao extends BaseDao {
         sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
                 "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
-            this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+            this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                     int length = accountItem.size();
                     for (int i = 0; i < length; i++) {
@@ -235,7 +235,7 @@ public class HisInfoDao extends BaseDao {
                             final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
                             accountItem.get(i).setAccountId(seqId);
                         }
-                        ps.setLong(1, accountItem.get(i).getAccountId());                       //记账记录序号
+                        ps.setLong(1, accountItem.get(i).getAccountId());                     //记账记录序号
                         ps.setObject(2, accountItem.get(i).getPatientId());                 //病人就诊序号
                         ps.setLong(3, 2);                                           //药品诊疗判别 1 药品 2 诊疗
                         ps.setString(4, accountItem.get(i).getFeeItemCode());              //费用项目序号 代码11266
@@ -310,7 +310,7 @@ public class HisInfoDao extends BaseDao {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public List<PatientRequestInfo> getPatientRequestInfo(int requestType, int executeStatus,String patientType, String patientId, String fromDate, String toDate) {
+    public List<PatientRequestInfo> getPatientRequestInfo(int requestType, int executeStatus,String patientType, String patientId, String fromDate, String toDate) throws Exception{
 
         if (patientType.equals("2")) {
             //住院病人信息
@@ -331,7 +331,7 @@ public class HisInfoDao extends BaseDao {
      * @param toDate
      * @return
      */
-    private List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String patientId,  String fromDate,  String toDate) {
+    private List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String patientId,  String fromDate,  String toDate) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and BRZYID=?  and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
@@ -399,7 +399,7 @@ public class HisInfoDao extends BaseDao {
      * @param toDate
      * @return
      */
-    private List<PatientRequestInfo> getOutPatientRequestInfo(int requestType,int excuteSatus, String patientId, String fromDate, String toDate) {
+    private List<PatientRequestInfo> getOutPatientRequestInfo(int requestType,int excuteSatus, String patientId, String fromDate, String toDate) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBCI_REQUESTINFO where BRSQLX =?  and BRJZHM=? and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();

@@ -105,7 +105,7 @@ public class TestInfo  implements Serializable {
     private String sampleNo;        //标本号
 
     @JSONField(name = "IsToll")
-    private String isToll;          //是否收费 1：已收 2：未收
+    private String isToll;  //是否收费 1：已收 2：未收
 
     @JSONField(name = "PatientFileNo")
     private String patientFileNo;  //病人档案号
@@ -116,8 +116,8 @@ public class TestInfo  implements Serializable {
     @JSONField(name = "RequestId")
     private String RequestId;  //申请ID
 
-    //@JSONField(name = "RequestItemId")
-    //private String requestItemId;  //申请项目ID
+    @JSONField(name = "RequestItemId")
+    private String requestItemId;  //申请项目ID
 
     public String getRequestId() {
         return RequestId;
@@ -125,6 +125,14 @@ public class TestInfo  implements Serializable {
 
     public void setRequestId(String requestId) {
         RequestId = requestId;
+    }
+
+    public String getRequestItemId() {
+        return requestItemId;
+    }
+
+    public void setRequestItemId(String requestItemId) {
+        this.requestItemId = requestItemId;
     }
 
     public String getPatientId() {
