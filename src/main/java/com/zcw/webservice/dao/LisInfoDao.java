@@ -7,14 +7,14 @@ import com.zcw.webservice.model.vo.*;
 import com.zcw.webservice.model.vo.TestResult;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Title:LisInfoDao
@@ -66,8 +66,8 @@ public class LisInfoDao extends BaseDao {
                         testInfo.setChargeTypeCode(Util.null2String(rs.getString("ChargeTypeCode")));
                         testInfo.setChargeTypeName(Util.null2String(rs.getString("ChargeTypeName")));
                         testInfo.setDiagnosis(Util.null2String(rs.getString("Diagnosis")));
-                        testInfo.setSignDate(Util.null2String(rs.getString("SignDate")));
-                        testInfo.setSignerAccount(Util.null2String(rs.getString("SignerAccount")));
+                        //testInfo.setSignDate(Util.null2String(rs.getString("SignDate")));
+                        //testInfo.setSignerAccount(Util.null2String(rs.getString("SignerAccount")));
                         String tmpItemCode = Util.null2String(rs.getString("InspectItemCode"));
                         if (!tmpItemCode.equals("")) {
                             if (tmpItemCode.lastIndexOf(",") > 0) {
@@ -77,19 +77,56 @@ public class LisInfoDao extends BaseDao {
                             testItem.setId(tmpItemCode);
                             testItem.setCode(tmpItemCode);
                             testItem.setName(Util.null2String(rs.getString("InspectItemName")));
+                            testItem.setRequestItemId(Util.null2String(rs.getString("requestItemId")));
                             List<TestItem> testItems = new ArrayList<TestItem>();
                             testItems.add(testItem);
+
                             testInfo.setTestItems(testItems);
+
                         }
                         testInfo.setRemark(Util.null2String(rs.getString("Remark")));
                         testInfo.setSampleNo(Util.null2String(rs.getString("SampleNo")));
-                        testInfo.setPatientFileNo(Util.null2String(rs.getString("patientFileNo")));
+                        //testInfo.setPatientFileNo(Util.null2String(rs.getString("patientFileNo")));
                         testInfo.setPatientPhone(Util.null2String(rs.getString("patientPhone")));
-                        testInfo.setIsToll(Util.null2String(rs.getString("patientPhone")));
+                        //testInfo.setIsToll(Util.null2String(rs.getString("patientPhone")));
                         testInfo.setPatientId(Util.null2String(rs.getString("patientid")));
+                        testInfo.setRequestId(Util.null2String(rs.getString("requestId")));
+                        //testInfo.setRequestItemId(Util.null2String(rs.getString("requestItemId")));
                         return testInfo;
                     }
                 });
+
+        if (testInfoList.size()>0){
+            //获取标本确认时间及确认人
+            sql = "select top 1 id, recordtime,operator,ybid,trans from t_lis_sampletransPro where Trans='标本确认'  and ybid=? order by id desc";
+            Map result= null;
+            try{
+                result=(Map)lisJdbcTemplate.queryForMap(sql,new Object[]{testInfoList.get(0).getBarcode()});
+                testInfoList.get(0).setSignDate(result.get("recordtime").toString());
+                testInfoList.get(0).setSignerAccount((String)result.get("operator"));
+            }catch (EmptyResultDataAccessException e){
+                result= null;
+            }
+            //获取病案号
+            try{
+                sql = "select top 1 P_wyh from TC_wyhdz where P_DYHM =? order by pid desc";
+                result=(Map)lisJdbcTemplate.queryForMap(sql,new Object[]{testInfoList.get(0).getPatientCode()});
+                testInfoList.get(0).setPatientFileNo((String)result.get("P_wyh"));
+            }catch (EmptyResultDataAccessException e){
+                result= null;
+            }
+            //获取TESTITEM
+//            List<Map<String,String>> testItems = new ArrayList<Map<String,String>>();
+//
+//            testItems = lisJdbcTemplate.query(sql,new Object[]{barcode},
+//                    new RowMapper<Map>() {
+//                        public Map<String,String> mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                            Map info = new HashMap();
+//                            info.put("")
+//                        }
+//                    })
+//
+        }
         return testInfoList;
     }
 
@@ -100,7 +137,7 @@ public class LisInfoDao extends BaseDao {
      */
     public List<Bacteria> getBacteriaList() throws Exception {
         List<Bacteria> bacterias = null;
-        String sql = "SELECT dh, bh, mc, ywm FROM xj_xjzl";
+        String sql = "SELECT dh, bh, mc, ywm,td FROM xj_xjzl";
         bacterias = lisJdbcTemplate.query(sql,
                 new RowMapper<Bacteria>() {
                     public Bacteria mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -108,6 +145,7 @@ public class LisInfoDao extends BaseDao {
                         bacteria.setCode(Util.null2String(rs.getString("dh")));
                         bacteria.setName(Util.null2String(rs.getString("mc")));
                         bacteria.setAlias(Util.null2String(rs.getString("ywm")));
+                        bacteria.setChannel(Util.null2String(rs.getString("td")));
                         return bacteria;
                     }
                 });
@@ -141,9 +179,11 @@ public class LisInfoDao extends BaseDao {
      * @return
      */
     public List<TestPurpose> getTestPurposeList() throws Exception {
-        String sql = "SELECT t1.jymddh, t1.jymdmc, t1.jymdsf,t2.dh,t2.mc " +
-                " FROM xt_jymd t1 left join xt_bbzl t2 on t1.bbzl = t2.dh" +
-                " where t1.jyyq =',微生物,' ";
+        String sql = "SELECT t1.jymddh, t1.jymdmc, t1.jymdsf,t2.dh,t2.mc ,t3.his_id,t3.Chinese_name,t3.Sample_class " +
+                "                  FROM xt_jymd t1 " +
+                "                  left join xt_bbzl t2 on t1.bbzl = t2.dh " +
+                "                  left join Tc_interface_Combine t3  on t1.jymddh = t3.Combine_id " +
+                "                  where t1.jyyq =',微生物,'";
         List<TestPurpose> testPurposes = null;
         testPurposes = lisJdbcTemplate.query(sql,
                 new RowMapper<TestPurpose>() {
@@ -154,6 +194,8 @@ public class LisInfoDao extends BaseDao {
                         testPurpose.setFee(Util.null2String(rs.getString("jymdsf")));
                         testPurpose.setSampleId(Util.null2String(rs.getString("dh")));
                         testPurpose.setSampleName(Util.null2String(rs.getString("mc")));
+                        testPurpose.setHisItemCode(Util.null2String(rs.getString("his_id")));
+                        testPurpose.setHisItemName(Util.null2String(rs.getString("Chinese_name")));
                         return testPurpose;
                     }
                 });
@@ -490,6 +532,7 @@ public class LisInfoDao extends BaseDao {
      * 日志记录
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public ReturnMsg saveSampleFlowLog(final SampleLog sampleLog)throws Exception{
         if(sampleLog ==null)
             return new ReturnMsg(0,"参数不能为空");
@@ -505,6 +548,22 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(4, Util.null2String(sampleLog.getRemark()));                   //内容
             }
         });
+        return new ReturnMsg(1, "保存成功");
+    }
+
+    /**
+     *
+     * @param reason
+     * @param returnTime
+     * @param operator
+     * @param barcode
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ReturnMsg returnReport(String reason, Date returnTime, String operator, String barcode)throws Exception{
+        if(barcode==null || barcode.equals(""))
+            return new ReturnMsg(0,"样本号不能为空");
         return new ReturnMsg(1, "保存成功");
     }
 }

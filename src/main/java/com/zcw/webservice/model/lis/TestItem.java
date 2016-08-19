@@ -29,6 +29,17 @@ public class TestItem  implements Serializable {
     @JSONField(name = "Name")
     private String name;    //检验项目名称
 
+    @JSONField(name = "RequestItemId")
+    String requestItemId;
+
+    public String getRequestItemId() {
+        return requestItemId;
+    }
+
+    public void setRequestItemId(String requestItemId) {
+        this.requestItemId = requestItemId;
+    }
+
     /**
      * Getter method for property <tt>id</tt>.
      *

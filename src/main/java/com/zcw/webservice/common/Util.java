@@ -62,4 +62,13 @@ public final class Util {
         return null;
     }
 
+    public static java.util.Date toDate (String dateTime){
+        try {
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  //格式化时间
+            Date sDate= sdf.parse(dateTime); //格式化startDate 开始时间为 Date类型
+            return sDate;
+        }catch (Exception e){
+        }
+        return null;
+    }
 }

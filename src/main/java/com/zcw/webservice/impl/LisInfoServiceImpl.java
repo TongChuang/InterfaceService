@@ -1,12 +1,14 @@
 package com.zcw.webservice.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.zcw.webservice.dao.HisInfoDao;
 import com.zcw.webservice.dao.LisInfoDao;
 import com.zcw.webservice.model.his.AccountItem;
+import com.zcw.webservice.model.his.RequestUpdateParam;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
@@ -17,6 +19,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.jws.WebService;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -305,7 +308,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @return
      */
     public String saveSampleFlowLog(SampleLog sampleLog) {
-        log.info("saveTestResult================================START");
+        log.info("saveSampleFlowLog================================START");
         log.info(JSON.toJSONString(sampleLog));
         //{"OperatorName":"邵晓丽","OperatorNo":"77008","RecordTime":"2016-08-17 19:37:25","Remark":"入库打印条码","SampleNo":"A12008812374","SysName":"微生物系统"}
         ReturnMsg msg = new ReturnMsg();
@@ -316,25 +319,43 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        log.info("saveTestResult================================END");
-        return JSON.toJSONString(msg,filter);
-    }
-
-
-    public String returnSample(String reason, Date returnTime, String operator,String barcode) {
-        ReturnMsg msg = new ReturnMsg();
-        log.info("returnSample================================START");
-        log.info(JSON.toJSONString(reason));
-        log.info(JSON.toJSONString(returnTime));
-        log.info(JSON.toJSONString(operator));
-        log.info(JSON.toJSONString(barcode));
-        log.info("returnSample================================END");
+        log.info("saveSampleFlowLog================================END");
         return JSON.toJSONString(msg,filter);
     }
 
     @Override
-    public String booking(AccountItem accountItem) {
-        log.info("saveTestResult================================START");
+    public String returnSample(String barcode,Date returnTime, String operator, String reason) {
+        ReturnMsg msg = new ReturnMsg(0,"退回成功");
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     * HIS申请状态变更
+     * @param param
+     * @return
+     */
+    public String requestUpdate(RequestUpdateParam param) {
+        ReturnMsg msg = new ReturnMsg();
+        log.info("requestUpdate================================START");
+        try{
+            msg = hisInfoDao.requestUpdate(param);
+        }catch (Exception e){
+            e.printStackTrace();
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info("requestUpdate================================END");
+
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     * 计费
+     * @param accountItem       费用信息
+     * @return
+     */
+    public String booking(List<AccountItem> accountItem) {
+        log.info("booking================================START");
         log.info(JSON.toJSONString(accountItem));
         System.out.println(JSON.toJSONString(accountItem));
         ReturnMsg msg = new ReturnMsg();
@@ -345,8 +366,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        System.out.println(JSON.toJSONString(msg));
-        log.info("saveTestResult================================END");
+        log.info("booking================================END");
 
         return JSON.toJSONString(msg,filter);
     }
@@ -357,11 +377,24 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    public String  getPatientRequestInfo(String patientType, String patientId, String fromDate, String toDate) {
+    public String  getPatientRequestInfo(int requestType,int executeStatus,String patientType, String patientId, String fromDate, String toDate) {
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setMessage(hisInfoDao.getPatientRequestInfo(patientType, patientId, fromDate, toDate));
+            msg.setMessage(hisInfoDao.getPatientRequestInfo(requestType,executeStatus,patientType, patientId, fromDate, toDate));
+        } catch (Exception e) {
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
+    @Override
+    public String returnReport(String reason, Date returnTime, String operator, String barcode) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg = lisInfoDao.returnReport(reason,returnTime,operator, barcode);
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);

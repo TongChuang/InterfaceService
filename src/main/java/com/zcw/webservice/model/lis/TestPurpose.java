@@ -33,6 +33,12 @@ public class TestPurpose  implements Serializable {
     @JSONField(name = "SampleName")
     private String sampleName;          //标本名称;
 
+    @JSONField(name = "HisItemCode")
+    private String hisItemCode;          //HIS诊疗项目ID;
+
+    @JSONField(name = "HisItemName")
+    private String hisItemName;          //HIS诊疗项目名称;
+
     public String getCode() {
         return code;
     }
@@ -79,5 +85,21 @@ public class TestPurpose  implements Serializable {
 
     public void setSampleName(String sampleName) {
         this.sampleName = sampleName;
+    }
+
+    public String getHisItemCode() {
+        return hisItemCode;
+    }
+
+    public void setHisItemCode(String hisItemCode) {
+        this.hisItemCode = hisItemCode;
+    }
+
+    public String getHisItemName() {
+        return hisItemName;
+    }
+
+    public void setHisItemName(String hisItemName) {
+        this.hisItemName = hisItemName;
     }
 }

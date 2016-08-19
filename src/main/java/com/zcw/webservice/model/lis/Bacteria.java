@@ -24,6 +24,17 @@ public class Bacteria  implements Serializable {
     @JSONField(name = "Alias")
     private String alias;           //别名;
 
+    @JSONField(name = "Channel")
+    private String channel;         //通道编码
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
     public String getAlias() {
         return alias;
     }

@@ -97,8 +97,8 @@ public interface LisInfoService {
      */
     @GET
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Path(value = "/getPatientInfoList/{patientType}/{patientCode}/{patientId}")
-    String getPatientInfoList(@PathParam("patientType") String patientType, @PathParam("patientCode") String patientCode, @PathParam("patientId") String patientId);
+    @Path(value = "/getPatientInfoList")
+    String getPatientInfoList(@QueryParam("patientType") String patientType, @QueryParam("patientCode") String patientCode, @QueryParam("patientId")  @DefaultValue("") String patientId);
 
     /**
      * 获取病区信息列表
@@ -180,17 +180,20 @@ public interface LisInfoService {
 
     /**
      * 标本退回
-     * @param barcode        标本信息
-     * @param reason            退回原因
-     * @param returnTime        退回时间
-     * @param operator          操作人式呈
+     * @param barcode        条码号
+     * @param reason        退回原因
+     * @param returnTime    退回时间
+     * @param operator      操作人式呈
      * @return
      */
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
-    @Path(value = "/returnSample/{reason}/{returnTime}/{operator}/{barcode}")
-    String returnSample(@PathParam("reason") String reason,@PathParam("returnTime")Date returnTime,@PathParam("operator")String operator,@PathParam("barcode")String barcode);
+    @Path(value = "/returnSample")
+    String returnSample(@QueryParam("barcode") String barcode,
+                        @QueryParam("returnTime") Date returnTime,
+                        @QueryParam("operator") String operator,
+                        @QueryParam("reason")@DefaultValue("")String reason);
 
     /**
      *  收费
@@ -201,7 +204,7 @@ public interface LisInfoService {
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/booking")
-    String booking (AccountItem accountItem);
+    String booking (List<AccountItem> accountItem);
 
     /**
      * 获取LIS相关检测结果
@@ -211,8 +214,39 @@ public interface LisInfoService {
      */
     String getListTestResult(String barcode,String patientId);
 
+    /**
+     *
+     * @param patientType
+     * @param patientCode       住院、门诊编号
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Path(value = "/getPatientRequestInfo/{patientType}/{patientId}/{fromDate}/{toDate}")
-    String getPatientRequestInfo(@PathParam("patientType") String patientType, @PathParam("patientId")String patientId,@PathParam("fromDate")String fromDate, @PathParam("toDate")String toDate);
+    @Path(value = "/getPatientRequestInfo")
+    String getPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
+                                 @QueryParam("executeStatus") @DefaultValue("0")int executeStatus,
+                                 @QueryParam("patientType") @DefaultValue("1")String patientType,
+                                 @QueryParam("patientCode")String patientCode,
+                                 @QueryParam("fromDate")@DefaultValue("")String fromDate,
+                                 @QueryParam("toDate")@DefaultValue("")String toDate);
+
+    /**
+     * 报告撤回
+     * @param barcode        标本信息
+     * @param reason            退回原因
+     * @param returnTime        退回时间
+     * @param operator          操作人式呈
+     * @return
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Path(value = "/returnReport")
+    String returnReport(@QueryParam("reason") @DefaultValue("")String reason,
+                        @QueryParam("returnTime")Date returnTime,
+                        @QueryParam("operator")String operator,
+                        @QueryParam("barcode")String barcode);
+
 }
