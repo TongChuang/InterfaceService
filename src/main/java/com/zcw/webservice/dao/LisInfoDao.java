@@ -414,15 +414,9 @@ public class LisInfoDao extends BaseDao {
             }
         });
         //异常测试
-<<<<<<< HEAD
-//        if (1 == 1) {
-//            throw new RuntimeException("错误！！！");
-//        }
-=======
         /*if (1 == 1) {
             throw new Exception("错误！！！");
         }*/
->>>>>>> f4a4877b554bf9888f0644afc3b25b8a917c4f43
         //更新药敏信息
         final List<DrugResult> drugResults = report.getDrugResults();
         if (drugResults != null && drugResults.size() > 0) {
@@ -436,10 +430,6 @@ public class LisInfoDao extends BaseDao {
                         if (orderNo > 1) flag = true;
                     }
                     for (int i = 0; i < length; i++) {
-                        int OrderId = Util.getIntValue(drugResults.get(i).getResultCode());
-                        if (flag) {
-                            OrderId--;
-                        }
                         ps.setString(1, sampleInfo.getSampleId());               //样本号
                         ps.setString(2, "ym");                                   //结果类型
                         ps.setInt(3, Util.getIntValue(drugResults.get(i).getResultCode()));        //结果类型序号
