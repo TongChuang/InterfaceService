@@ -374,7 +374,7 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(7, Util.null2String(sampleInfo.getAgeType()));           //年龄类型
                 ps.setString(8, Util.null2String(sampleInfo.getBedNo()));             //病人床号
                 ps.setString(9, Util.null2String((sampleInfo.getSampleType())));        //标本类型
-                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //采样时间
+                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //接收时间
                 ps.setString(11, Util.null2String(sampleInfo.getClinicalDiagnosis())); //临床诊断
                 ps.setString(12, Util.null2String(sampleInfo.getInspectDoctor()));     //送检医生
                 ps.setString(13, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
@@ -390,7 +390,7 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(23, "d");                              //样本状态(初审)
                 ps.setString(24, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setString(25, "外观正常");                       //标本外观
-                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));
+                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime())); //采样时间
             }
         });
 
@@ -414,12 +414,12 @@ public class LisInfoDao extends BaseDao {
             }
         });
         //异常测试
-        if (1 == 1) {
+        /*if (1 == 1) {
             throw new Exception("错误！！！");
-        }
+        }*/
         //更新药敏信息
         final List<DrugResult> drugResults = report.getDrugResults();
-        if (drugResults.size() > 0) {
+        if (drugResults != null && drugResults.size() > 0) {
             sql = "insert into xj_xmcdz(ybbh,jglx,lxxh,ybjg,jg1,jg2,kbvalue,jgxh) values(?,?,?,?,?,?,?,?)";
             this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -436,12 +436,12 @@ public class LisInfoDao extends BaseDao {
                         }
                         ps.setString(1, sampleInfo.getSampleId());               //样本号
                         ps.setString(2, "ym");                                   //结果类型
-                        ps.setInt(3, OrderId);        //结果类型序号
+                        ps.setInt(3, Util.getIntValue(drugResults.get(i).getResultCode()));        //结果类型序号
                         ps.setString(4, drugResults.get(i).getName());             //结果(抗生素名称)
                         ps.setString(5, drugResults.get(i).getAbnormalResult());   //异菌范围
                         ps.setString(6, drugResults.get(i).getResultValue());        //结果值(R/S/I)
                         ps.setString(7, drugResults.get(i).getReference());        //KB参考范围
-                        ps.setString(8, drugResults.get(i).getOrderNo());        //KB参考范围
+                        ps.setString(8, drugResults.get(i).getOrderNo());        //药敏顺序
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
@@ -462,10 +462,14 @@ public class LisInfoDao extends BaseDao {
     private ReturnMsg saveTestResult2(Report report) throws Exception {
         String sql = "insert into lis_ybxx(yqdh,ybid,ybbh,byh,cdrq,brxm,brxb," +
                 "brnl,nllx,brkb,brch,bbzl,cyrq,lczd,sjys,jyys,shys,jymd" +
-                ",jymdmc,bgrq,brbq,khks,brphone,papersize) " +
-                "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                ",jymdmc,bgrq,brbq,khks,brphone,papersize,bingrenlb,ybzt,cjtime) " +
+                "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         final SampleInfo sampleInfo = report.getSampleInfo();
         final int sex = (sampleInfo.getSex().equals("女")) ? 2 : 1;
+
+        //获取医院(客户名称)
+        String custCode = sampleInfo.getBarcode().length() > 6 ? sampleInfo.getBarcode().substring(0, 6) : "";
+        final String custName = lisJdbcTemplate.queryForObject("select mc from xt_yymc_print where dh=?", new Object[]{custCode}, String.class);
         //保存样本信息
         lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
@@ -473,16 +477,16 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(1, "微生物");                                                     //仪器代号
                 ps.setString(2, sampleInfo.getBarcode());                                       //条码号
                 ps.setString(3, sampleInfo.getSampleId());                                       //样本ID
-                ps.setString(4, sampleInfo.getPatientCode());                                   //病历号
+                ps.setString(4, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setTimestamp(5, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
                 ps.setString(6, sampleInfo.getPatientName());                                   //病人姓名
                 ps.setInt(7, sex);                                                              //病人性别
                 ps.setObject(8, sampleInfo.getAge());                                           //年龄
                 ps.setObject(9, sampleInfo.getAgeType());                                       //年龄类型
-                ps.setObject(10, sampleInfo.getDepartment());                                    //病人科别
+                ps.setString(10, "外观正常");                                                   //标本性状
                 ps.setObject(11, sampleInfo.getBedNo());                                         //病人床号
                 ps.setObject(12, sampleInfo.getSampleTypeCode());                               //标本类型
-                ps.setTimestamp(13, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //采样时间
+                ps.setTimestamp(13, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //接收时间
                 ps.setObject(14, sampleInfo.getClinicalDiagnosis());                            //临床诊断
                 ps.setObject(15, sampleInfo.getInspectDoctor());                                //送检医生
                 ps.setObject(16, sampleInfo.getTestDoctor());                                   //检验医生
@@ -495,6 +499,10 @@ public class LisInfoDao extends BaseDao {
                 ps.setObject(23, sampleInfo.getPatientPhone());                                 //病人电话
                 //ps.setObject(22, sampleInfo.getCreateTime());                                 //创建日期
                 ps.setObject(24, "A5");
+                ps.setString(25, Util.null2String(sampleInfo.getPatientCode()));      //病人类别编号
+                ps.setString(26, "d");                              //样本状态(初审)
+                //ps.setString(27, "外观正常");                       //标本外观
+                ps.setTimestamp(27, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime())); //采样时间                              //样本状态(初审)
             }
         });
 
@@ -509,12 +517,12 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(1, "微生物");                                                 //仪器代号
                     ps.setTimestamp(2, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime())); //测定日期
                     ps.setString(3, sampleInfo.getSampleId());                                   //样本编号
-                    ps.setString(4, results.get(i).getTestItemCode());                          //结果类型序号
-                    ps.setString(5, results.get(i).getTestItemCode());                          //结果
-                    ps.setString(6, results.get(i).getResult());                                //菌量计数
+                    ps.setString(4, results.get(i).getTestItemCode());                          //结果项目编号
+                    ps.setString(5, results.get(i).getTestItemOrder());                         //结果类型序号
+                    ps.setString(6, results.get(i).getResult());                                //结果
                     ps.setString(7, results.get(i).getAbnormalFlag());                          //异常标志
                     ps.setString(8, results.get(i).getReference());                             //参考值
-                    ps.setString(9, results.get(i).getUnit());                                   //单位
+                    ps.setString(9, results.get(i).getUnit());                                  //单位
                     ps.addBatch();
                 }
                 Object o = ps.executeBatch();
