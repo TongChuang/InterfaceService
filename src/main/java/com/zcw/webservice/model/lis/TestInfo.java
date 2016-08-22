@@ -105,7 +105,7 @@ public class TestInfo  implements Serializable {
     private String sampleNo;        //标本号
 
     @JSONField(name = "IsToll")
-    private String isToll;  //是否收费 1：已收 2：未收
+    private String isToll;      //是否收费 1：已收 2：未收
 
     @JSONField(name = "PatientFileNo")
     private String patientFileNo;  //病人档案号

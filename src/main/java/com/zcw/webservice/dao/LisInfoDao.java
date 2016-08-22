@@ -414,9 +414,9 @@ public class LisInfoDao extends BaseDao {
             }
         });
         //异常测试
-        if (1 == 1) {
-            throw new Exception("错误！！！");
-        }
+//        if (1 == 1) {
+//            throw new RuntimeException("错误！！！");
+//        }
         //更新药敏信息
         final List<DrugResult> drugResults = report.getDrugResults();
         if (drugResults.size() > 0) {
