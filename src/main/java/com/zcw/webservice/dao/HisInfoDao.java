@@ -301,59 +301,47 @@ public class HisInfoDao extends BaseDao {
 
     }
 
-    /**
-     * 病人申请信息
-     *
-     * @param patientId
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public List<PatientRequestInfo> getPatientRequestInfo(int requestType, int executeStatus,String patientType, String patientId, String fromDate, String toDate) throws Exception{
-
-        if (patientType.equals("2")) {
-            //住院病人信息
-            return getInPatientRequestInfo(requestType, executeStatus,patientId, fromDate, toDate);
-        }
-        if (patientType.equals("1")) {
-            //门诊病人信息
-            return getOutPatientRequestInfo(requestType, executeStatus,patientId, fromDate, toDate);
-        }
-        return null;
-    }
+//    /**
+//     * 病人申请信息
+//     *
+//     * @param patientId
+//     * @param fromDate
+//     * @param toDate
+//     * @return
+//     */
+//    @Transactional(rollbackFor = Exception.class)
+//    public List<PatientRequestInfo> getPatientRequestInfo(int requestType, int executeStatus,String patientType, String patientId, String fromDate, String toDate) throws Exception{
+//
+//        if (patientType.equals("2")) {
+//            //住院病人信息
+//            return getInPatientRequestInfo(requestType, executeStatus,patientId, fromDate, toDate);
+//        }
+//        if (patientType.equals("1")) {
+//            //门诊病人信息
+//            return getOutPatientRequestInfo(requestType, executeStatus,patientId, fromDate, toDate);
+//        }
+//        return null;
+//    }
 
     /**
      * 住院病人申请信息
-     *
-     * @param patientId
-     * @param fromDate
-     * @param toDate
+     * @param requestType
+     * @param executeStatus
+     * @param ward
      * @return
+     * @throws Exception
      */
-    private List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String patientId,  String fromDate,  String toDate) throws Exception{
+    public List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String ward) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
-        String sql = "select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and BRZYID=?  and SQZTBZ=? ";
+        String sql = "select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and DQBQID=?  and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
-        parms.add(patientId);
+        parms.add(ward);
         if(requestType==2){
             executeStatus = 0;
         }
         parms.add(executeStatus);
-        if (!fromDate.equals("")) {
-            fromDate += " 00:00:00";
-            sql += " and SQKDRQ>=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
-            parms.add(fromDate);
-        }
-        if (!toDate.equals("")) {
-            toDate += " 23:59:59";
-            sql += " and SQKDRQ<=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
-            parms.add(toDate);
-        }
-
-        patientRequestInfoList = hisJdbcTemplate.query(sql,
-                new Object[]{requestType, patientId, fromDate, toDate},
+        patientRequestInfoList = hisJdbcTemplate.query(sql,parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         PatientRequestInfo info = new PatientRequestInfo();
@@ -399,16 +387,16 @@ public class HisInfoDao extends BaseDao {
      * @param toDate
      * @return
      */
-    private List<PatientRequestInfo> getOutPatientRequestInfo(int requestType,int excuteSatus, String patientId, String fromDate, String toDate) throws Exception{
+    public List<PatientRequestInfo> getOutPatientRequestInfo(int requestType,int executeStatus, String patientId, String fromDate, String toDate) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBCI_REQUESTINFO where BRSQLX =?  and BRJZHM=? and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
         parms.add(patientId);
         if(requestType==2){
-            excuteSatus = 0;
+            executeStatus = 0;
         }
-        parms.add(excuteSatus);
+        parms.add(executeStatus);
 
         if (!fromDate.equals("")) {
             fromDate += " 00:00:00";

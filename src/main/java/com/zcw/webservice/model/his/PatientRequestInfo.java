@@ -30,15 +30,15 @@ public class PatientRequestInfo implements Serializable{
     private Date requestDateTime;          //申请日期
     private String itemCode;                //项目代码
     private String itemName;                //项目名称
-    private String itemPrintName;   //项目打印名称
-    private float quantity;           //数量
-    private int status;         //申请状态 -3 已退费 -1 撤销 3  确认 6 计费
-    private String testDept;        //检验科室
-    private int emergency;          //是否急诊 1 急诊 0 否
-    private float amount;           //金额
-    private String sampleType;      //标本类型
-    private String testPart;        //检查部位名称
-    private String patientFileCode; //病人档案号
+    private String itemPrintName;           //项目打印名称
+    private float quantity;                 //数量
+    private int status;                     //申请状态 -3 已退费 -1 撤销 3  确认 6 计费
+    private String testDept;                //检验科室
+    private int emergency;                  //是否急诊 1 急诊 0 否
+    private float amount;                    //金额
+    private String sampleType;              //标本类型
+    private String testPart;                //检查部位名称
+    private String patientFileCode;         //病人档案号
 
     public Long getRequestId() {
         return requestId;

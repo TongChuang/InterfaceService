@@ -384,12 +384,41 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return null;
     }
 
-    @Override
-    public String  getPatientRequestInfo(int requestType,int executeStatus,String patientType, String patientId, String fromDate, String toDate) {
+    /**
+     * 住院病人申请信息获取
+     * @param requestType
+     * @param executeStatus
+     * @param ward
+     * @return
+     */
+    public String  getInPatientRequestInfo(int requestType,int executeStatus,String ward) {
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setMessage(hisInfoDao.getPatientRequestInfo(requestType,executeStatus,patientType, patientId, fromDate, toDate));
+            msg.setMessage(hisInfoDao.getInPatientRequestInfo(requestType, executeStatus, ward));
+        } catch (Exception e) {
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     * 门诊病人申请信息查询
+     * @param requestType
+     * @param executeStatus
+     * @param patientType
+     * @param patientId
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    public String  getOutPatientRequestInfo(int requestType,int executeStatus,String patientType, String patientId, String fromDate, String toDate) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(hisInfoDao.getOutPatientRequestInfo( requestType, executeStatus,  patientId,  fromDate,  toDate));
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);

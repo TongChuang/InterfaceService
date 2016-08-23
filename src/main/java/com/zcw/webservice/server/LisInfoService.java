@@ -216,23 +216,36 @@ public interface LisInfoService {
     String getListTestResult(String barcode,String patientId);
 
     /**
-     *
+     *  住院病人检查申请信息查询
+     * @param requestType
+     * @param executeStatus       住院编号
+     * @param ward
+     * @return
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getPatientRequestInfo")
+    String getInPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
+                                 @QueryParam("executeStatus") @DefaultValue("0")int executeStatus,
+                                 @QueryParam("ward") String ward);
+    /**
+     * 门诊检查申请信息查询
      * @param patientType
      * @param patientCode       住院、门诊编号
      * @param fromDate
      * @param toDate
      * @return
      */
+
     @GET
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Path(value = "/getPatientRequestInfo")
-    String getPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
-                                 @QueryParam("executeStatus") @DefaultValue("0")int executeStatus,
-                                 @QueryParam("patientType") @DefaultValue("1")String patientType,
-                                 @QueryParam("patientCode")String patientCode,
-                                 @QueryParam("fromDate")@DefaultValue("")String fromDate,
-                                 @QueryParam("toDate")@DefaultValue("")String toDate);
-
+    @Path(value = "/getOutPatientRequestInfo")
+    String getOutPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
+                                   @QueryParam("executeStatus") @DefaultValue("0")int executeStatus,
+                                   @QueryParam("patientType") @DefaultValue("1")String patientType,
+                                   @QueryParam("patientCode")String patientCode,
+                                   @QueryParam("fromDate")@DefaultValue("")String fromDate,
+                                   @QueryParam("toDate")@DefaultValue("")String toDate);
     /**
      * 报告撤回
      * @param barcode        标本信息
