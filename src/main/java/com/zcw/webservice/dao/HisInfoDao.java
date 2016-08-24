@@ -386,36 +386,37 @@ public class HisInfoDao extends BaseDao {
      */
     public List<PatientRequestInfo> getOutPatientRequestInfo(int requestType, String requestId,String requestDetailId,String testItemId,int executeStatus, String patientId, String fromDate, String toDate) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
-        String sql = "select * from V_HSBCI_REQUESTINFO where BRSQLX =?  and BRJZHM=? and SQZTBZ=? ";
+        String sql = "select * from V_HSBCI_REQUESTINFO where BRSQLX =? and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
-        parms.add(patientId);
         if(requestType==2){
             executeStatus = 0;
         }
         parms.add(executeStatus);
-
-        if (!fromDate.equals("")) {
+        if (patientId != null && !patientId.isEmpty()) {
+            sql += " and BRJZHM=?";
+            parms.add(patientId);
+        }
+        if (!fromDate.isEmpty()) {
             fromDate += " 00:00:00";
             sql += "and SQKDRQ>=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(fromDate);
         }
-        if (!toDate.equals("")) {
+        if (!toDate.isEmpty()) {
             toDate += " 23:59:59";
             sql += "and SQKDRQ<=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(toDate);
         }
-        if(!requestId.equals("")){
+        if(!requestId.isEmpty()){
             sql += "and SQJLID=?";
             parms.add(requestId);
         }
-        if(!testItemId.equals("")){
+        if(!testItemId.isEmpty()){
             sql += "and JCXMID=?";
             parms.add(testItemId);
         }
-        if(!requestDetailId.equals("")){
-            sql += "and SQMXID=?";
-            parms.add(requestDetailId);
+        if(!requestDetailId.isEmpty()){
+            sql += "and SQMXID in (" + requestDetailId + ")";
         }
         patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
