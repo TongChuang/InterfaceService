@@ -61,9 +61,9 @@
       <version>10.2.0.4.0</version>
     </dependency>
     <dependency>
-      <groupId>com.hynnet</groupId>
-      <artifactId>sqljdbc-chs</artifactId>
-      <version>4.0.2206.100</version>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>sqljdbc</artifactId>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.jtds</groupId>
