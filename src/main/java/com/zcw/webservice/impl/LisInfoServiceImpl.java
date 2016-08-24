@@ -408,17 +408,18 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * 门诊病人申请信息查询
      * @param requestType
      * @param executeStatus
+     *
      * @param patientType
      * @param patientId
      * @param fromDate
      * @param toDate
      * @return
      */
-    public String  getOutPatientRequestInfo(int requestType,int executeStatus,String patientType, String patientId, String fromDate, String toDate) {
+    public String  getOutPatientRequestInfo(int requestType,  String requestId,String requestDetailId,String testItemId,int executeStatus,String patientType, String patientId, String fromDate, String toDate) {
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setMessage(hisInfoDao.getOutPatientRequestInfo( requestType, executeStatus,  patientId,  fromDate,  toDate));
+            msg.setMessage(hisInfoDao.getOutPatientRequestInfo( requestType,   requestId,requestDetailId, testItemId,executeStatus,  patientId,  fromDate,  toDate));
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);

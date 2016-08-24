@@ -2,6 +2,7 @@ package com.zcw.webservice.server;
 
 import com.zcw.webservice.model.his.AccountItem;
 import com.zcw.webservice.model.his.PatientRequestInfo;
+import com.zcw.webservice.model.his.RequestUpdateParam;
 import com.zcw.webservice.model.lis.Bacteria;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
@@ -224,23 +225,30 @@ public interface LisInfoService {
      */
     @GET
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Path(value = "/getPatientRequestInfo")
+    @Path(value = "/getInPatientRequestInfo")
     String getInPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
-                                 @QueryParam("executeStatus") @DefaultValue("0")int executeStatus,
+                                 @QueryParam("executeStatus") @DefaultValue("3")int executeStatus,
                                  @QueryParam("ward") String ward);
+
     /**
      * 门诊检查申请信息查询
-     * @param patientType
-     * @param patientCode       住院、门诊编号
-     * @param fromDate
-     * @param toDate
+     * @param requestType           申请类型
+     * @param requestId             申请ID
+     * @param testItemId            检验目的ID
+     * @param executeStatus         执行状态
+     * @param patientType    类型
+     * @param patientCode   病人编号
+     * @param fromDate      开始时间
+     * @param toDate        截止时间
      * @return
      */
-
     @GET
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getOutPatientRequestInfo")
     String getOutPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
+                                    @QueryParam("requestId") @DefaultValue("") String requestId,
+                                    @QueryParam("requestDetailId") @DefaultValue("") String requestDetailId,
+                                   @QueryParam("testItemId") @DefaultValue("") String testItemId,
                                    @QueryParam("executeStatus") @DefaultValue("0")int executeStatus,
                                    @QueryParam("patientType") @DefaultValue("1")String patientType,
                                    @QueryParam("patientCode")String patientCode,
@@ -270,4 +278,15 @@ public interface LisInfoService {
      * @return
      */
     String getReportStatus(@QueryParam("reportType")int reportType,@QueryParam("barcode")String barcode);
+
+    /**
+     * 申请状态变更
+     * @param param
+     * @return
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Path(value = "/requestUpdate")
+    String requestUpdate(RequestUpdateParam param);
 }

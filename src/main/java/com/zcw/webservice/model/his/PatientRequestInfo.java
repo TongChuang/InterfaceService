@@ -9,11 +9,12 @@ import java.util.Date;
  * Created by zcw on 2016/8/17.
  */
 public class PatientRequestInfo implements Serializable{
+    private static final long serialVersionUID = -6085747401931009371L;
     private Long requestId;         //申请记录序号
     private Long requestDetailId;   //申请明细序号
     private String patientCode;     //住院号（病历号）
-    private String parentId;        //门诊唯一号
-    private String partientRequestCode; //病人申请号码
+    private String patientId;        //门诊唯一号
+    private String patientRequestCode; //病人申请号码
     private String name;        //姓名
     private String sex;        //性别
     private String birthday;        //出生日期
@@ -64,20 +65,20 @@ public class PatientRequestInfo implements Serializable{
         this.patientCode = patientCode;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
-    public String getPartientRequestCode() {
-        return partientRequestCode;
+    public String getPatientRequestCode() {
+        return patientRequestCode;
     }
 
-    public void setPartientRequestCode(String partientRequestCode) {
-        this.partientRequestCode = partientRequestCode;
+    public void setPatientRequestCode(String patientRequestCode) {
+        this.patientRequestCode = patientRequestCode;
     }
 
     public String getName() {

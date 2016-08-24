@@ -337,9 +337,6 @@ public class HisInfoDao extends BaseDao {
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
         parms.add(ward);
-        if(requestType==2){
-            executeStatus = 0;
-        }
         parms.add(executeStatus);
         patientRequestInfoList = hisJdbcTemplate.query(sql,parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
@@ -348,8 +345,8 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestId(Util.getLongValue(rs.getString("SQJLID")));
                         info.setRequestDetailId(Util.getLongValue(rs.getString("SQMXID")));
                         info.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
-                        info.setParentId(Util.null2String(rs.getString("BRZYID")));
-                        info.setPartientRequestCode(Util.null2String(rs.getString("BRSQHM")));
+                        info.setPatientId(Util.null2String(rs.getString("BRZYID")));
+                        info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
                         info.setSex(Util.null2String(rs.getString("BRDAXB")));
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
@@ -387,7 +384,7 @@ public class HisInfoDao extends BaseDao {
      * @param toDate
      * @return
      */
-    public List<PatientRequestInfo> getOutPatientRequestInfo(int requestType,int executeStatus, String patientId, String fromDate, String toDate) throws Exception{
+    public List<PatientRequestInfo> getOutPatientRequestInfo(int requestType, String requestId,String requestDetailId,String testItemId,int executeStatus, String patientId, String fromDate, String toDate) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBCI_REQUESTINFO where BRSQLX =?  and BRJZHM=? and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
@@ -408,6 +405,18 @@ public class HisInfoDao extends BaseDao {
             sql += "and SQKDRQ<=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(toDate);
         }
+        if(!requestId.equals("")){
+            sql += "and SQJLID=?";
+            parms.add(requestId);
+        }
+        if(!testItemId.equals("")){
+            sql += "and JCXMID=?";
+            parms.add(testItemId);
+        }
+        if(!requestDetailId.equals("")){
+            sql += "and SQMXID=?";
+            parms.add(requestDetailId);
+        }
         patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -415,8 +424,8 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestId(Util.getLongValue(rs.getString("SQJLID")));
                         info.setRequestDetailId(Util.getLongValue(rs.getString("SQMXID")));
                         info.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
-                        info.setParentId(Util.null2String(rs.getString("BRJZXH")));
-                        info.setPartientRequestCode(Util.null2String(rs.getString("BRSQHM")));
+                        info.setPatientId(Util.null2String(rs.getString("BRJZXH")));
+                        info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
                         info.setSex(Util.null2String(rs.getString("BRDAXB")));
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
