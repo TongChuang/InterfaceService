@@ -2,6 +2,7 @@ package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import javax.ws.rs.PathParam;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  */
 public class RequestUpdateParam  implements Serializable{
     private static final long serialVersionUID = -2021077548820602298L;
+
 
     @JSONField(name = "RequestType")
     int  requestType;       //项目申请类型 11 门诊检验  12 门诊检查 21 住院检验  22 住院检查
@@ -37,6 +39,18 @@ public class RequestUpdateParam  implements Serializable{
 
     @JSONField(name = "Expand")
     String expand;          //扩展内容  打印时打印编号、预约注意事项
+
+    public RequestUpdateParam(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, Date exeDate, String expand) {
+        this.requestType = requestType;
+        this.itemId = itemId;
+        this.exeType = exeType;
+        this.exeDeptCode = exeDeptCode;
+        this.exeDeptName = exeDeptName;
+        this.exeDoctorCode = exeDoctorCode;
+        this.exeDoctorName = exeDoctorName;
+        this.exeDate = exeDate;
+        this.expand = expand;
+    }
 
     public int getRequestType() {
         return requestType;

@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCallback;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,7 @@ public class HisInfoDao extends BaseDao {
      *
      * @return
      */
-    public String getWardList() throws Exception {
+    public List<Ward> getWardList() throws Exception {
         String sql = "select * from V_HSBHI_WARDINFO";
         List<Map<String, Object>> list = hisJdbcTemplate.queryForList(sql);
         Object[] params = new Object[]{};
@@ -54,7 +53,7 @@ public class HisInfoDao extends BaseDao {
                     }
                 });
 
-        return JSON.toJSONString(wardInfoList);
+        return wardInfoList;
     }
 
     /**
@@ -144,6 +143,7 @@ public class HisInfoDao extends BaseDao {
                         patient.setInDateTime(rs.getDate("BRJZRQ"));
                         patient.setPatientPhone(Util.null2String(rs.getString("BRLXDH")));
                         patient.setPatientAddress(Util.null2String(rs.getString("BRJTDZ")));
+
                         return patient;
                     }
                 });
@@ -352,6 +352,7 @@ public class HisInfoDao extends BaseDao {
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setWard(Util.null2String(rs.getString("DQBQID")));
+                        info.setWardName(Util.null2String(rs.getString("DQBQMC")));
                         info.setBedno(Util.null2String(rs.getString("BQCWHM")));
                         info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
                         info.setRequestType(Util.null2String(rs.getString("BRSQLX")));
@@ -369,6 +370,7 @@ public class HisInfoDao extends BaseDao {
                         info.setAmount((rs.getFloat("FYHJJE")));
                         info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
                         info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
+                        info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
                         return info;
                     }
                 });
@@ -447,6 +449,7 @@ public class HisInfoDao extends BaseDao {
                         info.setAmount((rs.getFloat("FYHJJE")));
                         info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
                         info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
+                        info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
                         return info;
                     }
                 });

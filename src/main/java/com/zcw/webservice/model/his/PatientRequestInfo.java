@@ -20,7 +20,8 @@ public class PatientRequestInfo implements Serializable{
     private String birthday;        //出生日期
     private String age;         //病人就诊年龄
     private String department;   //就诊科室
-    private String ward;         //病区
+    private String ward;         //病区ID
+    private String wardName;    //病区名称
     private String bedno;        //住院床号
     private String diagnose;     //临床诊断
     private String requestType; //申请类型 1 检验 2 检查
@@ -267,6 +268,14 @@ public class PatientRequestInfo implements Serializable{
 
     public String getPatientFileCode() {
         return patientFileCode;
+    }
+
+    public String getWardName() {
+        return wardName;
+    }
+
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
     }
 
     public void setPatientFileCode(String patientFileCode) {

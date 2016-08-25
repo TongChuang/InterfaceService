@@ -4383,4 +4383,376 @@ ORA-04088: 触发器 'ETRACKHIS.TRI_II_INPATICHARGE' 执行过程中出错
     [INFO][2016-08-19 16:55:47] com.zcw.webservice.impl.LisInfoServiceImpl.booking(LisInfoServiceImpl.java:358) 1365611185@qtp-840737335-0 booking================================START 
     [INFO][2016-08-19 16:55:47] com.zcw.webservice.impl.LisInfoServiceImpl.booking(LisInfoServiceImpl.java:359) 1365611185@qtp-840737335-0 [{"DateTime":"2016-08-19 16:55:27.027","FeeItemCode":"11266","FeeItemName":"","OperatorNo":"77008","PatientId":"341484","Price":0,"Quantity":1,"patientCode":"60023026","patientType":"1"}] 
     [INFO][2016-08-19 16:55:56] com.zcw.webservice.impl.LisInfoServiceImpl.booking(LisInfoServiceImpl.java:369) 1365611185@qtp-840737335-0 booking================================END 
+    [INFO][2016-08-23 10:07:42] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1214125015@qtp-1261545224-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey359i1e9gh08e9kifd|1a0f349, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey359i1e9gh08e9kifd|1a0f349, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-23 10:22:34] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1134051859@qtp-300111306-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey359i1e9wuzj10z8kyf|73aaec54, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey359i1e9wuzj10z8kyf|73aaec54, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-24 11:19:53] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 547380018@qtp-1980560788-1 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey2z9i1frhe5t1ee0vte|1283ca23, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey2z9i1frhe5t1ee0vte|1283ca23, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-24 11:33:53] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1181205697@qtp-1773117761-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey2z9i1frzvai17ox9og|653a5967, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey2z9i1frzvai17ox9og|653a5967, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-24 11:38:52] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 762628123@qtp-59298126-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey2z9i1fs61zewh3umi|5885e231, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey2z9i1fs61zewh3umi|5885e231, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [ERROR][2016-08-24 11:49:48] com.zcw.webservice.impl.LisInfoServiceImpl.getInPatientRequestInfo(LisInfoServiceImpl.java:400) 762628123@qtp-59298126-0 获取检验信息异常 
+    org.springframework.dao.DataAccessResourceFailureException: PreparedStatementCallback; SQL [select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and DQBQID=?  and SQZTBZ=? ]; Io 异常: Connection reset by peer: socket write error; nested exception is java.sql.SQLException: Io 异常: Connection reset by peer: socket write error
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:251)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:649)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:684)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:716)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:726)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:776)
+	at com.zcw.webservice.dao.HisInfoDao.getInPatientRequestInfo(HisInfoDao.java:341)
+	at com.zcw.webservice.dao.HisInfoDao$$FastClassBySpringCGLIB$$d42aa18e.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:651)
+	at com.zcw.webservice.dao.HisInfoDao$$EnhancerBySpringCGLIB$$a8935654.getInPatientRequestInfo(<generated>)
+	at com.zcw.webservice.impl.LisInfoServiceImpl.getInPatientRequestInfo(LisInfoServiceImpl.java:398)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:181)
+	at org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:97)
+	at org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:200)
+	at org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:99)
+	at org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	at org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	at org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	at org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	at org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:254)
+	at org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	at org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	at org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	at org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:180)
+	at org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:298)
+	at org.apache.cxf.transport.servlet.AbstractHTTPServlet.doGet(AbstractHTTPServlet.java:222)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:707)
+	at org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:273)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:511)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1221)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:88)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:106)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1212)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:399)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:182)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:766)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:450)
+	at org.mortbay.jetty.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:230)
+	at org.mortbay.jetty.handler.HandlerCollection.handle(HandlerCollection.java:114)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:326)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:542)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:928)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:549)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:212)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:404)
+	at org.mortbay.io.nio.SelectChannelEndPoint.run(SelectChannelEndPoint.java:410)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:582)
+Caused by: java.sql.SQLException: Io 异常: Connection reset by peer: socket write error
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:112)
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:146)
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:255)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeForDescribe(T4CPreparedStatement.java:829)
+	at oracle.jdbc.driver.OracleStatement.executeMaybeDescribe(OracleStatement.java:1049)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeMaybeDescribe(T4CPreparedStatement.java:854)
+	at oracle.jdbc.driver.OracleStatement.doExecuteWithTimeout(OracleStatement.java:1154)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeInternal(OraclePreparedStatement.java:3370)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeQuery(OraclePreparedStatement.java:3415)
+	at com.mchange.v2.c3p0.impl.NewProxyPreparedStatement.executeQuery(NewProxyPreparedStatement.java:76)
+	at org.springframework.jdbc.core.JdbcTemplate$1.doInPreparedStatement(JdbcTemplate.java:692)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:633)
+	... 52 more
+[INFO][2016-08-24 14:24:24] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 182046563@qtp-59298126-2 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey2z9i1fs61zewh3umi|5889fc44, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.microsoft.sqlserver.jdbc.SQLServerDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey2z9i1fs61zewh3umi|5889fc44, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:sqlserver://10.31.96.37:1433;databaseName=elisdb, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [ERROR][2016-08-24 15:43:33] com.zcw.webservice.impl.LisInfoServiceImpl.getInPatientRequestInfo(LisInfoServiceImpl.java:400) 182046563@qtp-59298126-2 获取检验信息异常 
+    org.springframework.dao.DataAccessResourceFailureException: PreparedStatementCallback; SQL [select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and DQBQID=?  and SQZTBZ=? ]; Io 异常: Connection reset by peer: socket write error; nested exception is java.sql.SQLException: Io 异常: Connection reset by peer: socket write error
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:251)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:649)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:684)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:716)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:726)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:776)
+	at com.zcw.webservice.dao.HisInfoDao.getInPatientRequestInfo(HisInfoDao.java:341)
+	at com.zcw.webservice.dao.HisInfoDao$$FastClassBySpringCGLIB$$d42aa18e.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:651)
+	at com.zcw.webservice.dao.HisInfoDao$$EnhancerBySpringCGLIB$$a8935654.getInPatientRequestInfo(<generated>)
+	at com.zcw.webservice.impl.LisInfoServiceImpl.getInPatientRequestInfo(LisInfoServiceImpl.java:398)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:181)
+	at org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:97)
+	at org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:200)
+	at org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:99)
+	at org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	at org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	at org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	at org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	at org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:254)
+	at org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	at org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	at org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	at org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:180)
+	at org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:298)
+	at org.apache.cxf.transport.servlet.AbstractHTTPServlet.doGet(AbstractHTTPServlet.java:222)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:707)
+	at org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:273)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:511)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1221)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:88)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:106)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1212)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:399)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:182)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:766)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:450)
+	at org.mortbay.jetty.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:230)
+	at org.mortbay.jetty.handler.HandlerCollection.handle(HandlerCollection.java:114)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:326)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:542)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:928)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:549)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:212)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:404)
+	at org.mortbay.io.nio.SelectChannelEndPoint.run(SelectChannelEndPoint.java:410)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:582)
+Caused by: java.sql.SQLException: Io 异常: Connection reset by peer: socket write error
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:112)
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:146)
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:255)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeForDescribe(T4CPreparedStatement.java:829)
+	at oracle.jdbc.driver.OracleStatement.executeMaybeDescribe(OracleStatement.java:1049)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeMaybeDescribe(T4CPreparedStatement.java:854)
+	at oracle.jdbc.driver.OracleStatement.doExecuteWithTimeout(OracleStatement.java:1154)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeInternal(OraclePreparedStatement.java:3370)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeQuery(OraclePreparedStatement.java:3415)
+	at com.mchange.v2.c3p0.impl.NewProxyPreparedStatement.executeQuery(NewProxyPreparedStatement.java:76)
+	at org.springframework.jdbc.core.JdbcTemplate$1.doInPreparedStatement(JdbcTemplate.java:692)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:633)
+	... 52 more
+[INFO][2016-08-24 16:03:07] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 65567135@qtp-1772780918-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey2z9i1g1kwqekma1jp|5fd18419, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey2z9i1g1kwqekma1jp|5fd18419, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 14:08:28] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 542019831@qtp-1980560788-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey319i1h3ipuzy11vr1|2d7637e6, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.microsoft.sqlserver.jdbc.SQLServerDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey319i1h3ipuzy11vr1|2d7637e6, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:sqlserver://10.31.96.37:1433;databaseName=elisdb, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [WARN][2016-08-25 14:08:48] com.mchange.v2.async.ThreadPoolAsynchronousRunner$DeadlockDetector.run(ThreadPoolAsynchronousRunner.java:608) Timer-1 com.mchange.v2.async.ThreadPoolAsynchronousRunner$DeadlockDetector@3451bba1 -- APPARENT DEADLOCK!!! Creating emergency threads for unassigned pending tasks! 
+    [WARN][2016-08-25 14:08:48] com.mchange.v2.async.ThreadPoolAsynchronousRunner$DeadlockDetector.run(ThreadPoolAsynchronousRunner.java:624) Timer-1 com.mchange.v2.async.ThreadPoolAsynchronousRunner$DeadlockDetector@3451bba1 -- APPARENT DEADLOCK!!! Complete Status: 
+	Managed Threads: 3
+	Active Threads: 3
+	Active Tasks: 
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@429e6907 (com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#1)
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4a1a7694 (com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#2)
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3ac5085e (com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#0)
+	Pending Tasks: 
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1b84b62f
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2ae33209
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@33d45f17
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@21c126cb
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1fcac912
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2c0ad398
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3db71de9
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@15e883ea
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@5ca35a1c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@264fc403
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2312dd76
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@72b4ed2d
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@34013add
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6cb68f82
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@597a060f
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@cf24588
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@31185119
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@698a1227
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@60c93b67
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@7e09fcf3
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@deaeab2
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3448ca02
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1df3ddef
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2cac44c6
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@76c9849b
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4a3589a
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@7bcf144
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@49781f01
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@732fb7e9
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6dd6569e
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@d80acb1
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4092a17
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@a975580
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@55aa80ea
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@5dc75bca
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@10539bf7
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2058e728
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@21748e19
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@460a98f6
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4a8a3fe3
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2d8cf03d
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@280db7d3
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3ad2470c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@21bc0292
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6bfb0380
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2e8d8203
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@64f4af9
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@47a67030
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@74729c47
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@36ad9550
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4ac909fe
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3e9ad767
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@5eeae457
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4b7edcf
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@633825e
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6efa5c10
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@67bbc5c4
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@5c599569
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4662ddce
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@7ac403ce
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@43687cb7
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@538a5b6e
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3d6707c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@5956c9bb
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@59db9be2
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@588bfa9c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@68ee2461
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@79a33d6
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@29bac4c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@543f999
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1c17187c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4a458cab
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@15e3a063
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@f760c77
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2b86311d
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4d40d012
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@45288161
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@7a023807
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6096f083
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2b1d7cc3
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@2abfd348
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@41960418
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1653f641
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@56687b2c
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@219c73a
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@735eb5a5
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@7ab6b471
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6f120110
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@23fe2bdf
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@250b4198
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6a516c74
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1534faaf
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@47468b05
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@383e15f4
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@59edfc4b
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@6bbe945b
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@1853348a
+Pool thread stack traces:
+	Thread[com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#1,5,main]
+		java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+		java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+		java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+		java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+		java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+		java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+		java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+		java.net.Socket.connect(Socket.java:589)
+		com.microsoft.sqlserver.jdbc.SocketFinder.getConnectedSocket(IOBuffer.java:2446)
+		com.microsoft.sqlserver.jdbc.SocketFinder.getDefaultSocket(IOBuffer.java:2431)
+		com.microsoft.sqlserver.jdbc.SocketFinder.findSocket(IOBuffer.java:2094)
+		com.microsoft.sqlserver.jdbc.TDSChannel.open(IOBuffer.java:491)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.connectHelper(SQLServerConnection.java:1309)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.login(SQLServerConnection.java:991)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.connect(SQLServerConnection.java:827)
+		com.microsoft.sqlserver.jdbc.SQLServerDriver.connect(SQLServerDriver.java:1012)
+		com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:134)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:182)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:171)
+		com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:137)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1014)
+		com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:32)
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1810)
+		com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)
+	Thread[com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#0,5,main]
+		java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+		java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+		java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+		java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+		java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+		java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+		java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+		java.net.Socket.connect(Socket.java:589)
+		com.microsoft.sqlserver.jdbc.SocketFinder.getConnectedSocket(IOBuffer.java:2446)
+		com.microsoft.sqlserver.jdbc.SocketFinder.getDefaultSocket(IOBuffer.java:2431)
+		com.microsoft.sqlserver.jdbc.SocketFinder.findSocket(IOBuffer.java:2094)
+		com.microsoft.sqlserver.jdbc.TDSChannel.open(IOBuffer.java:491)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.connectHelper(SQLServerConnection.java:1309)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.login(SQLServerConnection.java:991)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.connect(SQLServerConnection.java:827)
+		com.microsoft.sqlserver.jdbc.SQLServerDriver.connect(SQLServerDriver.java:1012)
+		com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:134)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:182)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:171)
+		com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:137)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1014)
+		com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:32)
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1810)
+		com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)
+	Thread[com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#2,5,main]
+		java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+		java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)
+		java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+		java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+		java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+		java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+		java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+		java.net.Socket.connect(Socket.java:589)
+		com.microsoft.sqlserver.jdbc.SocketFinder.getConnectedSocket(IOBuffer.java:2446)
+		com.microsoft.sqlserver.jdbc.SocketFinder.getDefaultSocket(IOBuffer.java:2431)
+		com.microsoft.sqlserver.jdbc.SocketFinder.findSocket(IOBuffer.java:2094)
+		com.microsoft.sqlserver.jdbc.TDSChannel.open(IOBuffer.java:491)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.connectHelper(SQLServerConnection.java:1309)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.login(SQLServerConnection.java:991)
+		com.microsoft.sqlserver.jdbc.SQLServerConnection.connect(SQLServerConnection.java:827)
+		com.microsoft.sqlserver.jdbc.SQLServerDriver.connect(SQLServerDriver.java:1012)
+		com.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:134)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:182)
+		com.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:171)
+		com.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:137)
+		com.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1014)
+		com.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:32)
+		com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1810)
+		com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)
+
+ 
+    [WARN][2016-08-25 14:09:48] com.mchange.v2.async.ThreadPoolAsynchronousRunner.processReplacedThreads(ThreadPoolAsynchronousRunner.java:416) Timer-1 Task com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@429e6907 (in deadlocked PoolThread) failed to complete in maximum time 60000ms. Trying interrupt(). 
+    [WARN][2016-08-25 14:09:48] com.mchange.v2.async.ThreadPoolAsynchronousRunner.processReplacedThreads(ThreadPoolAsynchronousRunner.java:416) Timer-1 Task com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@3ac5085e (in deadlocked PoolThread) failed to complete in maximum time 60000ms. Trying interrupt(). 
+    [WARN][2016-08-25 14:09:48] com.mchange.v2.async.ThreadPoolAsynchronousRunner.processReplacedThreads(ThreadPoolAsynchronousRunner.java:416) Timer-1 Task com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask@4a1a7694 (in deadlocked PoolThread) failed to complete in maximum time 60000ms. Trying interrupt(). 
+    [WARN][2016-08-25 14:09:48] com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1876) com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#1 com.mchange.v2.resourcepool.BasicResourcePool@5eb6e6c4 -- Thread unexpectedly interrupted while performing an acquisition attempt. 
+    java.lang.InterruptedException: sleep interrupted
+	at java.lang.Thread.sleep(Native Method)
+	at com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1805)
+	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)
+[WARN][2016-08-25 14:09:48] com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1876) com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#2 com.mchange.v2.resourcepool.BasicResourcePool@5eb6e6c4 -- Thread unexpectedly interrupted while performing an acquisition attempt. 
+    java.lang.InterruptedException: sleep interrupted
+	at java.lang.Thread.sleep(Native Method)
+	at com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1805)
+	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)
+[WARN][2016-08-25 14:09:48] com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1876) com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#0 com.mchange.v2.resourcepool.BasicResourcePool@5eb6e6c4 -- Thread unexpectedly interrupted while performing an acquisition attempt. 
+    java.lang.InterruptedException: sleep interrupted
+	at java.lang.Thread.sleep(Native Method)
+	at com.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1805)
+	at com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)
+[INFO][2016-08-25 17:46:56] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 445104668@qtp-1502843539-2 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hkq2ggwux8k9|27d98bef, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hkq2ggwux8k9|27d98bef, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:15:38] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 542019831@qtp-1980560788-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hls5jbf6ctyo|1ab14636, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hls5jbf6ctyo|1ab14636, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:21:08] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1720890985@qtp-1812530678-2 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hlzig11xbqr5m|61808ecd, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hlzig11xbqr5m|61808ecd, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:21:13] com.zcw.webservice.impl.LisInfoServiceImpl.requestUpdate(LisInfoServiceImpl.java:347) 1720890985@qtp-1812530678-2 requestUpdate================================START 
+    [INFO][2016-08-25 18:21:13] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1720890985@qtp-1812530678-2 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hlzig11xbqr5m|beabd6b, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.microsoft.sqlserver.jdbc.SQLServerDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hlzig11xbqr5m|beabd6b, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:sqlserver://10.31.96.37:1433;databaseName=elisdb, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:21:14] com.zcw.webservice.impl.LisInfoServiceImpl.requestUpdate(LisInfoServiceImpl.java:355) 1720890985@qtp-1812530678-2 requestUpdate================================END 
+    [INFO][2016-08-25 18:21:44] com.zcw.webservice.impl.LisInfoServiceImpl.requestUpdate(LisInfoServiceImpl.java:347) 1720890985@qtp-1812530678-2 requestUpdate================================START 
+    [INFO][2016-08-25 18:26:04] com.zcw.webservice.impl.LisInfoServiceImpl.requestUpdate(LisInfoServiceImpl.java:355) 1720890985@qtp-1812530678-2 requestUpdate================================END 
+    [INFO][2016-08-25 18:26:53] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 927557408@qtp-1933808172-1 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hm6c3jhjpivt|538b3c88, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hm6c3jhjpivt|538b3c88, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:34:45] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 71843125@qtp-1501888239-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hmgmxd15462u8|5e98032e, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hmgmxd15462u8|5e98032e, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:39:20] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1406782328@qtp-375273627-2 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 2tbziu9i1hmn2ct14v6ydm|1f10fec6, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> oracle.jdbc.driver.OracleDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 2tbziu9i1hmn2ct14v6ydm|1f10fec6, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:oracle:thin:@10.31.96.30:1521:orcl, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:49:50] com.zcw.webservice.impl.LisInfoServiceImpl.getBacteriaList(LisInfoServiceImpl.java:91) 1406782328@qtp-375273627-2 getBacteriaList================================START 
+    [INFO][2016-08-25 18:49:50] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 1406782328@qtp-375273627-2 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 2tbziu9i1hmn2ct14v6ydm|63a9c661, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.microsoft.sqlserver.jdbc.SQLServerDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 2tbziu9i1hmn2ct14v6ydm|63a9c661, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:sqlserver://10.31.96.37:1433;databaseName=elisdb, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:49:50] com.zcw.webservice.impl.LisInfoServiceImpl.getBacteriaList(LisInfoServiceImpl.java:91) 1406782328@qtp-375273627-2 getBacteriaList================================START 
+    [INFO][2016-08-25 18:50:41] com.zcw.webservice.impl.LisInfoServiceImpl.getBacteriaList(LisInfoServiceImpl.java:91) 542019831@qtp-1980560788-0 getBacteriaList================================START 
+    [INFO][2016-08-25 18:50:41] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 542019831@qtp-1980560788-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hn1ms113lu461|23cd5d42, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.microsoft.sqlserver.jdbc.SQLServerDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hn1ms113lu461|23cd5d42, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:sqlserver://10.31.96.37:1433;databaseName=elisdb, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:50:43] com.zcw.webservice.impl.LisInfoServiceImpl.getBacteriaList(LisInfoServiceImpl.java:91) 542019831@qtp-1980560788-0 getBacteriaList================================START 
+    [INFO][2016-08-25 18:54:11] com.zcw.webservice.impl.LisInfoServiceImpl.getBacteriaList(LisInfoServiceImpl.java:91) 542019831@qtp-1980560788-0 getBacteriaList================================START 
+    [INFO][2016-08-25 18:54:11] com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource.getPoolManager(AbstractPoolBackedDataSource.java:462) 542019831@qtp-1980560788-0 Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 3, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 1hgey3a9i1hn65izwq349i|7126e26, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.microsoft.sqlserver.jdbc.SQLServerDriver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 1hgey3a9i1hn65izwq349i|7126e26, idleConnectionTestPeriod -> 0, initialPoolSize -> 10, jdbcUrl -> jdbc:sqlserver://10.31.96.37:1433;databaseName=elisdb, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 0, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 10, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 100, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ] 
+    [INFO][2016-08-25 18:54:12] com.zcw.webservice.impl.LisInfoServiceImpl.getBacteriaList(LisInfoServiceImpl.java:91) 542019831@qtp-1980560788-0 getBacteriaList================================START 
     

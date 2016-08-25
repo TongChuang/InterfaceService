@@ -35,8 +35,8 @@
         <value>classpath:jdbc.properties</value>
     </property>
 </bean>
-
-<bean id="dataSourceHis" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+    <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    <bean id="dataSourceHis" class="com.mchange.v2.c3p0.ComboPooledDataSource"
       destroy-method="close">
     <property name="driverClass" value="${his.driver}"/>
     <property name="jdbcUrl" value="${his.url}"/>
