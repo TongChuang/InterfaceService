@@ -272,7 +272,7 @@ public class HisInfoDao extends BaseDao {
      */
     @Transactional(rollbackFor = Exception.class)
     public ReturnMsg requestUpdate(final RequestUpdateParam param) throws Exception {
-        String sql = "{call Etrack_Interface.Prc_RequestUpdate(?,?,?,?,?,?,?,?,?)}";
+        String sql = "{call PKG_Etrack_Interface.Prc_RequestUpdate(?,?,?,?,?,?,?,?,?)}";
         Map mapR = (Map) hisJdbcTemplate.execute(sql,
                 new CallableStatementCallback() {
                     public Map doInCallableStatement(CallableStatement cs) throws SQLException, DataAccessException {
@@ -283,9 +283,9 @@ public class HisInfoDao extends BaseDao {
                         cs.setString(4, param.getExeDeptCode());
                         cs.setString(5, param.getExeDoctorCode());
                         cs.setTimestamp(6, new java.sql.Timestamp(param.getExeDate().getTime()));
-                        cs.setString(7, param.getExpand());
+                        cs.setString(7, Util.null2String(param.getExpand()));
                         cs.registerOutParameter(8, OracleTypes.NUMBER);
-                        cs.registerOutParameter(9, Types.VARCHAR);
+                        cs.registerOutParameter(9,  OracleTypes.VARCHAR);
                         cs.execute();
                         Map map = new HashMap();
                         map.put("appCode", cs.getString(8)); // 错误代码 成功返回0  失败返回 -1

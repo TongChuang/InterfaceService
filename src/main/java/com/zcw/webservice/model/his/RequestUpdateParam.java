@@ -1,6 +1,8 @@
 package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zcw.webservice.common.JsonDateFormateFull;
 
 import javax.ws.rs.PathParam;
 import java.io.Serializable;
@@ -34,12 +36,14 @@ public class RequestUpdateParam  implements Serializable{
     @JSONField(name = "ExeDoctorName")
     String exeDoctorName;
 
-    @JSONField(name = "ExeDate",format="yyyy-MM-dd HH:mm:ss")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     Date exeDate;           //执行时间 (预约时间)
 
     @JSONField(name = "Expand")
     String expand;          //扩展内容  打印时打印编号、预约注意事项
-
+    public RequestUpdateParam(){
+        super();
+    }
     public RequestUpdateParam(int requestType, String itemId, int exeType, String exeDeptCode, String exeDeptName, String exeDoctorCode, String exeDoctorName, Date exeDate, String expand) {
         this.requestType = requestType;
         this.itemId = itemId;
