@@ -228,7 +228,9 @@ public interface LisInfoService {
     @Path(value = "/getInPatientRequestInfo")
     String getInPatientRequestInfo(@QueryParam("requestType") @DefaultValue("1") int requestType,
                                    @QueryParam("executeStatus") @DefaultValue("3")int executeStatus,
-                                   @QueryParam("ward") String ward);
+                                   @QueryParam("ward") String ward,
+                                   @QueryParam("bedNo") @DefaultValue("")String bedNo,
+                                   @QueryParam("patientId") @DefaultValue("")String patientId);
 
     /**
      * 门诊检查申请信息查询
@@ -266,11 +268,12 @@ public interface LisInfoService {
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/returnReport")
-    String returnReport(@QueryParam("barcode")String barcode,
+    String returnReport(@QueryParam("reportType")int reportType,
+                        @QueryParam("barcode")String barcode,
+                        @QueryParam("sampleNo")String sampleNo,
                         @QueryParam("operator")String operator,
                         @QueryParam("returnTime")Date returnTime,
                         @QueryParam("reason") @DefaultValue("")String reason);
-
     /**
      * 标本报告状态
      * @param reportType    //报告类型 0 普通 1真菌D内毒素

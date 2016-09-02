@@ -19,6 +19,7 @@ public class PatientRequestInfo implements Serializable{
     private String sex;        //性别
     private String birthday;        //出生日期
     private String age;         //病人就诊年龄
+    private String ageUnit;     //病人年龄单位
     private String department;   //就诊科室
     private String ward;         //病区ID
     private String wardName;    //病区名称
@@ -26,8 +27,10 @@ public class PatientRequestInfo implements Serializable{
     private String diagnose;     //临床诊断
     private String requestType; //申请类型 1 检验 2 检查
     private String requestItemType;//申请项目类型
-    private String requestDoctor;        //申请医生
-    private String requestDepartment;        //申请科室
+    private String requestDoctor;        //申请医生ID
+    private String requestDoctorName;        //申请医生名称
+    private String requestDepartment;        //开单科室ID
+    private String requestDepartmentName;    //开单科室名称
     @JSONField(format="yyyy-MM-dd HH:mm:ss.SSS")
     private Date requestDateTime;          //申请日期
     private String itemCode;                //项目代码
@@ -280,5 +283,29 @@ public class PatientRequestInfo implements Serializable{
 
     public void setPatientFileCode(String patientFileCode) {
         this.patientFileCode = patientFileCode;
+    }
+
+    public String getRequestDoctorName() {
+        return requestDoctorName;
+    }
+
+    public void setRequestDoctorName(String requestDoctorName) {
+        this.requestDoctorName = requestDoctorName;
+    }
+
+    public String getRequestDepartmentName() {
+        return requestDepartmentName;
+    }
+
+    public void setRequestDepartmentName(String requestDepartmentName) {
+        this.requestDepartmentName = requestDepartmentName;
+    }
+
+    public String getAgeUnit() {
+        return ageUnit;
+    }
+
+    public void setAgeUnit(String ageUnit) {
+        this.ageUnit = ageUnit;
     }
 }

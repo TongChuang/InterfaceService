@@ -391,11 +391,11 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @param ward
      * @return
      */
-    public String  getInPatientRequestInfo(int requestType,int executeStatus,String ward) {
+    public String  getInPatientRequestInfo(int requestType,int executeStatus,String ward,String bedNo,String patientId) {
         ReturnMsg msg = new ReturnMsg();
         try {
             msg.setState(1);
-            msg.setMessage(hisInfoDao.getInPatientRequestInfo(requestType, executeStatus, ward));
+            msg.setMessage(hisInfoDao.getInPatientRequestInfo(requestType, executeStatus, ward,bedNo,patientId));
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);
@@ -429,13 +429,15 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     @Override
-    public String returnReport(String barcode,
+    public String returnReport(int reportType,
+                               String barcode,
+                               String sampleNo,
                                String operator,
                                Date returnTime,
                                String reason) {
         ReturnMsg msg = new ReturnMsg();
         try {
-            msg = lisInfoDao.returnReport(barcode,operator,returnTime, reason);
+            msg = lisInfoDao.returnReport(reportType,barcode,sampleNo,operator,returnTime, reason);
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);

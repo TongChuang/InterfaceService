@@ -140,7 +140,7 @@ public class HisInfoDao extends BaseDao {
                         patient.setPatientType("2");
                         patient.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
                         patient.setChargeType(Util.null2String(rs.getString("BRLBID")));
-                        patient.setInDateTime(rs.getDate("BRJZRQ"));
+                        //patient.setInDateTime(rs.getDate("BRJZRQ"));
                         patient.setPatientPhone(Util.null2String(rs.getString("BRLXDH")));
                         patient.setPatientAddress(Util.null2String(rs.getString("BRJTDZ")));
 
@@ -301,28 +301,6 @@ public class HisInfoDao extends BaseDao {
 
     }
 
-//    /**
-//     * 病人申请信息
-//     *
-//     * @param patientId
-//     * @param fromDate
-//     * @param toDate
-//     * @return
-//     */
-//    @Transactional(rollbackFor = Exception.class)
-//    public List<PatientRequestInfo> getPatientRequestInfo(int requestType, int executeStatus,String patientType, String patientId, String fromDate, String toDate) throws Exception{
-//
-//        if (patientType.equals("2")) {
-//            //住院病人信息
-//            return getInPatientRequestInfo(requestType, executeStatus,patientId, fromDate, toDate);
-//        }
-//        if (patientType.equals("1")) {
-//            //门诊病人信息
-//            return getOutPatientRequestInfo(requestType, executeStatus,patientId, fromDate, toDate);
-//        }
-//        return null;
-//    }
-
     /**
      * 住院病人申请信息
      * @param requestType
@@ -331,13 +309,23 @@ public class HisInfoDao extends BaseDao {
      * @return
      * @throws Exception
      */
-    public List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String ward) throws Exception{
+    public List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String ward,String bedNo,String patientId) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and DQBQID=?  and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
         parms.add(ward);
         parms.add(executeStatus);
+        //床位号
+        if(bedNo != null && !bedNo.isEmpty()){
+            sql += " and BQCWHM=?";
+            parms.add(bedNo);
+        }
+        //病人就诊ID
+        if(patientId != null && !patientId.isEmpty()){
+            sql += " and BRZYID=?";
+            parms.add(patientId);
+        }
         patientRequestInfoList = hisJdbcTemplate.query(sql,parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -358,7 +346,9 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestType(Util.null2String(rs.getString("BRSQLX")));
                         info.setRequestItemType(Util.null2String(rs.getString("SQXMLX")));
                         info.setRequestDoctor(Util.null2String(rs.getString("KDYSID")));
+                        info.setRequestDoctorName(Util.null2String(rs.getString("KDYSXM")));
                         info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
+                        info.setRequestDepartmentName(Util.null2String(rs.getString("KDKSMC")));
                         info.setRequestDateTime(rs.getDate("SQKDRQ"));
                         info.setItemCode(Util.null2String(rs.getString("JCXMID")));
                         info.setItemName(Util.null2String(rs.getString("JCXMMC")));
@@ -371,6 +361,8 @@ public class HisInfoDao extends BaseDao {
                         info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
                         info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
                         info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
+                        info.setAge(Util.null2String(rs.getString("BRJZNL")));
+                        info.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
                         return info;
                     }
                 });
@@ -450,6 +442,8 @@ public class HisInfoDao extends BaseDao {
                         info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
                         info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
                         info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
+                        info.setAge(Util.null2String(rs.getString("BLJZNL")));
+                        info.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
                         return info;
                     }
                 });
