@@ -396,7 +396,7 @@ public class LisInfoDao extends BaseDao {
 
         //普通报告
         final List<TestResult> results = report.getResults();
-        sql = "insert into xj_xmcdz(ybbh,jglx,lxxh,ybjg) values(?,?,?,?)";
+        sql = "insert into xj_xmcdz(ybbh,jglx,lxxh,ybjg,jg1) values(?,?,?,?,?)";
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 int length = results.size();
@@ -405,7 +405,7 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(2, results.get(i).getResultType());        //结果类型
                     ps.setInt(3, results.get(i).getResultTypeId());         //结果类型序号
                     ps.setString(4, results.get(i).getResult());             //结果
-                    //ps.setString(5, results.get(i).getCount());             //菌量计数
+                    ps.setString(5, results.get(i).getCount());             //菌量计数
                     // ps.setString(5, results.get(i).getDrugResistance());  //耐药标志
                     ps.addBatch();
                 }
@@ -562,13 +562,47 @@ public class LisInfoDao extends BaseDao {
      * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg returnReport(String barcode,
+    public ReturnMsg returnReport(int reportType,
+                                  String barcode,
+                                  String sampleNo,
                                   String operator,
                                   Date returnTime,
                                   String reason)throws Exception{
-        if(barcode==null || barcode.equals(""))
+        if(barcode==null || barcode.equals("")){
+            return new ReturnMsg(0,"条码号不能为空");
+        }
+        if(sampleNo==null || sampleNo.equals("")){
             return new ReturnMsg(0,"样本号不能为空");
-        return new ReturnMsg(1, "保存成功");
+        }
+        String sql = "";
+        if(reportType ==0){
+            sql = "select ybzt from xj_ybxx where byh = ? and ybbh=?";
+        }else if(reportType ==1){
+            sql = "select ybzt from lis_ybxx where ybid = ? and ybbh = ?";
+        }
+        String status = lisJdbcTemplate.queryForObject(sql,new Object[]{barcode,sampleNo},String.class);
+        if(status !=null && !status.isEmpty()){
+            if(status.equals("p") || status.equals("s")){
+                return new ReturnMsg(0,"样本已审核或打印，不允许删除");
+            }
+        }
+        //检测报告状态
+        if(status.equals("d")){
+            //删除报告
+            if(reportType==0){
+                sql = "delete from xj_xmcdz where ybbh=?";
+                lisJdbcTemplate.update(sql,new Object[]{sampleNo});
+                sql = "delete from xj_ybxx where ybbh=? and byh=?";
+                lisJdbcTemplate.update(sql,new Object[]{sampleNo,barcode});
+            }else if(reportType ==1){
+                sql = "delete from lis_xmcdz where ybbh=?";
+                lisJdbcTemplate.update(sql,new Object[]{sampleNo});
+                sql = "delete from lis_ybxx where ybid=? and ybbh=?";
+                lisJdbcTemplate.update(sql,new Object[]{sampleNo,barcode});
+            }
+        }
+
+        return new ReturnMsg(1, "删除成功");
     }
 
     /**
@@ -583,7 +617,7 @@ public class LisInfoDao extends BaseDao {
         if(reportType ==0){
             sql = "select ybzt from xj_ybxx where byh = ?";
         }else if(reportType ==1){
-            sql = "select ybzt from lis_ybxx where byh = ?";
+            sql = "select ybzt from lis_ybxx where ybid = ?";
         }
         String status = "";
         try {
