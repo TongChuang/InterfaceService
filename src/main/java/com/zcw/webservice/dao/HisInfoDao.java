@@ -393,7 +393,7 @@ public class HisInfoDao extends BaseDao {
         }
         if (!fromDate.isEmpty()) {
             fromDate += " 00:00:00";
-            sql += "and SQKDRQ>=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
+            sql += " and SQKDRQ>=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(fromDate);
         }
         if (!toDate.isEmpty()) {
@@ -442,7 +442,7 @@ public class HisInfoDao extends BaseDao {
                         info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
                         info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
                         info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
-                        info.setAge(Util.null2String(rs.getString("BLJZNL")));
+                        info.setAge(Util.null2String(rs.getString("BRJZNL")));
                         info.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
                         return info;
                     }
