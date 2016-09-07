@@ -429,6 +429,7 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestType(Util.null2String(rs.getString("BRSQLX")));
                         //info.setRequestItemType(Util.null2String(rs.getString("SQXMLX")));
                         info.setRequestDoctor(Util.null2String(rs.getString("KDYSID")));
+                        info.setRequestDoctorName(Util.null2String(rs.getString("KDYSXM")));
                         info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
                         info.setRequestDateTime(rs.getDate("SQKDRQ"));
                         info.setItemCode(Util.null2String(rs.getString("JCXMID")));
