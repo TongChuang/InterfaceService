@@ -290,7 +290,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     public String saveTestResult(Report report) {
         log.info("saveTestResult================================START");
         log.info(JSON.toJSONString(report));
-        System.out.println(JSON.toJSONString(report));
+        //System.out.println(JSON.toJSONString(report));
         ReturnMsg msg = new ReturnMsg();
         try{
             msg = lisInfoDao.saveTestResult(report);
@@ -299,7 +299,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
-        System.out.println(JSON.toJSONString(msg));
+        //System.out.println(JSON.toJSONString(msg));
         log.info("saveTestResult================================END");
 
         return JSON.toJSONString(msg,filter);
@@ -368,7 +368,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     public String booking(List<AccountItem> accountItem) {
         log.info("booking================================START");
         log.info(JSON.toJSONString(accountItem));
-        System.out.println(JSON.toJSONString(accountItem));
+        //System.out.println(JSON.toJSONString(accountItem));
         ReturnMsg msg = new ReturnMsg();
         try{
             msg = hisInfoDao.saveBooking(accountItem);
@@ -390,7 +390,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     public String lisbooking(AccountItemDto accountItem) {
         log.info("booking================================START");
         log.info(JSON.toJSONString(accountItem));
-        System.out.println(JSON.toJSONString(accountItem));
+        //System.out.println(JSON.toJSONString(accountItem));
         ReturnMsg msg = new ReturnMsg();
         try{
             msg = hisInfoDao.saveLisBooking(accountItem);

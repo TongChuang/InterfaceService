@@ -214,13 +214,13 @@ public class HisInfoDao extends BaseDao {
     public ReturnMsg saveBooking(final List<AccountItem> accountItem) throws Exception{
         ReturnMsg msg = new ReturnMsg();
         String userids = "";
-        try {
-            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItem.get(0).getOperatorNo()}, String.class);
-        }catch (EmptyResultDataAccessException e){
-            return new ReturnMsg(0, "HIS用户不存在，请检查。");
-        }
-        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
-        final String hisUserID = userids;
+//        try {
+//            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItem.get(0).getOperatorNo()}, String.class);
+//        }catch (EmptyResultDataAccessException e){
+//            return new ReturnMsg(0, "HIS用户不存在，请检查。");
+//        }
+//        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
+//        final String hisUserID = userids;
 
         String sql = "";
         //插入收费记录
@@ -244,11 +244,11 @@ public class HisInfoDao extends BaseDao {
                         ps.setLong(5, 14);                                          //费用途径序号 12 用血 14 LIS 15 物资
                         ps.setTimestamp(6, new java.sql.Timestamp(accountItem.get(i).getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
                         ps.setInt(7, accountItem.get(i).getQuantity());                    //费用发生数量
-                        ps.setString(8, hisUserID);                                 //开单医生序号
+                        ps.setString(8, accountItem.get(0).getBillingDoctorNo());                                 //开单医生序号
                         ps.setString(9, "21");                                      //开单科室序号
-                        ps.setString(10, hisUserID);                                //执行用户序号
+                        ps.setString(10, accountItem.get(0).getTestDoctorNo());                                //执行用户序号
                         ps.setString(11, "21");                                     //执行科室序号
-                        ps.setString(12, hisUserID);                                //操作用户序号
+                        ps.setString(12, accountItem.get(0).getOperatorNo());                                //操作用户序号
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
@@ -275,14 +275,14 @@ public class HisInfoDao extends BaseDao {
     @Transactional(rollbackFor = Exception.class)
     public ReturnMsg saveLisBooking(final AccountItemDto accountItemDto) throws Exception{
         ReturnMsg msg = new ReturnMsg();
-        String userids = "";
-        try {
-            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItemDto.getAccountItems().get(0).getOperatorNo()}, String.class);
-        }catch (EmptyResultDataAccessException e){
-            return new ReturnMsg(0, "HIS用户不存在，请检查。");
-        }
-        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
-        final String hisUserID = userids;
+//        String userids = "";
+//        try {
+//            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItemDto.getAccountItems().get(0).getOperatorNo()}, String.class);
+//        }catch (EmptyResultDataAccessException e){
+//            return new ReturnMsg(0, "HIS用户不存在，请检查。");
+//        }
+//        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
+//        final String hisUserID = userids;
 
         String sql = "";
         //插入收费记录
@@ -305,11 +305,11 @@ public class HisInfoDao extends BaseDao {
                         ps.setLong(5, 14);                                          //费用途径序号 12 用血 14 LIS 15 物资
                         ps.setTimestamp(6, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
                         ps.setInt(7, accountItem.getQuantity());                    //费用发生数量
-                        ps.setString(8, hisUserID);                                 //开单医生序号
+                        ps.setString(8, accountItem.getBillingDoctorNo());                                 //开单医生序号
                         ps.setString(9, "21");                                      //开单科室序号
-                        ps.setString(10, hisUserID);                                //执行用户序号
+                        ps.setString(10, accountItem.getBillingDeptNo());                                //执行用户序号
                         ps.setString(11, "21");                                     //执行科室序号
-                        ps.setString(12, hisUserID);                                //操作用户序号
+                        ps.setString(12, accountItem.getOperatorNo());                                //操作用户序号
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
@@ -398,7 +398,9 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientId(Util.null2String(rs.getString("BRZYID")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
-                        info.setSex(""+Util.getIntValue(rs.getString("BRDAXB"),3));
+                        int sex = Util.getIntValue(rs.getString("BRDAXB"),3);
+                        sex=(sex==0?3:sex);
+                        info.setSex(""+sex);
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setWard(Util.null2String(rs.getString("DQBQID")));
