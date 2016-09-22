@@ -221,7 +221,7 @@ public class HisInfoDao extends BaseDao {
             this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                     int length = accountItem.size();
-                    for (AccountItem item :accountItem) {
+                    for (AccountItem item : accountItem) {
                         String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
                         final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
                         ps.setLong(1, seqId);                     //记账记录序号
@@ -263,61 +263,68 @@ public class HisInfoDao extends BaseDao {
     /**
      * LIS 补计费、退费
      *
-     * @param accountItemDtos
+     * @param accountItems
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveLisBooking(List<AccountItemDto> accountItemDtos, int isFee) throws Exception {
-        ReturnMsg msg = new ReturnMsg();
+    public ReturnMsg saveLisBooking(List<AccountItem> accountItems) throws Exception {
+        if(accountItems==null || accountItems.size()<0){
+            return new ReturnMsg(0, "参数不允许为空");
+        }
         //收费
         String sql = "";
-        final List<AccountItemDto> accountItemDtoList = new ArrayList<AccountItemDto>();
+        List<AccountItem> accountItemList = new ArrayList<AccountItem>();
         try {
             //收费，根据诊疗项目查询具体收费项目
-            if (isFee == 0) {
-                for (final AccountItemDto accountItemDto : accountItemDtos) {
-                    sql = "select zlxmid,sfxmid,sfxmmc,sfxmdj from V_HSBDI_ORDER2CHARGE where zlxmid =" + accountItemDto.getFeeItemCode();
-                    List<AccountItemDto> accountItemDtoList1 = hisJdbcTemplate.query(sql,
-                            new RowMapper<AccountItemDto>() {
-                                public AccountItemDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                                    AccountItemDto item = new AccountItemDto();
-                                    item = accountItemDto;
-                                    item.setFeeDetailItemId(Util.null2String(rs.getString("zlxmid")));
-                                    item.setFeeDetailItemName(Util.null2String(rs.getString("sfxmmc")));
-                                    item.setPrice(rs.getDouble("sfxmdj"));
-                                    return item;
-                                }
-                            });
-                    accountItemDtoList.addAll(accountItemDtoList1);
+            if (accountItems.get(0).getQuantity() > 0) {
+                final Map<String, AccountItem> accountItemMap = new HashMap<String, AccountItem>();
+                String itemId = "";
+                for (AccountItem accountItem : accountItems) {
+                    if (!itemId.isEmpty()) itemId += ",";
+                    itemId += accountItem.getTestPurposesCode();
+                    accountItemMap.put(accountItem.getTestPurposesCode(), accountItem);
                 }
+                sql = "select zlxmid,sfxmid,sfxmmc,sfxmdj from V_HSBDI_ORDER2CHARGE where zlxmid in(" + itemId + ")";
+                accountItemList = hisJdbcTemplate.query(sql,
+                        new RowMapper<AccountItem>() {
+                            public AccountItem mapRow(ResultSet rs, int rowNum) throws SQLException {
+                                AccountItem item = new AccountItem();
+                                item = accountItemMap.get(Util.null2String(rs.getString("zlxmid")));
+                                item.setFeeItemCode(Util.null2String(rs.getString("sfxmid")));
+                                item.setFeeItemName(Util.null2String(rs.getString("sfxmmc")));
+                                item.setPrice(rs.getDouble("sfxmdj"));
+                                return item;
+                            }
+                        });
             }
+
             //插入收费记录
             sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
                     "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
+            final List<AccountItem> accountItems1 = accountItemList;
             this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                    for (AccountItemDto accountItemDto:accountItemDtoList) {
+                    for (AccountItem accountItem : accountItems1) {
                         String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
                         final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
                         ps.setLong(1, seqId);                                           //记账记录序号
-                        ps.setObject(2, accountItemDto.getPatientId());                 //病人就诊序号
+                        ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
                         ps.setLong(3, 2);                                               //药品诊疗判别 1 药品 2 诊疗
-                        ps.setString(4, accountItemDto.getFeeItemCode());              //费用项目序号 代码11266
+                        ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
                         //ps.setObject(6, accountItem.getAge());                        //药品产地序号 诊疗不需要，药品需传入
                         ps.setLong(5, 14);                                              //费用途径序号 12 用血 14 LIS 15 物资
-                        ps.setTimestamp(6, new java.sql.Timestamp(accountItemDto.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
-                        ps.setInt(7, accountItemDto.getQuantity());                    //费用发生数量
-                        ps.setString(8, accountItemDto.getBillingDoctorNo());                                 //开单医生序号
+                        ps.setTimestamp(6, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+                        ps.setInt(7, accountItem.getQuantity());                    //费用发生数量
+                        ps.setString(8, accountItem.getBillingDoctorNo());                                 //开单医生序号
                         ps.setString(9, "21");                                      //开单科室序号
-                        ps.setString(10, accountItemDto.getTestDoctorNo());                                //执行用户序号
+                        ps.setString(10, accountItem.getTestDoctorNo());                                //执行用户序号
                         ps.setString(11, "21");                                     //执行科室序号
-                        ps.setString(12, accountItemDto.getOperatorNo());                                //操作用户序号
-                        if (accountItemDto.getQuantity() < 0) {
-                            ps.setLong(13,accountItemDto.getAccountId());                                //操作用户序号
+                        ps.setString(12, accountItem.getOperatorNo());                                //操作用户序号
+                        if (accountItem.getQuantity() < 0) {
+                            ps.setLong(13, accountItem.getAccountId());                                //操作用户序号
                         } else {
                             ps.setObject(13, null);
-                            accountItemDto.setAccountId(seqId);
+                            accountItem.setAccountId(seqId);
                         }
                         ps.addBatch();
                     }
@@ -325,17 +332,12 @@ public class HisInfoDao extends BaseDao {
                     return o;
                 }
             });
-            return new ReturnMsg(1, accountItemDtoList);
-        } catch (
-                Exception e)
-
-        {
+            return new ReturnMsg(1, accountItems1);
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("计费异常", e);
-            msg.setState(0);
-            msg.setMessage("计费异常:" + e.getMessage());
+            return new ReturnMsg(0, e.getMessage());
         }
-        return msg;
     }
 
     /**

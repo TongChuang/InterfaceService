@@ -212,8 +212,8 @@ public interface LisInfoService {
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML})
-    @Path(value = "/lisbooking")
-    String lisbooking (AccountItemDto accountItem);
+    @Path(value = "/lisBooking")
+    String lisBooking (List<AccountItem> accountItem);
 
     /**
      * 获取LIS相关检测结果

@@ -1,14 +1,11 @@
 package com.zcw.webservice.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.zcw.webservice.dao.HisInfoDao;
 import com.zcw.webservice.dao.LisInfoDao;
 import com.zcw.webservice.model.his.AccountItem;
-import com.zcw.webservice.model.his.AccountItemDto;
 import com.zcw.webservice.model.his.HisTestInfo;
 import com.zcw.webservice.model.his.RequestUpdateParam;
 import com.zcw.webservice.model.lis.InspectionItem;
@@ -361,7 +358,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     /**
-     * 计费
+     * Mlis计费
      * @param accountItem       费用信息
      * @return
      */
@@ -383,18 +380,19 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     /**
-     * 计费
-     * @param accountItem       费用信息
+     * Lis计费
+     * @param accountItems       费用信息
      * @return
      */
-    public String lisbooking(AccountItemDto accountItem) {
+    public String lisBooking(List<AccountItem> accountItems) {
         log.info("booking================================START");
-        log.info(JSON.toJSONString(accountItem));
-        //System.out.println(JSON.toJSONString(accountItem));
+        log.info(JSON.toJSONString(accountItems));
+
         ReturnMsg msg = new ReturnMsg();
         try{
-            msg = hisInfoDao.saveLisBooking(accountItem);
+            msg = hisInfoDao.saveLisBooking(accountItems);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             msg.setState(0);
             msg.setMessage(e.getMessage());

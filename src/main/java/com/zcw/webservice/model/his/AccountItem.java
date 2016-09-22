@@ -24,11 +24,11 @@ public class AccountItem  implements Serializable {
 
     private static final long serialVersionUID = -4040025415801341888L;
 
-    protected AccountItem() {
+    public AccountItem() {
         super();
     }
 
-    protected AccountItem(String patientCode, String patientId, String patientType, String patientName, String testPurposesCode, String testPurposes, Date dateTime, int quantity, double price, String feeItemCode, String feeItemName, String billingDoctorNo, String billingDeptNo, String testDoctorNo, String testDoctorDeptNo, String operatorNo, Long accountId) {
+    public AccountItem(String patientCode, String patientId, String patientType, String patientName, String testPurposesCode, String testPurposes, Date dateTime, int quantity, double price, String feeItemCode, String feeItemName, String billingDoctorNo, String billingDeptNo, String testDoctorNo, String testDoctorDeptNo, String operatorNo, Long accountId) {
         this.patientCode = patientCode;
         this.patientId = patientId;
         this.patientType = patientType;
@@ -49,24 +49,24 @@ public class AccountItem  implements Serializable {
     }
 
     @JSONField(name = "patientCode")
-    protected String patientCode;     //病人住院序号
+    private String patientCode;     //病人住院序号
     @JSONField(name = "PatientId")
-    protected String patientId;       //病人就诊ID
+    private String patientId;       //病人就诊ID
     @JSONField(name = "patientType")
-    protected String patientType;     //病人类型 住院 1、门诊 2
+    private String patientType;     //病人类型 住院 1、门诊 2
     @JSONField(name = "patientName")
-    protected String patientName;     //病人姓名
+    private String patientName;     //病人姓名
     @JSONField(name = "testPurposesCode")
-    protected String testPurposesCode;  //检验目的编号
+    private String testPurposesCode;  //检验目的编号
     @JSONField(name = "testPurposes")
-    protected String testPurposes;    //检验目的
+    private String testPurposes;    //检验目的
     @JSONField(name = "DateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
     @JsonSerialize(using = JsonDateFormateFull.class)
-    protected Date dateTime;        //费用发生日期
+    private Date dateTime;        //费用发生日期
     @JSONField(name = "Quantity")
-    protected int quantity;           //费用发生数量
+    private int quantity;           //费用发生数量
     @JSONField(name = "Price")
-    protected double price;           //费用发生单价
+    private double price;           //费用发生单价
     @JSONField(name = "FeeItemCode")
     protected String feeItemCode;     //费用项目序号
     @JSONField(name = "FeeItemName")
@@ -74,17 +74,17 @@ public class AccountItem  implements Serializable {
 
     //private String costSource;    //费用途径序号    12 用血 14 LIS 15 物资
     @JSONField(name = "BillingDoctorNo")
-    protected String billingDoctorNo;	//开单医生序号
+    private String billingDoctorNo;	//开单医生序号
     @JSONField(name = "BillingDeptNo")
-    protected String billingDeptNo;	//开单科室序号
+    private String billingDeptNo;	//开单科室序号
     @JSONField(name = "TestDoctorNo")
-    protected String testDoctorNo;	//执行用户序号
+    private String testDoctorNo;	//执行用户序号
     @JSONField(name = "TestDoctorDeptNo")
-    protected String testDoctorDeptNo;//执行科室序号
+    private String testDoctorDeptNo;//执行科室序号
     @JSONField(name = "OperatorNo")
-    protected String operatorNo;	    //操作用户序号
+    private String operatorNo;	    //操作用户序号
     @JSONField(name = "AccountId")
-    protected Long accountId;         //记账序号
+    private Long accountId;         //记账序号
 
     public String getPatientId() {
         return patientId;
