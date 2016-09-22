@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,17 +28,18 @@ import java.util.*;
 @Repository
 public class LisInfoDao extends BaseDao {
     private static Logger log = Logger.getLogger(LisInfoDao.class);
+
     /**
      * 获取检验信息
      *
      * @param barcode //申请条码
      * @return
      */
-    public List<TestInfo> getTestInfo(String barcode) throws Exception{
+    public List<TestInfo> getTestInfo(String barcode) throws Exception {
         //SELECT * FROM t_lis_sampletransPro where ybid ='' and Trans='已计费' 已经计费 状态
         String sql = "select * from vw_testinfo_micro where Barcode =?";
         List<TestInfo> testInfoList = null;
-        testInfoList = lisJdbcTemplate.query(sql,new Object[]{barcode},
+        testInfoList = lisJdbcTemplate.query(sql, new Object[]{barcode},
                 new RowMapper<TestInfo>() {
                     public TestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         TestInfo testInfo = new TestInfo();
@@ -93,24 +95,24 @@ public class LisInfoDao extends BaseDao {
                     }
                 });
 
-        if (testInfoList.size()>0){
+        if (testInfoList.size() > 0) {
             //获取标本确认时间及确认人
             sql = "select top 1 id, recordtime,operator,ybid,trans from t_lis_sampletransPro where Trans='标本确认'  and ybid=? order by id desc";
-            Map result= null;
-            try{
-                result=(Map)lisJdbcTemplate.queryForMap(sql,new Object[]{testInfoList.get(0).getBarcode()});
+            Map result = null;
+            try {
+                result = (Map) lisJdbcTemplate.queryForMap(sql, new Object[]{testInfoList.get(0).getBarcode()});
                 testInfoList.get(0).setSignDate(result.get("recordtime").toString());
-                testInfoList.get(0).setSignerAccount((String)result.get("operator"));
-            }catch (EmptyResultDataAccessException e){
-                result= null;
+                testInfoList.get(0).setSignerAccount((String) result.get("operator"));
+            } catch (EmptyResultDataAccessException e) {
+                result = null;
             }
             //获取病案号
-            try{
+            try {
                 sql = "select top 1 P_wyh from TC_wyhdz where P_DYHM =? order by pid desc";
-                result=(Map)lisJdbcTemplate.queryForMap(sql,new Object[]{testInfoList.get(0).getPatientCode()});
-                testInfoList.get(0).setPatientFileNo((String)result.get("P_wyh"));
-            }catch (EmptyResultDataAccessException e){
-                result= null;
+                result = (Map) lisJdbcTemplate.queryForMap(sql, new Object[]{testInfoList.get(0).getPatientCode()});
+                testInfoList.get(0).setPatientFileNo((String) result.get("P_wyh"));
+            } catch (EmptyResultDataAccessException e) {
+                result = null;
             }
             //获取TESTITEM
 //            List<Map<String,String>> testItems = new ArrayList<Map<String,String>>();
@@ -247,7 +249,7 @@ public class LisInfoDao extends BaseDao {
      * @param signEndDate
      * @return
      */
-    public List<TestInfo> getReceivedSampleList(String signStartDate, String signEndDate) throws Exception{
+    public List<TestInfo> getReceivedSampleList(String signStartDate, String signEndDate) throws Exception {
         List<TestInfo> testInfoList = null;
         String sql = "select  * from vw_testinfo_micro where status='1' and  CollectDate>=? and CollectDate<=?";
         testInfoList = lisJdbcTemplate.query(sql, new Object[]{signStartDate, signEndDate},
@@ -399,13 +401,12 @@ public class LisInfoDao extends BaseDao {
         sql = "insert into xj_xmcdz(ybbh,jglx,lxxh,ybjg,jg1) values(?,?,?,?,?)";
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                int length = results.size();
-                for (int i = 0; i < length; i++) {
-                    ps.setString(1, sampleInfo.getSampleId());               //样本号
-                    ps.setString(2, results.get(i).getResultType());        //结果类型
-                    ps.setInt(3, results.get(i).getResultTypeId());         //结果类型序号
-                    ps.setString(4, results.get(i).getResult());             //结果
-                    ps.setString(5, results.get(i).getCount());             //菌量计数
+                for (TestResult testResult : results) {
+                    ps.setString(1, sampleInfo.getSampleId());              //样本号
+                    ps.setString(2, testResult.getResultType());            //结果类型
+                    ps.setInt(3, testResult.getResultTypeId());             //结果类型序号
+                    ps.setString(4, testResult.getResult());                //结果
+                    ps.setString(5, testResult.getCount());                 //菌量计数
                     // ps.setString(5, results.get(i).getDrugResistance());  //耐药标志
                     ps.addBatch();
                 }
@@ -423,21 +424,17 @@ public class LisInfoDao extends BaseDao {
             sql = "insert into xj_xmcdz(ybbh,jglx,lxxh,ybjg,jg1,jg2,kbvalue,jgxh) values(?,?,?,?,?,?,?,?)";
             this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                    int length = drugResults.size();
                     boolean flag = false;
-                    if (length > 0) {
-                        int orderNo = Util.getIntValue(drugResults.get(0).getResultCode());
-                        if (orderNo > 1) flag = true;
-                    }
-                    for (int i = 0; i < length; i++) {
-                        ps.setString(1, sampleInfo.getSampleId());               //样本号
-                        ps.setString(2, "ym");                                   //结果类型
-                        ps.setInt(3, Util.getIntValue(drugResults.get(i).getResultCode()));        //结果类型序号
-                        ps.setString(4, drugResults.get(i).getName());             //结果(抗生素名称)
-                        ps.setString(5, drugResults.get(i).getAbnormalResult());   //异菌范围
-                        ps.setString(6, drugResults.get(i).getResultValue());        //结果值(R/S/I)
-                        ps.setString(7, drugResults.get(i).getReference());        //KB参考范围
-                        ps.setString(8, drugResults.get(i).getOrderNo());        //药敏顺序
+                    flag = (drugResults.size()>0 && Util.getIntValue(drugResults.get(0).getResultCode()) > 1);
+                    for (DrugResult drugResult : drugResults) {
+                        ps.setString(1, sampleInfo.getSampleId());                          //样本号
+                        ps.setString(2, "ym");                                              //结果类型
+                        ps.setInt(3, Util.getIntValue(drugResult.getResultCode()));         //结果类型序号
+                        ps.setString(4, drugResult.getName());                              //结果(抗生素名称)
+                        ps.setString(5, drugResult.getAbnormalResult());                    //异菌范围
+                        ps.setString(6, drugResult.getResultValue());                       //结果值(R/S/I)
+                        ps.setString(7, drugResult.getReference());                         //KB参考范围
+                        ps.setString(8, drugResult.getOrderNo());                           //药敏顺序
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
@@ -507,18 +504,16 @@ public class LisInfoDao extends BaseDao {
         final List<TestResult> results = report.getResults();
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                int length = results.size();
-                //ps.getConnection().setAutoCommit(false);
-                for (int i = 0; i < length; i++) {
-                    ps.setString(1, "微生物");                                                 //仪器代号
+                for (TestResult testResult: results) {
+                    ps.setString(1, "微生物");                                             //仪器代号
                     ps.setTimestamp(2, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime())); //测定日期
-                    ps.setString(3, sampleInfo.getSampleId());                                   //样本编号
-                    ps.setString(4, results.get(i).getTestItemCode());                          //结果项目编号
-                    ps.setString(5, results.get(i).getTestItemOrder());                         //结果类型序号
-                    ps.setString(6, results.get(i).getResult());                                //结果
-                    ps.setString(7, results.get(i).getAbnormalFlag());                          //异常标志
-                    ps.setString(8, results.get(i).getReference());                             //参考值
-                    ps.setString(9, results.get(i).getUnit());                                  //单位
+                    ps.setString(3, sampleInfo.getSampleId());                              //样本编号
+                    ps.setString(4, testResult.getTestItemCode());                          //结果项目编号
+                    ps.setString(5, testResult.getTestItemOrder());                         //结果类型序号
+                    ps.setString(6, testResult.getResult());                                //结果
+                    ps.setString(7, testResult.getAbnormalFlag());                          //异常标志
+                    ps.setString(8, testResult.getReference());                             //参考值
+                    ps.setString(9, testResult.getUnit());                                  //单位
                     ps.addBatch();
                 }
                 Object o = ps.executeBatch();
@@ -531,15 +526,16 @@ public class LisInfoDao extends BaseDao {
 
     /**
      * 日志记录
+     *
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveSampleFlowLog(final SampleLog sampleLog)throws Exception{
-        if(sampleLog ==null)
-            return new ReturnMsg(0,"参数不能为空");
-        if(sampleLog.getSampleNo()==null || sampleLog.getSampleNo().equals(""))
-            return new ReturnMsg(0,"样本号不能为空");
-        String sql = "insert into t_lis_sampletransPro(ybid,recordtime,operator,trans)values(?,?,?,?) " ;
+    public ReturnMsg saveSampleFlowLog(final SampleLog sampleLog) throws Exception {
+        if (sampleLog == null)
+            return new ReturnMsg(0, "参数不能为空");
+        if (sampleLog.getSampleNo() == null || sampleLog.getSampleNo().equals(""))
+            return new ReturnMsg(0, "样本号不能为空");
+        String sql = "insert into t_lis_sampletransPro(ybid,recordtime,operator,trans)values(?,?,?,?) ";
         lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
@@ -553,7 +549,6 @@ public class LisInfoDao extends BaseDao {
     }
 
     /**
-     *
      * @param reason
      * @param returnTime
      * @param operator
@@ -567,38 +562,38 @@ public class LisInfoDao extends BaseDao {
                                   String sampleNo,
                                   String operator,
                                   Date returnTime,
-                                  String reason)throws Exception{
-        if(barcode==null || barcode.equals("")){
-            return new ReturnMsg(0,"条码号不能为空");
+                                  String reason) throws Exception {
+        if (barcode == null || barcode.equals("")) {
+            return new ReturnMsg(0, "条码号不能为空");
         }
-        if(sampleNo==null || sampleNo.equals("")){
-            return new ReturnMsg(0,"样本号不能为空");
+        if (sampleNo == null || sampleNo.equals("")) {
+            return new ReturnMsg(0, "样本号不能为空");
         }
         String sql = "";
-        if(reportType ==0){
+        if (reportType == 0) {
             sql = "select ybzt from xj_ybxx where byh = ? and ybbh=?";
-        }else if(reportType ==1){
+        } else if (reportType == 1) {
             sql = "select ybzt from lis_ybxx where ybid = ? and ybbh = ?";
         }
-        String status = lisJdbcTemplate.queryForObject(sql,new Object[]{barcode,sampleNo},String.class);
-        if(status !=null && !status.isEmpty()){
-            if(status.equals("p") || status.equals("s")){
-                return new ReturnMsg(0,"样本已审核或打印，不允许删除");
+        String status = lisJdbcTemplate.queryForObject(sql, new Object[]{barcode, sampleNo}, String.class);
+        if (status != null && !status.isEmpty()) {
+            if (status.equals("p") || status.equals("s")) {
+                return new ReturnMsg(0, "样本已审核或打印，不允许删除");
             }
         }
         //检测报告状态
-        if(status.equals("d")){
+        if (status.equals("d")) {
             //删除报告
-            if(reportType==0){
+            if (reportType == 0) {
                 sql = "delete from xj_xmcdz where ybbh=?";
-                lisJdbcTemplate.update(sql,new Object[]{sampleNo});
+                lisJdbcTemplate.update(sql, new Object[]{sampleNo});
                 sql = "delete from xj_ybxx where ybbh=? and byh=?";
-                lisJdbcTemplate.update(sql,new Object[]{sampleNo,barcode});
-            }else if(reportType ==1){
+                lisJdbcTemplate.update(sql, new Object[]{sampleNo, barcode});
+            } else if (reportType == 1) {
                 sql = "delete from lis_xmcdz where ybbh=?";
-                lisJdbcTemplate.update(sql,new Object[]{sampleNo});
+                lisJdbcTemplate.update(sql, new Object[]{sampleNo});
                 sql = "delete from lis_ybxx where ybid=? and ybbh=?";
-                lisJdbcTemplate.update(sql,new Object[]{sampleNo,barcode});
+                lisJdbcTemplate.update(sql, new Object[]{sampleNo, barcode});
             }
         }
         return new ReturnMsg(1, "删除成功");
@@ -606,53 +601,55 @@ public class LisInfoDao extends BaseDao {
 
     /**
      * 获取报告状态
+     *
      * @param reportType
      * @param barcode
      * @return
      */
-    public int getReportStatus(int reportType,String barcode) throws  Exception{
-        String sql= "";
+    public int getReportStatus(int reportType, String barcode) throws Exception {
+        String sql = "";
         int returnValue = -1;   //0 未审 1 初审 2已审 3已打 -1 其他
-        if(reportType ==0){
+        if (reportType == 0) {
             sql = "select ybzt from xj_ybxx where byh = ?";
-        }else if(reportType ==1){
+        } else if (reportType == 1) {
             sql = "select ybzt from lis_ybxx where ybid = ?";
         }
         String status = "";
         try {
-            status = lisJdbcTemplate.queryForObject(sql,new Object[]{barcode},String.class);
-            if(status.equals("")){
-                returnValue=0;
-            }else if(status.equals("d")){
-                returnValue=1;
-            }else if(status.equals("s")){
-                returnValue=2;
-            }else if(status.equals("p")){
-                returnValue=3;
+            status = lisJdbcTemplate.queryForObject(sql, new Object[]{barcode}, String.class);
+            if (status.equals("")) {
+                returnValue = 0;
+            } else if (status.equals("d")) {
+                returnValue = 1;
+            } else if (status.equals("s")) {
+                returnValue = 2;
+            } else if (status.equals("p")) {
+                returnValue = 3;
             }
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             e.printStackTrace();
-            returnValue =-1;
+            returnValue = -1;
         }
         return returnValue;
     }
 
     /**
      * LIS结果 用于电子病历结果查询(临时)
+     *
      * @param info
      * @return
      * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveLisResult(final List<InspectionItem> info)throws Exception{
-        if(info ==null || info.size()==0)
-            return new ReturnMsg(0,"参数不能为空");
-       String sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
-               "testItemName_EN,testItemName_CN,unit,orderNum,reference,resultFlag,barcode) " +
-               "values(?,?,?,?,?,?,?,?,?)";
+    public ReturnMsg saveLisResult(final List<InspectionItem> info) throws Exception {
+        if (info == null || info.size() == 0)
+            return new ReturnMsg(0, "参数不能为空");
+        String sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
+                "testItemName_EN,testItemName_CN,unit,orderNum,reference,resultFlag,barcode) " +
+                "values(?,?,?,?,?,?,?,?,?)";
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                for (InspectionItem inspectionItem:info) {
+                for (InspectionItem inspectionItem : info) {
                     ps.setString(1, inspectionItem.getInspectionId());
                     ps.setString(2, inspectionItem.getTestItemId());
                     ps.setString(3, inspectionItem.getTestItemName_EN());

@@ -1,19 +1,18 @@
 package com.zcw.webservice.dao;
 
-import com.alibaba.fastjson.JSON;
 import com.zcw.webservice.common.Util;
 import com.zcw.webservice.model.his.*;
 import com.zcw.webservice.model.vo.ReturnMsg;
 import oracle.jdbc.driver.OracleTypes;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +63,7 @@ public class HisInfoDao extends BaseDao {
      */
     public List<Department> getDepartmentList() throws Exception {
         String sql = "select * from V_HSBHI_DEPTINFO";
-        List<Map<String, Object>> list = hisJdbcTemplate.queryForList(sql);
+
         Object[] params = new Object[]{};
         List<Department> departmentList = null;
         departmentList = hisJdbcTemplate.query(sql,
@@ -89,7 +88,7 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode 住院、门诊号
      * @return 返回病人信息
      */
-    public List<Patient> getPatientInfo(String patientType, String patientCode, String patientId) throws Exception{
+    public List<Patient> getPatientInfo(String patientType, String patientCode, String patientId) throws Exception {
         if (patientType.equals("1")) {
             //门诊病人信息
             return getOutPatientInfo(patientCode, patientId);
@@ -107,7 +106,7 @@ public class HisInfoDao extends BaseDao {
      * @param patientCode
      * @return 返回住院病人信息
      */
-    private List<Patient> getInPatientInfo(String patientCode, String patientId) throws Exception{
+    private List<Patient> getInPatientInfo(String patientCode, String patientId) throws Exception {
         List<Patient> patientList = null;
         String sql = "";
         Object[] parms = null;
@@ -158,7 +157,7 @@ public class HisInfoDao extends BaseDao {
      * @return 返回门诊病人信息
      */
 
-    private List<Patient> getOutPatientInfo(String patientCode, String patientId) throws Exception{
+    private List<Patient> getOutPatientInfo(String patientCode, String patientId) throws Exception {
         List<Patient> patientList = null;
         //String sql = "select * from V_HSBCI_TREATINFO where BRJZHM =?";
         String sql = "";
@@ -211,44 +210,39 @@ public class HisInfoDao extends BaseDao {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveBooking(final List<AccountItem> accountItem) throws Exception{
+    public ReturnMsg saveBooking(final List<AccountItem> accountItem) throws Exception {
         ReturnMsg msg = new ReturnMsg();
         String userids = "";
-//        try {
-//            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItem.get(0).getOperatorNo()}, String.class);
-//        }catch (EmptyResultDataAccessException e){
-//            return new ReturnMsg(0, "HIS用户不存在，请检查。");
-//        }
-//        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
-//        final String hisUserID = userids;
-
         String sql = "";
         //插入收费记录
         sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
-                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                     int length = accountItem.size();
-                    for (int i = 0; i < length; i++) {
-                        if (accountItem.get(i).getAccountId() == null || accountItem.get(i).getAccountId().equals("")) {
-                            String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
-                            final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
-                            accountItem.get(i).setAccountId(seqId);
-                        }
-                        ps.setLong(1, accountItem.get(i).getAccountId());                     //记账记录序号
-                        ps.setObject(2, accountItem.get(i).getPatientId());                 //病人就诊序号
+                    for (AccountItem item :accountItem) {
+                        String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
+                        final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
+                        ps.setLong(1, seqId);                     //记账记录序号
+                        ps.setObject(2, item.getPatientId());                 //病人就诊序号
                         ps.setLong(3, 2);                                           //药品诊疗判别 1 药品 2 诊疗
-                        ps.setString(4, accountItem.get(i).getFeeItemCode());              //费用项目序号 代码11266
+                        ps.setString(4, item.getFeeItemCode());              //费用项目序号 代码11266
                         //ps.setObject(6, accountItem.getAge());                    //药品产地序号 诊疗不需要，药品需传入
                         ps.setLong(5, 14);                                          //费用途径序号 12 用血 14 LIS 15 物资
-                        ps.setTimestamp(6, new java.sql.Timestamp(accountItem.get(i).getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
-                        ps.setInt(7, accountItem.get(i).getQuantity());                    //费用发生数量
-                        ps.setString(8, accountItem.get(0).getBillingDoctorNo());                                 //开单医生序号
+                        ps.setTimestamp(6, new java.sql.Timestamp(item.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+                        ps.setInt(7, item.getQuantity());                    //费用发生数量
+                        ps.setString(8, item.getBillingDoctorNo());                                 //开单医生序号
                         ps.setString(9, "21");                                      //开单科室序号
-                        ps.setString(10, accountItem.get(0).getTestDoctorNo());                                //执行用户序号
+                        ps.setString(10, item.getTestDoctorNo());                                //执行用户序号
                         ps.setString(11, "21");                                     //执行科室序号
-                        ps.setString(12, accountItem.get(0).getOperatorNo());                                //操作用户序号
+                        ps.setString(12, item.getOperatorNo());                                //操作用户序号
+                        if (item.getQuantity() < 0) {
+                            ps.setLong(13, item.getAccountId());                                //操作用户序号
+                        } else {
+                            ps.setObject(13, null);
+                            item.setAccountId(seqId);
+                        }
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
@@ -269,55 +263,74 @@ public class HisInfoDao extends BaseDao {
     /**
      * LIS 补计费、退费
      *
-     * @param accountItemDto
+     * @param accountItemDtos
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveLisBooking(final AccountItemDto accountItemDto) throws Exception{
+    public ReturnMsg saveLisBooking(List<AccountItemDto> accountItemDtos, int isFee) throws Exception {
         ReturnMsg msg = new ReturnMsg();
-//        String userids = "";
-//        try {
-//            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItemDto.getAccountItems().get(0).getOperatorNo()}, String.class);
-//        }catch (EmptyResultDataAccessException e){
-//            return new ReturnMsg(0, "HIS用户不存在，请检查。");
-//        }
-//        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
-//        final String hisUserID = userids;
-
+        //收费
         String sql = "";
-        //插入收费记录
-        sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
-                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        final List<AccountItemDto> accountItemDtoList = new ArrayList<AccountItemDto>();
         try {
+            //收费，根据诊疗项目查询具体收费项目
+            if (isFee == 0) {
+                for (final AccountItemDto accountItemDto : accountItemDtos) {
+                    sql = "select zlxmid,sfxmid,sfxmmc,sfxmdj from V_HSBDI_ORDER2CHARGE where zlxmid =" + accountItemDto.getFeeItemCode();
+                    List<AccountItemDto> accountItemDtoList1 = hisJdbcTemplate.query(sql,
+                            new RowMapper<AccountItemDto>() {
+                                public AccountItemDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                                    AccountItemDto item = new AccountItemDto();
+                                    item = accountItemDto;
+                                    item.setFeeDetailItemId(Util.null2String(rs.getString("zlxmid")));
+                                    item.setFeeDetailItemName(Util.null2String(rs.getString("sfxmmc")));
+                                    item.setPrice(rs.getDouble("sfxmdj"));
+                                    return item;
+                                }
+                            });
+                    accountItemDtoList.addAll(accountItemDtoList1);
+                }
+            }
+            //插入收费记录
+            sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
+                    "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
             this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                    for (AccountItem accountItem:accountItemDto.getAccountItems()) {
-                        if (accountItem.getAccountId() == null || accountItem.getAccountId().equals("")) {
-                            String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
-                            final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
-                            accountItem.setAccountId(seqId);
-                        }
-                        ps.setLong(1, accountItem.getAccountId());                     //记账记录序号
-                        ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
-                        ps.setLong(3, 2);                                           //药品诊疗判别 1 药品 2 诊疗
-                        ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
-                        //ps.setObject(6, accountItem.getAge());                    //药品产地序号 诊疗不需要，药品需传入
-                        ps.setLong(5, 14);                                          //费用途径序号 12 用血 14 LIS 15 物资
-                        ps.setTimestamp(6, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
-                        ps.setInt(7, accountItem.getQuantity());                    //费用发生数量
-                        ps.setString(8, accountItem.getBillingDoctorNo());                                 //开单医生序号
+                    for (AccountItemDto accountItemDto:accountItemDtoList) {
+                        String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
+                        final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
+                        ps.setLong(1, seqId);                                           //记账记录序号
+                        ps.setObject(2, accountItemDto.getPatientId());                 //病人就诊序号
+                        ps.setLong(3, 2);                                               //药品诊疗判别 1 药品 2 诊疗
+                        ps.setString(4, accountItemDto.getFeeItemCode());              //费用项目序号 代码11266
+                        //ps.setObject(6, accountItem.getAge());                        //药品产地序号 诊疗不需要，药品需传入
+                        ps.setLong(5, 14);                                              //费用途径序号 12 用血 14 LIS 15 物资
+                        ps.setTimestamp(6, new java.sql.Timestamp(accountItemDto.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+                        ps.setInt(7, accountItemDto.getQuantity());                    //费用发生数量
+                        ps.setString(8, accountItemDto.getBillingDoctorNo());                                 //开单医生序号
                         ps.setString(9, "21");                                      //开单科室序号
-                        ps.setString(10, accountItem.getBillingDeptNo());                                //执行用户序号
+                        ps.setString(10, accountItemDto.getTestDoctorNo());                                //执行用户序号
                         ps.setString(11, "21");                                     //执行科室序号
-                        ps.setString(12, accountItem.getOperatorNo());                                //操作用户序号
+                        ps.setString(12, accountItemDto.getOperatorNo());                                //操作用户序号
+                        if (accountItemDto.getQuantity() < 0) {
+                            ps.setLong(13,accountItemDto.getAccountId());                                //操作用户序号
+                        } else {
+                            ps.setObject(13, null);
+                            accountItemDto.setAccountId(seqId);
+                        }
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
                     return o;
                 }
             });
-            return new ReturnMsg(1, accountItemDto);
-        } catch (Exception e) {
+            return new ReturnMsg(1, accountItemDtoList);
+        } catch (
+                Exception e)
+
+        {
+            e.printStackTrace();
             log.error("计费异常", e);
             msg.setState(0);
             msg.setMessage("计费异常:" + e.getMessage());
@@ -347,7 +360,7 @@ public class HisInfoDao extends BaseDao {
                         cs.setTimestamp(6, new java.sql.Timestamp(param.getExeDate().getTime()));
                         cs.setString(7, Util.null2String(param.getExpand()));
                         cs.registerOutParameter(8, OracleTypes.NUMBER);
-                        cs.registerOutParameter(9,  OracleTypes.VARCHAR);
+                        cs.registerOutParameter(9, OracleTypes.VARCHAR);
                         cs.execute();
                         Map map = new HashMap();
                         map.put("appCode", cs.getString(8)); // 错误代码 成功返回0  失败返回 -1
@@ -365,13 +378,14 @@ public class HisInfoDao extends BaseDao {
 
     /**
      * 住院病人申请信息
+     *
      * @param requestType
      * @param executeStatus
      * @param ward
      * @return
      * @throws Exception
      */
-    public List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String ward,String bedNo,String patientId) throws Exception{
+    public List<PatientRequestInfo> getInPatientRequestInfo(int requestType, int executeStatus, String ward, String bedNo, String patientId) throws Exception {
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBDI_REQUESTINFO where SFDYPB <>1 AND BRSQLX =?  and DQBQID=?  and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
@@ -379,16 +393,16 @@ public class HisInfoDao extends BaseDao {
         parms.add(ward);
         parms.add(executeStatus);
         //床位号
-        if(bedNo != null && !bedNo.isEmpty()){
+        if (bedNo != null && !bedNo.isEmpty()) {
             sql += " and BQCWHM=?";
             parms.add(bedNo);
         }
         //病人就诊ID
-        if(patientId != null && !patientId.isEmpty()){
+        if (patientId != null && !patientId.isEmpty()) {
             sql += " and BRZYID=?";
             parms.add(patientId);
         }
-        patientRequestInfoList = hisJdbcTemplate.query(sql,parms.toArray(),
+        patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
                         PatientRequestInfo info = new PatientRequestInfo();
@@ -398,9 +412,9 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientId(Util.null2String(rs.getString("BRZYID")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
-                        int sex = Util.getIntValue(rs.getString("BRDAXB"),3);
-                        sex=(sex==0?3:sex);
-                        info.setSex(""+sex);
+                        int sex = Util.getIntValue(rs.getString("BRDAXB"), 3);
+                        sex = (sex == 0 ? 3 : sex);
+                        info.setSex("" + sex);
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setWard(Util.null2String(rs.getString("DQBQID")));
@@ -442,12 +456,12 @@ public class HisInfoDao extends BaseDao {
      * @param toDate
      * @return
      */
-    public List<PatientRequestInfo> getOutPatientRequestInfo(int requestType, String requestId,String requestDetailId,String testItemId,int executeStatus, String patientId, String fromDate, String toDate) throws Exception{
+    public List<PatientRequestInfo> getOutPatientRequestInfo(int requestType, String requestId, String requestDetailId, String testItemId, int executeStatus, String patientId, String fromDate, String toDate) throws Exception {
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBCI_REQUESTINFO where BRSQLX =? and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
-        if(requestType==2){
+        if (requestType == 2) {
             executeStatus = 0;
         }
         parms.add(executeStatus);
@@ -465,15 +479,15 @@ public class HisInfoDao extends BaseDao {
             sql += "and SQKDRQ<=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(toDate);
         }
-        if(!requestId.isEmpty()){
+        if (!requestId.isEmpty()) {
             sql += "and SQJLID=?";
             parms.add(requestId);
         }
-        if(!testItemId.isEmpty()){
+        if (!testItemId.isEmpty()) {
             sql += "and JCXMID=?";
             parms.add(testItemId);
         }
-        if(!requestDetailId.isEmpty()){
+        if (!requestDetailId.isEmpty()) {
             sql += "and SQMXID in (" + requestDetailId + ")";
         }
         patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
@@ -486,7 +500,7 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientId(Util.null2String(rs.getString("BRJZXH")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
-                        info.setSex(""+Util.getIntValue(rs.getString("BRDAXB"),3));
+                        info.setSex("" + Util.getIntValue(rs.getString("BRDAXB"), 3));
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         //info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
@@ -522,21 +536,21 @@ public class HisInfoDao extends BaseDao {
         final HisSampleInfo sampleInfo = info.getSampleInfo();
 
         //删除样本信息
-        String sql ="delete from di_labsampleinfo where JCYBID=? ";
+        String sql = "delete from di_labsampleinfo where JCYBID=? ";
         lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1,sampleInfo.getBarCode());
+                ps.setString(1, sampleInfo.getBarCode());
             }
         });
 
         //删除结果信息
-        sql ="delete from di_labtestresult where BRYZID=? and SJBRID=? ";
+        sql = "delete from di_labtestresult where BRYZID=? and SJBRID=? ";
         lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1,sampleInfo.getBarCode());
-                ps.setString(2,sampleInfo.getPatientId());
+                ps.setString(1, sampleInfo.getBarCode());
+                ps.setString(2, sampleInfo.getPatientId());
             }
         });
 
@@ -561,10 +575,10 @@ public class HisInfoDao extends BaseDao {
                 ps.setString(6, Util.null2String(sampleInfo.getPatientId()));          //病人档案ID
                 ps.setString(7, Util.null2String(sampleInfo.getPatientCode()));          //病人就诊号码：住院号、门诊号
                 ps.setString(8, Util.null2String(sampleInfo.getPatientName()));          //病人姓名
-                ps.setInt(9,sampleInfo.getSex());
-                ps.setInt(10,sampleInfo.getAge());
+                ps.setInt(9, sampleInfo.getSex());
+                ps.setInt(10, sampleInfo.getAge());
                 ps.setString(11, Util.null2String(sampleInfo.getAgeUnit()));
-                ps.setInt(12,sampleInfo.getIsBaby());
+                ps.setInt(12, sampleInfo.getIsBaby());
                 ps.setString(13, Util.null2String(sampleInfo.getBedNo()));       //床号
                 ps.setString(14, Util.null2String(sampleInfo.getDiagnosisId())); //临床诊断ID
                 ps.setString(15, Util.null2String(sampleInfo.getDiagnosis()));   //临床诊断
@@ -588,9 +602,9 @@ public class HisInfoDao extends BaseDao {
                 ps.setString(33, Util.null2String(sampleInfo.getAuditNote()));      //审核备注
                 ps.setString(34, Util.null2String(sampleInfo.getSampleTypeId()));      //样本类型ID
                 ps.setString(35, Util.null2String(sampleInfo.getSampleTypeName()));      //样本类型名称
-                ps.setInt(36,0);     //样本操作状态
-                ps.setInt(37,0);     //送检费用合计
-                ps.setInt(38,0);     //送检收费状态
+                ps.setInt(36, 0);     //样本操作状态
+                ps.setInt(37, 0);     //送检费用合计
+                ps.setInt(38, 0);     //送检收费状态
                 ps.setString(39, "");      //接收记录ID
                 ps.setTimestamp(40, new java.sql.Timestamp(sampleInfo.getSampleResultTime().getTime()));      //样本结果时间
                 ps.setInt(41, sampleInfo.getSampleResultStatus());      //样本结果状态
@@ -612,7 +626,7 @@ public class HisInfoDao extends BaseDao {
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 int length = results.size();
-                for(HisTestResult result:results){
+                for (HisTestResult result : results) {
                     ps.setString(1, Util.null2String(sampleInfo.getBarCode()));               //样本号
                     ps.setString(2, Util.null2String(sampleInfo.getOrganizationId()));        //结果类型
                     ps.setString(3, Util.null2String(result.getTestItemId()));               //结果类型序号
