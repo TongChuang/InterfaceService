@@ -8,7 +8,10 @@ import com.alibaba.fastjson.serializer.ValueFilter;
 import com.zcw.webservice.dao.HisInfoDao;
 import com.zcw.webservice.dao.LisInfoDao;
 import com.zcw.webservice.model.his.AccountItem;
+import com.zcw.webservice.model.his.AccountItemDto;
+import com.zcw.webservice.model.his.HisTestInfo;
 import com.zcw.webservice.model.his.RequestUpdateParam;
+import com.zcw.webservice.model.lis.InspectionItem;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
@@ -379,6 +382,28 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return JSON.toJSONString(msg,filter);
     }
 
+    /**
+     * 计费
+     * @param accountItem       费用信息
+     * @return
+     */
+    public String lisbooking(AccountItemDto accountItem) {
+        log.info("booking================================START");
+        log.info(JSON.toJSONString(accountItem));
+        System.out.println(JSON.toJSONString(accountItem));
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = hisInfoDao.saveLisBooking(accountItem);
+        }catch (Exception e){
+            e.printStackTrace();
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info("booking================================END");
+
+        return JSON.toJSONString(msg,filter);
+    }
+
     @Override
     public String getListTestResult(String barcode, String patientId) {
         return null;
@@ -401,6 +426,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
+        log.info(JSON.toJSONString(msg,filter));
         return JSON.toJSONString(msg,filter);
     }
 
@@ -468,6 +494,48 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setState(0);
             msg.setMessage(e.getMessage());
         }
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     *  LIS将检测结果写入HIS系统
+     * @param info    检验结果信息
+     * @return
+     */
+    public String saveHisResult(HisTestInfo info) {
+        log.info("saveHisResult================================START");
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = hisInfoDao.saveHisResult(info);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        };
+        log.info("saveHisResult================================END");
+
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     * LIS结果 用于电子病历结果查询(临时)
+     * @param info
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String saveLisResult(List<InspectionItem> info) {
+        log.info("saveLisResult================================START");
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = lisInfoDao.saveLisResult(info);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info("saveLisResult================================END");
         return JSON.toJSONString(msg,filter);
     }
 }

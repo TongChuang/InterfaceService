@@ -1,9 +1,9 @@
 package com.zcw.webservice.server;
 
-        import com.zcw.webservice.model.his.AccountItem;
-        import com.zcw.webservice.model.his.PatientRequestInfo;
-        import com.zcw.webservice.model.his.RequestUpdateParam;
+        import com.fasterxml.jackson.annotation.JsonProperty;
+        import com.zcw.webservice.model.his.*;
         import com.zcw.webservice.model.lis.Bacteria;
+        import com.zcw.webservice.model.lis.InspectionItem;
         import com.zcw.webservice.model.lis.SampleLog;
         import com.zcw.webservice.model.vo.Report;
         import com.zcw.webservice.model.vo.ReturnMsg;
@@ -204,9 +204,16 @@ public interface LisInfoService {
      */
     @POST
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML})
     @Path(value = "/booking")
+    @JsonProperty("accountItem")
     String booking (List<AccountItem> accountItem);
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML})
+    @Path(value = "/lisbooking")
+    String lisbooking (AccountItemDto accountItem);
 
     /**
      * 获取LIS相关检测结果
@@ -292,4 +299,29 @@ public interface LisInfoService {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML})
     @Path(value = "/requestUpdate")
     String requestUpdate(RequestUpdateParam param);
+
+
+    /**
+     *  LIS将检测结果写入HIS系统
+     *
+     * @param info 检验结果信息
+     * @return 返回Json成功失败信息[{key:value},{...}]
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Path(value = "/saveHisResult")
+    String saveHisResult(HisTestInfo info);
+
+    /**
+     *  LIS将检测结果写入OldliS系统 用于电子病历
+     *
+     * @param info 检验结果信息
+     * @return 返回Json成功失败信息[{key:value},{...}]
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Path(value = "/saveLisResult")
+    String saveLisResult(List<InspectionItem> info);
 }

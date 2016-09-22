@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -256,6 +257,67 @@ public class HisInfoDao extends BaseDao {
             });
             return new ReturnMsg(1, accountItem);
         } catch (Exception e) {
+            e.printStackTrace();
+            log.error("计费异常", e);
+            msg.setState(0);
+            msg.setMessage("计费异常:" + e.getMessage());
+        }
+        return msg;
+    }
+
+
+    /**
+     * LIS 补计费、退费
+     *
+     * @param accountItemDto
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ReturnMsg saveLisBooking(final AccountItemDto accountItemDto) throws Exception{
+        ReturnMsg msg = new ReturnMsg();
+        String userids = "";
+        try {
+            userids = lisJdbcTemplate.queryForObject("select his_id from xt_user where logid=?", new Object[]{accountItemDto.getAccountItems().get(0).getOperatorNo()}, String.class);
+        }catch (EmptyResultDataAccessException e){
+            return new ReturnMsg(0, "HIS用户不存在，请检查。");
+        }
+        if(userids.equals("")) return new ReturnMsg(0, "HIS用户不存在，请检查。");
+        final String hisUserID = userids;
+
+        String sql = "";
+        //插入收费记录
+        sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
+                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+                public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                    for (AccountItem accountItem:accountItemDto.getAccountItems()) {
+                        if (accountItem.getAccountId() == null || accountItem.getAccountId().equals("")) {
+                            String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
+                            final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
+                            accountItem.setAccountId(seqId);
+                        }
+                        ps.setLong(1, accountItem.getAccountId());                     //记账记录序号
+                        ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
+                        ps.setLong(3, 2);                                           //药品诊疗判别 1 药品 2 诊疗
+                        ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
+                        //ps.setObject(6, accountItem.getAge());                    //药品产地序号 诊疗不需要，药品需传入
+                        ps.setLong(5, 14);                                          //费用途径序号 12 用血 14 LIS 15 物资
+                        ps.setTimestamp(6, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+                        ps.setInt(7, accountItem.getQuantity());                    //费用发生数量
+                        ps.setString(8, hisUserID);                                 //开单医生序号
+                        ps.setString(9, "21");                                      //开单科室序号
+                        ps.setString(10, hisUserID);                                //执行用户序号
+                        ps.setString(11, "21");                                     //执行科室序号
+                        ps.setString(12, hisUserID);                                //操作用户序号
+                        ps.addBatch();
+                    }
+                    Object o = ps.executeBatch();
+                    return o;
+                }
+            });
+            return new ReturnMsg(1, accountItemDto);
+        } catch (Exception e) {
             log.error("计费异常", e);
             msg.setState(0);
             msg.setMessage("计费异常:" + e.getMessage());
@@ -311,7 +373,7 @@ public class HisInfoDao extends BaseDao {
      */
     public List<PatientRequestInfo> getInPatientRequestInfo( int requestType, int executeStatus, String ward,String bedNo,String patientId) throws Exception{
         List<PatientRequestInfo> patientRequestInfoList = null;
-        String sql = "select * from V_HSBDI_REQUESTINFO where BRSQLX =?  and DQBQID=?  and SQZTBZ=? ";
+        String sql = "select * from V_HSBDI_REQUESTINFO where SFDYPB <>1 AND BRSQLX =?  and DQBQID=?  and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
         parms.add(requestType);
         parms.add(ward);
@@ -336,7 +398,7 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientId(Util.null2String(rs.getString("BRZYID")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
-                        info.setSex(Util.null2String(rs.getString("BRDAXB")));
+                        info.setSex(""+Util.getIntValue(rs.getString("BRDAXB"),3));
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setWard(Util.null2String(rs.getString("DQBQID")));
@@ -422,7 +484,7 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientId(Util.null2String(rs.getString("BRJZXH")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
-                        info.setSex(Util.null2String(rs.getString("BRDAXB")));
+                        info.setSex(""+Util.getIntValue(rs.getString("BRDAXB"),3));
                         info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
                         //info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
@@ -448,5 +510,134 @@ public class HisInfoDao extends BaseDao {
                     }
                 });
         return patientRequestInfoList;
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public ReturnMsg saveHisResult(HisTestInfo info) throws Exception {
+        ReturnMsg msg = new ReturnMsg();
+        final HisSampleInfo sampleInfo = info.getSampleInfo();
+
+        //删除样本信息
+        String sql ="delete from di_labsampleinfo where JCYBID=? ";
+        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1,sampleInfo.getBarCode());
+            }
+        });
+
+        //删除结果信息
+        sql ="delete from di_labtestresult where BRYZID=? and SJBRID=? ";
+        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1,sampleInfo.getBarCode());
+                ps.setString(2,sampleInfo.getPatientId());
+            }
+        });
+
+        //插入样本信息
+        sql = "insert into di_labsampleinfo(BRYZID,JCYBID,ZZJGDM,SJBRLX,SJBRID," +
+                "BRDAID,BRJZHM,SJBRXM,SJBRXB,SJBRNL,BRNLDW,SJYEPB,SJBRCH,LCZDDM,LCZDMC" +
+                ",SJCJBW,SLZQID,YBSJSJ,KDYSID,KDYSXM,KDKSID,KDKSMC,YBJSSJ,ZXRYID,ZXRYXM,ZXKSID " +
+                ",ZXKSMC,YBZXSJ,SHRYID,SHRYXM,YBSHSJ,YBSHBZ,YBLXID,YBLXMC,YBCZZT,SJFYHJ" +
+                ",SJSFZT,JSJLID,YBJGSJ,YBJGZT,SFDYPB,SFJZPB,JCMDDM,JCMDMC,JGLJDZ,JGBZSM" +
+                ",BRDABH) " +
+                "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?" +
+                ",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, Util.null2String(sampleInfo.getBarCode()));           //条码号
+                ps.setString(2, Util.null2String(sampleInfo.getBarCode()));          //样本ID
+                ps.setString(3, Util.null2String(sampleInfo.getOrganizationId()));          //组织机构ID
+                ps.setInt(4, sampleInfo.getPatientType());          //病人类型
+                ps.setString(5, Util.null2String(sampleInfo.getPatientId()));          //病人ID
+                ps.setString(6, Util.null2String(sampleInfo.getPatientId()));          //病人档案ID
+                ps.setString(7, Util.null2String(sampleInfo.getPatientCode()));          //病人就诊号码：住院号、门诊号
+                ps.setString(8, Util.null2String(sampleInfo.getPatientName()));          //病人姓名
+                ps.setInt(9,sampleInfo.getSex());
+                ps.setInt(10,sampleInfo.getAge());
+                ps.setString(11, Util.null2String(sampleInfo.getAgeUnit()));
+                ps.setInt(12,sampleInfo.getIsBaby());
+                ps.setString(13, Util.null2String(sampleInfo.getBedNo()));       //床号
+                ps.setString(14, Util.null2String(sampleInfo.getDiagnosisId())); //临床诊断ID
+                ps.setString(15, Util.null2String(sampleInfo.getDiagnosis()));   //临床诊断
+                ps.setString(16, Util.null2String(sampleInfo.getPart()));        //检测部位
+                ps.setString(17, Util.null2String(sampleInfo.getCycleId()));     //生理周期ID
+                ps.setTimestamp(18, new java.sql.Timestamp(sampleInfo.getExecuteTime().getTime()));      //送检时间
+                ps.setString(19, Util.null2String(sampleInfo.getRequesterId()));     //开单医生ID
+                ps.setString(20, Util.null2String(sampleInfo.getRequesterName()));   //开单医生姓名
+                ps.setString(21, Util.null2String(sampleInfo.getDepartmentId()));    //开单科室ID
+                ps.setString(22, Util.null2String(sampleInfo.getDepartmentName()));  //开单科室名称
+                ps.setString(23, Util.null2String(sampleInfo.getRequesterId()));
+                ps.setTimestamp(24, new java.sql.Timestamp(sampleInfo.getReceiveTime().getTime()));      //样本接收时间
+                ps.setString(25, Util.null2String(sampleInfo.getTesterId()));        //执行人员ID
+                ps.setString(26, Util.null2String(sampleInfo.getTesterName()));      //执行人员名称
+                ps.setString(27, Util.null2String(sampleInfo.getTestDepartmentId()));      //执行科室ID
+                ps.setString(28, Util.null2String(sampleInfo.getTestDepartmentName()));      //执行科室名称
+                ps.setTimestamp(29, new java.sql.Timestamp(sampleInfo.getTestTime().getTime()));      //样本执行时间
+                ps.setString(30, Util.null2String(sampleInfo.getAuditerId()));        //审核人员ID
+                ps.setString(31, Util.null2String(sampleInfo.getAuditerName()));      //审核人员名称
+                ps.setTimestamp(32, new java.sql.Timestamp(sampleInfo.getAuditTime().getTime()));      //样本审核时间
+                ps.setString(33, Util.null2String(sampleInfo.getAuditNote()));      //审核备注
+                ps.setString(34, Util.null2String(sampleInfo.getSampleTypeId()));      //样本类型ID
+                ps.setString(35, Util.null2String(sampleInfo.getSampleTypeName()));      //样本类型名称
+                ps.setInt(36,0);     //样本操作状态
+                ps.setInt(37,0);     //送检费用合计
+                ps.setInt(38,0);     //送检收费状态
+                ps.setString(39, "");      //接收记录ID
+                ps.setTimestamp(40, new java.sql.Timestamp(sampleInfo.getSampleResultTime().getTime()));      //样本结果时间
+                ps.setInt(41, sampleInfo.getSampleResultStatus());      //样本结果状态
+                ps.setInt(42, sampleInfo.getIsPrint());      //是否打印判断
+                ps.setInt(43, sampleInfo.getIsEmergency());      //是否急诊判别
+                ps.setString(44, Util.null2String(sampleInfo.getTestId()));      //检测目的ID
+                ps.setString(45, Util.null2String(sampleInfo.getTestName()));      //检测目的名称
+                ps.setString(46, Util.null2String(sampleInfo.getReportUrl()));      //报告单路径
+                ps.setString(47, "");      //结果备注说明
+                ps.setString(48, Util.null2String(sampleInfo.getPatientNo()));      //病人档案编号
+            }
+        });
+
+        //保存结果信息
+        final List<HisTestResult> results = info.getTestResultList();
+        sql = "insert into di_labtestresult(JCYBID,ZZJGDM,JCXMID,JCXMYW,JCXMZW,YBLXID,YBLXMC" +
+                ",YBCZZT,YBJCJG,JCJGBZ,JCJGTS,XMJLDW,XMJGXX,XMJGSX,XMJGFW,JGCZSJ" +
+                ",JCJGCX,SYCZFF) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+            public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                int length = results.size();
+                for(HisTestResult result:results){
+                    ps.setString(1, Util.null2String(sampleInfo.getBarCode()));               //样本号
+                    ps.setString(2, Util.null2String(sampleInfo.getOrganizationId()));        //结果类型
+                    ps.setString(3, Util.null2String(result.getTestItemId()));               //结果类型序号
+                    ps.setString(4, Util.null2String(result.getTestItemName_EN()));             //结果
+                    ps.setString(5, Util.null2String(result.getTestItemName_CN()));
+                    ps.setString(6, Util.null2String(result.getSampleTypeId()));
+                    ps.setString(7, Util.null2String(result.getSampleTypeName()));
+                    ps.setInt(8, 0);        //样本操作状态
+                    ps.setString(9, Util.null2String(result.getTestResult()));
+                    ps.setString(10, Util.null2String(result.getResultFlag()));
+                    ps.setString(11, Util.null2String(result.getResultHint()));
+                    ps.setString(12, Util.null2String(result.getUnit()));
+                    ps.setString(13, Util.null2String(result.getReferenceLo()));
+                    ps.setString(14, Util.null2String(result.getReferenceHi()));
+                    ps.setString(15, Util.null2String(result.getReference()));
+                    ps.setTimestamp(16, new java.sql.Timestamp(result.getResultTime().getTime()));      //结果操作时间
+                    ps.setInt(17, result.getOrder());        //结果次序
+                    ps.setString(18, Util.null2String(result.getMethod()));          //操作方法
+                    ps.addBatch();
+                }
+                Object obj = ps.executeBatch();
+                return obj;
+            }
+        });
+        //异常测试
+        /*if (1 == 1) {
+            throw new Exception("错误！！！");
+        }*/
+        return new ReturnMsg(1, "保存成功");
     }
 }

@@ -5,6 +5,8 @@
 package com.zcw.webservice.model.his;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zcw.webservice.common.JsonDateFormateFull;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
@@ -21,6 +23,31 @@ import java.util.Date;
 public class AccountItem  implements Serializable {
 
     private static final long serialVersionUID = -4040025415801341888L;
+
+    public AccountItem() {
+        super();
+    }
+
+    public AccountItem(String patientCode, String patientId, String patientType, String patientName, String testPurposesCode, String testPurposes, Date dateTime, int quantity, double price, String feeItemCode, String feeItemName, String billingDoctorNo, String billingDeptNo, String testDoctorNo, String testDoctorDeptNo, String operatorNo, Long accountId) {
+        this.patientCode = patientCode;
+        this.patientId = patientId;
+        this.patientType = patientType;
+        this.patientName = patientName;
+        this.testPurposesCode = testPurposesCode;
+        this.testPurposes = testPurposes;
+        this.dateTime = dateTime;
+        this.quantity = quantity;
+        this.price = price;
+        this.feeItemCode = feeItemCode;
+        this.feeItemName = feeItemName;
+        this.billingDoctorNo = billingDoctorNo;
+        this.billingDeptNo = billingDeptNo;
+        this.testDoctorNo = testDoctorNo;
+        this.testDoctorDeptNo = testDoctorDeptNo;
+        this.operatorNo = operatorNo;
+        this.accountId = accountId;
+    }
+
     @JSONField(name = "patientCode")
     private String patientCode;     //病人住院序号
     @JSONField(name = "PatientId")
@@ -34,6 +61,7 @@ public class AccountItem  implements Serializable {
     @JSONField(name = "testPurposes")
     private String testPurposes;    //检验目的
     @JSONField(name = "DateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     private Date dateTime;        //费用发生日期
     @JSONField(name = "Quantity")
     private int quantity;           //费用发生数量
