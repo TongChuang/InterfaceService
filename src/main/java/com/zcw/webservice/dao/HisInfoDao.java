@@ -223,7 +223,7 @@ public class HisInfoDao extends BaseDao {
                     int length = accountItem.size();
                     for (AccountItem item : accountItem) {
                         String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
-                        final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
+                        Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
                         ps.setLong(1, seqId);                     //记账记录序号
                         ps.setObject(2, item.getPatientId());                 //病人就诊序号
                         ps.setLong(3, 2);                                           //药品诊疗判别 1 药品 2 诊疗
@@ -260,85 +260,103 @@ public class HisInfoDao extends BaseDao {
     }
 
 
-    /**
-     * LIS 补计费、退费
-     *
-     * @param accountItems
-     * @return
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveLisBooking(List<AccountItem> accountItems) throws Exception {
-        if(accountItems==null || accountItems.size()<0){
-            return new ReturnMsg(0, "参数不允许为空");
-        }
-        //收费
-        String sql = "";
-        List<AccountItem> accountItemList = new ArrayList<AccountItem>();
-        try {
-            //收费，根据诊疗项目查询具体收费项目
-            if (accountItems.get(0).getQuantity() > 0) {
-                final Map<String, AccountItem> accountItemMap = new HashMap<String, AccountItem>();
-                String itemId = "";
-                for (AccountItem accountItem : accountItems) {
-                    if (!itemId.isEmpty()) itemId += ",";
-                    itemId += accountItem.getTestPurposesCode();
-                    accountItemMap.put(accountItem.getTestPurposesCode(), accountItem);
-                }
-                sql = "select zlxmid,sfxmid,sfxmmc,sfxmdj from V_HSBDI_ORDER2CHARGE where zlxmid in(" + itemId + ")";
-                accountItemList = hisJdbcTemplate.query(sql,
-                        new RowMapper<AccountItem>() {
-                            public AccountItem mapRow(ResultSet rs, int rowNum) throws SQLException {
-                                AccountItem item = new AccountItem();
-                                item = accountItemMap.get(Util.null2String(rs.getString("zlxmid")));
-                                item.setFeeItemCode(Util.null2String(rs.getString("sfxmid")));
-                                item.setFeeItemName(Util.null2String(rs.getString("sfxmmc")));
-                                item.setPrice(rs.getDouble("sfxmdj"));
-                                return item;
-                            }
-                        });
-            }
-
-            //插入收费记录
-            sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
-                    "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            final List<AccountItem> accountItems1 = accountItemList;
-            this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
-                public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                    for (AccountItem accountItem : accountItems1) {
-                        String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
-                        final Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
-                        ps.setLong(1, seqId);                                           //记账记录序号
-                        ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
-                        ps.setLong(3, 2);                                               //药品诊疗判别 1 药品 2 诊疗
-                        ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
-                        //ps.setObject(6, accountItem.getAge());                        //药品产地序号 诊疗不需要，药品需传入
-                        ps.setLong(5, 14);                                              //费用途径序号 12 用血 14 LIS 15 物资
-                        ps.setTimestamp(6, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
-                        ps.setInt(7, accountItem.getQuantity());                    //费用发生数量
-                        ps.setString(8, accountItem.getBillingDoctorNo());                                 //开单医生序号
-                        ps.setString(9, "21");                                      //开单科室序号
-                        ps.setString(10, accountItem.getTestDoctorNo());                                //执行用户序号
-                        ps.setString(11, "21");                                     //执行科室序号
-                        ps.setString(12, accountItem.getOperatorNo());                                //操作用户序号
-                        if (accountItem.getQuantity() < 0) {
-                            ps.setLong(13, accountItem.getAccountId());                                //操作用户序号
-                        } else {
-                            ps.setObject(13, null);
-                            accountItem.setAccountId(seqId);
-                        }
-                        ps.addBatch();
-                    }
-                    Object o = ps.executeBatch();
-                    return o;
-                }
-            });
-            return new ReturnMsg(1, accountItems1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("计费异常", e);
-            return new ReturnMsg(0, e.getMessage());
-        }
-    }
+//    /**
+//     * LIS 补计费、退费
+//     *
+//     * @param accountItems
+//     * @return
+//     */
+//    @Transactional(rollbackFor = Exception.class)
+//    public ReturnMsg saveLisBooking(List<AccountItem> accountItems) throws Exception {
+//        if(accountItems==null || accountItems.size()<0){
+//            return new ReturnMsg(0, "参数不允许为空");
+//        }
+//        //收费
+//        String sql = "";
+//        List<AccountItem> accountItemList = new ArrayList<AccountItem>();
+//        try {
+//            //收费，根据诊疗项目查询具体收费项目
+//            if (accountItems.get(0).getQuantity() > 0) {
+//                final Map<String, AccountItem> accountItemMap = new HashMap<String, AccountItem>();
+//                String itemId = "";
+//                for (AccountItem accountItem : accountItems) {
+//                    if (!itemId.isEmpty()) itemId += ",";
+//                    itemId += accountItem.getTestPurposesCode();
+//                    accountItemMap.put(accountItem.getTestPurposesCode(), accountItem);
+//                }
+//                sql = "select zlxmid,sfxmid,sfxmmc,sfxmdj from V_HSBDI_ORDER2CHARGE where zlxmid in(" + itemId + ")";
+//                accountItemList = hisJdbcTemplate.query(sql,
+//                        new RowMapper<AccountItem>() {
+//                            public AccountItem mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                                AccountItem item  = accountItemMap.get(Util.null2String(rs.getString("zlxmid")));
+//                                AccountItem accountItem= new AccountItem();
+//                                accountItem.setAccountId(item.getAccountId());
+//                                accountItem.setBillingDeptNo(item.getBillingDeptNo());
+//                                accountItem.setBillingDoctorNo(item.getBillingDoctorNo());
+//                                accountItem.setDateTime(item.getDateTime());
+//                                accountItem.setOperatorNo(item.getOperatorNo());
+//                                accountItem.setPatientCode(item.getPatientCode());
+//                                accountItem.setPatientId(item.getPatientId());
+//                                accountItem.setPatientName(item.getPatientName());
+//                                accountItem.setPatientType(item.getPatientType());
+//                                accountItem.setQuantity(item.getQuantity());
+//                                accountItem.setTestDoctorDeptNo(item.getTestDoctorDeptNo());
+//                                accountItem.setTestDoctorNo(item.getTestDoctorNo());
+//                                accountItem.setTestPurposesCode(item.getTestPurposesCode());
+//                                accountItem.setTestPurposes(item.getTestPurposes());
+//                                accountItem.setFeeItemCode(Util.null2String(rs.getString("sfxmid")));
+//                                accountItem.setFeeItemName(Util.null2String(rs.getString("sfxmmc")));
+//                                accountItem.setPrice(rs.getDouble("sfxmdj"));
+//                                return accountItem;
+//                            }
+//                        });
+//            }else {
+//                accountItemList = accountItems;
+//            }
+//
+//            //插入收费记录
+//            sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYXMMC,FYTJID," +
+//                    "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID,ZZJGDM)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//            final List<AccountItem> accountItems1 = accountItemList;
+//            this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+//                public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+//                    for (AccountItem accountItem : accountItems1) {
+//                        String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
+//                        Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
+//                        ps.setLong(1, seqId);                     //记账记录序号
+//                        ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
+//                        ps.setLong(3, 2);                                               //药品诊疗判别 1 药品 2 诊疗
+//                        ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
+//                        ps.setString(5, accountItem.getFeeItemName());              //费用项目序号 代码11266
+//                        //ps.setObject(6, accountItem.getAge());                        //药品产地序号 诊疗不需要，药品需传入
+//                        ps.setLong(6, 14);                                              //费用途径序号 12 用血 14 LIS 15 物资
+//                        ps.setTimestamp(7, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
+//                        ps.setInt(8, accountItem.getQuantity());                    //费用发生数量
+//                        ps.setString(9, accountItem.getBillingDoctorNo());                                 //开单医生序号
+//                        ps.setString(10, "21");                                      //开单科室序号
+//                        ps.setString(11, accountItem.getTestDoctorNo());                                //执行用户序号
+//                        ps.setString(12, "21");                                     //执行科室序号
+//                        ps.setString(13, accountItem.getOperatorNo());                                //操作用户序号
+//                        if (accountItem.getQuantity() < 0) {
+//                            ps.setLong(14, accountItem.getAccountId());                                //操作用户序号
+//                        } else {
+//                            ps.setObject(14, null);
+//                            accountItem.setAccountId(seqId);
+//                        }
+//                        ps.setString(15, "1001");
+//                        ps.addBatch();
+//                    }
+//                    Object o = ps.executeBatch();
+//                    return o;
+//                }
+//            });
+//            return new ReturnMsg(1, accountItems1);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error("计费异常", e);
+//            return new ReturnMsg(0, e.getMessage());
+//        }
+//    }
 
     /**
      * 申请状态更新

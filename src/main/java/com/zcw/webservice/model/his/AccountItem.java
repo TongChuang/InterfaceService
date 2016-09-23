@@ -48,17 +48,17 @@ public class AccountItem  implements Serializable {
         this.accountId = accountId;
     }
 
-    @JSONField(name = "patientCode")
+    @JSONField(name = "PatientCode")
     private String patientCode;     //病人住院序号
     @JSONField(name = "PatientId")
     private String patientId;       //病人就诊ID
-    @JSONField(name = "patientType")
+    @JSONField(name = "PatientType")
     private String patientType;     //病人类型 住院 1、门诊 2
-    @JSONField(name = "patientName")
+    @JSONField(name = "PatientName")
     private String patientName;     //病人姓名
-    @JSONField(name = "testPurposesCode")
+    @JSONField(name = "TestPurposesCode")
     private String testPurposesCode;  //检验目的编号
-    @JSONField(name = "testPurposes")
+    @JSONField(name = "TestPurposes")
     private String testPurposes;    //检验目的
     @JSONField(name = "DateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
     @JsonSerialize(using = JsonDateFormateFull.class)
