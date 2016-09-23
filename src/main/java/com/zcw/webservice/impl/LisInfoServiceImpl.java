@@ -379,29 +379,6 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return JSON.toJSONString(msg,filter);
     }
 
-    /**
-     * Lis计费
-     * @param accountItems       费用信息
-     * @return
-     */
-    public String lisBooking(List<AccountItem> accountItems) {
-        log.info("booking================================START");
-        log.info(JSON.toJSONString(accountItems));
-
-        ReturnMsg msg = new ReturnMsg();
-        try{
-            msg = hisInfoDao.saveLisBooking(accountItems);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            msg.setState(0);
-            msg.setMessage(e.getMessage());
-        }
-        log.info("booking================================END");
-
-        return JSON.toJSONString(msg,filter);
-    }
-
     @Override
     public String getListTestResult(String barcode, String patientId) {
         return null;
