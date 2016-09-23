@@ -644,9 +644,15 @@ public class LisInfoDao extends BaseDao {
     public ReturnMsg saveLisResult(final List<InspectionItem> info) throws Exception {
         if (info == null || info.size() == 0)
             return new ReturnMsg(0, "参数不能为空");
-        String sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
-                "testItemName_EN,testItemName_CN,unit,orderNum,reference,resultFlag,barcode) " +
-                "values(?,?,?,?,?,?,?,?,?)";
+
+        //删除样本信息
+        String sql = "delete from EHR_inspection_item where barcode=?";
+        lisJdbcTemplate.update(sql, new Object[] { info.get(0).getBarcode()});
+
+        //插入结果信息
+        sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
+                "testItemName_EN,testItemName_CN,unit,orderNum,reference,resultFlag,barcode,testresult) " +
+                "values(?,?,?,?,?,?,?,?,?,?)";
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 for (InspectionItem inspectionItem : info) {
@@ -659,6 +665,7 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(7, inspectionItem.getReference());
                     ps.setString(8, inspectionItem.getResultFlag());
                     ps.setString(9, inspectionItem.getBarcode());
+                    ps.setString(10,inspectionItem.getTestResult());
                     ps.addBatch();
                 }
                 Object o = ps.executeBatch();

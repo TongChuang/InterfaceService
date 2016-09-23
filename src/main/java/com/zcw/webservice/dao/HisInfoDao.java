@@ -510,6 +510,7 @@ public class HisInfoDao extends BaseDao {
         if (!requestDetailId.isEmpty()) {
             sql += "and SQMXID in (" + requestDetailId + ")";
         }
+        
         patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -557,23 +558,12 @@ public class HisInfoDao extends BaseDao {
         final HisSampleInfo sampleInfo = info.getSampleInfo();
 
         //删除样本信息
-        String sql = "delete from di_labsampleinfo where JCYBID=? ";
-        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, sampleInfo.getBarCode());
-            }
-        });
+        String sql = "delete from di_labsampleinfo where ZZJGDM=1001 AND BRYZID=? and SJBRID=? ";
+        hisJdbcTemplate.update(sql, new Object[] { sampleInfo.getBarCode(),sampleInfo.getPatientId()});
 
         //删除结果信息
-        sql = "delete from di_labtestresult where BRYZID=? and SJBRID=? ";
-        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, sampleInfo.getBarCode());
-                ps.setString(2, sampleInfo.getPatientId());
-            }
-        });
+        sql = "delete from di_labtestresult where ZZJGDM=1001 AND JCYBID=? ";
+        hisJdbcTemplate.update(sql, new Object[] { sampleInfo.getBarCode()});
 
         //插入样本信息
         sql = "insert into di_labsampleinfo(BRYZID,JCYBID,ZZJGDM,SJBRLX,SJBRID," +
@@ -583,9 +573,9 @@ public class HisInfoDao extends BaseDao {
                 ",SJSFZT,JSJLID,YBJGSJ,YBJGZT,SFDYPB,SFJZPB,JCMDDM,JCMDMC,JGLJDZ,JGBZSM" +
                 ",BRDABH) " +
                 "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?" +
-                ",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                ",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+        hisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, Util.null2String(sampleInfo.getBarCode()));           //条码号
@@ -593,8 +583,8 @@ public class HisInfoDao extends BaseDao {
                 ps.setString(3, Util.null2String(sampleInfo.getOrganizationId()));          //组织机构ID
                 ps.setInt(4, sampleInfo.getPatientType());          //病人类型
                 ps.setString(5, Util.null2String(sampleInfo.getPatientId()));          //病人ID
-                ps.setString(6, Util.null2String(sampleInfo.getPatientId()));          //病人档案ID
-                ps.setString(7, Util.null2String(sampleInfo.getPatientCode()));          //病人就诊号码：住院号、门诊号
+                ps.setString(6, Util.null2String(sampleInfo.getPatientCode()));          //病人档案ID
+                ps.setString(7, Util.null2String(sampleInfo.getPatientNo()));          //病人就诊号码：住院号、门诊号
                 ps.setString(8, Util.null2String(sampleInfo.getPatientName()));          //病人姓名
                 ps.setInt(9, sampleInfo.getSex());
                 ps.setInt(10, sampleInfo.getAge());
@@ -610,32 +600,31 @@ public class HisInfoDao extends BaseDao {
                 ps.setString(20, Util.null2String(sampleInfo.getRequesterName()));   //开单医生姓名
                 ps.setString(21, Util.null2String(sampleInfo.getDepartmentId()));    //开单科室ID
                 ps.setString(22, Util.null2String(sampleInfo.getDepartmentName()));  //开单科室名称
-                ps.setString(23, Util.null2String(sampleInfo.getRequesterId()));
-                ps.setTimestamp(24, new java.sql.Timestamp(sampleInfo.getReceiveTime().getTime()));      //样本接收时间
-                ps.setString(25, Util.null2String(sampleInfo.getTesterId()));        //执行人员ID
-                ps.setString(26, Util.null2String(sampleInfo.getTesterName()));      //执行人员名称
-                ps.setString(27, Util.null2String(sampleInfo.getTestDepartmentId()));      //执行科室ID
-                ps.setString(28, Util.null2String(sampleInfo.getTestDepartmentName()));      //执行科室名称
-                ps.setTimestamp(29, new java.sql.Timestamp(sampleInfo.getTestTime().getTime()));      //样本执行时间
-                ps.setString(30, Util.null2String(sampleInfo.getAuditerId()));        //审核人员ID
-                ps.setString(31, Util.null2String(sampleInfo.getAuditerName()));      //审核人员名称
-                ps.setTimestamp(32, new java.sql.Timestamp(sampleInfo.getAuditTime().getTime()));      //样本审核时间
-                ps.setString(33, Util.null2String(sampleInfo.getAuditNote()));      //审核备注
-                ps.setString(34, Util.null2String(sampleInfo.getSampleTypeId()));      //样本类型ID
-                ps.setString(35, Util.null2String(sampleInfo.getSampleTypeName()));      //样本类型名称
-                ps.setInt(36, 0);     //样本操作状态
-                ps.setInt(37, 0);     //送检费用合计
-                ps.setInt(38, 0);     //送检收费状态
-                ps.setString(39, "");      //接收记录ID
-                ps.setTimestamp(40, new java.sql.Timestamp(sampleInfo.getSampleResultTime().getTime()));      //样本结果时间
-                ps.setInt(41, sampleInfo.getSampleResultStatus());      //样本结果状态
-                ps.setInt(42, sampleInfo.getIsPrint());      //是否打印判断
-                ps.setInt(43, sampleInfo.getIsEmergency());      //是否急诊判别
-                ps.setString(44, Util.null2String(sampleInfo.getTestId()));      //检测目的ID
-                ps.setString(45, Util.null2String(sampleInfo.getTestName()));      //检测目的名称
-                ps.setString(46, Util.null2String(sampleInfo.getReportUrl()));      //报告单路径
-                ps.setString(47, "");      //结果备注说明
-                ps.setString(48, Util.null2String(sampleInfo.getPatientNo()));      //病人档案编号
+                ps.setTimestamp(23, new java.sql.Timestamp(sampleInfo.getReceiveTime().getTime()));      //样本接收时间
+                ps.setString(24, Util.null2String(sampleInfo.getTesterId()));        //执行人员ID
+                ps.setString(25, Util.null2String(sampleInfo.getTesterName()));      //执行人员名称
+                ps.setString(26, Util.null2String(sampleInfo.getTestDepartmentId()));      //执行科室ID
+                ps.setString(27, Util.null2String(sampleInfo.getTestDepartmentName()));      //执行科室名称
+                ps.setTimestamp(28, new java.sql.Timestamp(sampleInfo.getTestTime().getTime()));      //样本执行时间
+                ps.setString(29, Util.null2String(sampleInfo.getAuditerId()));        //审核人员ID
+                ps.setString(30, Util.null2String(sampleInfo.getAuditerName()));      //审核人员名称
+                ps.setTimestamp(31, new java.sql.Timestamp(sampleInfo.getAuditTime().getTime()));      //样本审核时间
+                ps.setString(32, Util.null2String(sampleInfo.getAuditNote()));      //审核备注
+                ps.setString(33, "");      //样本类型ID
+                ps.setString(34, Util.null2String(sampleInfo.getSampleTypeName()));      //样本类型名称
+                ps.setInt(35, 0);     //样本操作状态
+                ps.setInt(36, 0);     //送检费用合计
+                ps.setInt(37, 0);     //送检收费状态
+                ps.setString(38, "");      //接收记录ID
+                ps.setTimestamp(39, new java.sql.Timestamp(sampleInfo.getSampleResultTime().getTime()));      //样本结果时间
+                ps.setInt(40, sampleInfo.getSampleResultStatus());      //样本结果状态
+                ps.setInt(41, sampleInfo.getIsPrint());      //是否打印判断
+                ps.setInt(42, sampleInfo.getIsEmergency());      //是否急诊判别
+                ps.setString(43, Util.null2String(sampleInfo.getTestId()));      //检测目的ID
+                ps.setString(44, Util.null2String(sampleInfo.getTestName()));      //检测目的名称
+                ps.setString(45, Util.null2String(sampleInfo.getReportUrl()));      //报告单路径
+                ps.setString(46, "");      //结果备注说明
+                ps.setString(47, Util.null2String(sampleInfo.getPatientNo()));      //病人档案编号
             }
         });
 
@@ -644,7 +633,7 @@ public class HisInfoDao extends BaseDao {
         sql = "insert into di_labtestresult(JCYBID,ZZJGDM,JCXMID,JCXMYW,JCXMZW,YBLXID,YBLXMC" +
                 ",YBCZZT,YBJCJG,JCJGBZ,JCJGTS,XMJLDW,XMJGXX,XMJGSX,XMJGFW,JGCZSJ" +
                 ",JCJGCX,SYCZFF) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+        this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 int length = results.size();
                 for (HisTestResult result : results) {
@@ -653,8 +642,8 @@ public class HisInfoDao extends BaseDao {
                     ps.setString(3, Util.null2String(result.getTestItemId()));               //结果类型序号
                     ps.setString(4, Util.null2String(result.getTestItemName_EN()));             //结果
                     ps.setString(5, Util.null2String(result.getTestItemName_CN()));
-                    ps.setString(6, Util.null2String(result.getSampleTypeId()));
-                    ps.setString(7, Util.null2String(result.getSampleTypeName()));
+                    ps.setString(6, "");
+                    ps.setString(7, "");
                     ps.setInt(8, 0);        //样本操作状态
                     ps.setString(9, Util.null2String(result.getTestResult()));
                     ps.setString(10, Util.null2String(result.getResultFlag()));

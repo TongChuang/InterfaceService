@@ -18,6 +18,7 @@ public class InspectionItem  implements Serializable{
     private String reference;           //参考范围
     private String resultFlag;          //结果标记
     private String barcode;             //条码号
+    private String testResult;          //结果
 
     public String getInspectionId() {
         return inspectionId;
@@ -89,5 +90,13 @@ public class InspectionItem  implements Serializable{
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(String testResult) {
+        this.testResult = testResult;
     }
 }

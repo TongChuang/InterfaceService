@@ -483,10 +483,11 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         try{
             msg = hisInfoDao.saveHisResult(info);
         }catch (Exception e){
+            e.printStackTrace();
             log.error(e.getMessage());
             msg.setState(0);
             msg.setMessage(e.getMessage());
-        };
+        }
         log.info("saveHisResult================================END");
 
         return JSON.toJSONString(msg,filter);
