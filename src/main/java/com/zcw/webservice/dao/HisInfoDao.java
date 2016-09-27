@@ -100,6 +100,57 @@ public class HisInfoDao extends BaseDao {
         return null;
     }
 
+
+    /**
+     * 住院病人信息列表
+     * @param ward 住院病区
+     * @return 返回病人信息
+     */
+    public List<Patient> getInPatientList(String ward) throws Exception {
+        List<Patient> patientList = null;
+        String sql = "";
+        Object[] parms = null;
+        if (!ward.equals("")) {
+            sql = "select T1.*,T2.ZZKSMC from V_HSBBI_RECORDHOME t1,V_HSBHI_WARDINFO t2 where t1.BRZYZT=2 and t1.ZYBQID=T2.ZZKSID and ZYBQID=? order by t1.ZYCWHM  ";
+            parms = new Object[]{ward};
+            patientList = hisJdbcTemplate.query(sql, parms,
+                    new RowMapper<Patient>() {
+                        public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
+                            Patient patient = new Patient();
+                            patient.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
+                            patient.setPatientId(Util.null2String(rs.getString("BRZYID")));
+                            patient.setName(Util.null2String(rs.getString("BRDAXM")));
+                            patient.setSex(Util.null2String(rs.getString("BRDAXB")));
+                            patient.setBirthday(Util.null2String(rs.getDate("BRCSRQ")));
+                            patient.setAge(Util.null2String(rs.getString("BRJZNL")));
+                            patient.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
+                            patient.setDepartment(Util.null2String(rs.getString("RYKSID"))); //入院科室
+                            patient.setDoctor(Util.null2String(rs.getString("ZZYSID")));
+                            patient.setCompany(Util.null2String(rs.getString("BRDWMC")));
+                            patient.setIdCard(Util.null2String(rs.getString("BRSFZH")));
+                            patient.setAdmissionDepartment(Util.null2String(rs.getString("RYKSID")));
+                            patient.setHospitalWard(Util.null2String(rs.getString("RYBQID")));
+                            patient.setInpatientDepartment(Util.null2String(rs.getString("ZYKSID")));
+                            patient.setInpatientWardId(Util.null2String(rs.getString("ZYBQID")));
+                            patient.setInpatientWard(Util.null2String(rs.getString("ZZKSMC")));
+                            patient.setBedno(Util.null2String(rs.getString("ZYCWHM")));
+                            patient.setStatus(Util.null2String(rs.getString("BRZYZT")));
+                            patient.setPatientType("2");
+                            patient.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
+                            patient.setChargeType(Util.null2String(rs.getString("BRLBID")));
+                            patient.setInDateTime(rs.getTimestamp("BRRYRQ"));
+                            //patient.setInDateTime(rs.getDate("BRJZRQ"));
+                            patient.setPatientPhone(Util.null2String(rs.getString("BRLXDH")));
+                            patient.setPatientAddress(Util.null2String(rs.getString("BRJTDZ")));
+
+                            return patient;
+                        }
+                    });
+        }
+        return patientList;
+    }
+
+
     /**
      * 获取住院病人信息
      *
@@ -125,7 +176,7 @@ public class HisInfoDao extends BaseDao {
                         patient.setPatientId(Util.null2String(rs.getString("BRZYID")));
                         patient.setName(Util.null2String(rs.getString("BRDAXM")));
                         patient.setSex(Util.null2String(rs.getString("BRDAXB")));
-                        patient.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
+                        patient.setBirthday(Util.null2String(rs.getDate("BRCSRQ")));
                         patient.setAge(Util.null2String(rs.getString("BRJZNL")));
                         patient.setDepartment(Util.null2String(rs.getString("RYKSID"))); //入院科室
                         patient.setDoctor(Util.null2String(rs.getString("ZZYSID")));
@@ -179,7 +230,7 @@ public class HisInfoDao extends BaseDao {
                         patient.setChargeType(Util.null2String(rs.getString("BRLBID")));
                         patient.setName(Util.null2String(rs.getString("BRDAXM")));
                         patient.setSex(Util.null2String(rs.getString("BRDAXB")));
-                        patient.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
+                        patient.setBirthday(Util.null2String(rs.getDate("BRCSRQ")));
                         patient.setAge(Util.null2String(rs.getString("BRJZNL")));
                         patient.setDepartment(Util.null2String(rs.getString("JZKSID")));
                         patient.setDoctor(Util.null2String(rs.getString("JZYSID")));
@@ -260,103 +311,6 @@ public class HisInfoDao extends BaseDao {
     }
 
 
-//    /**
-//     * LIS 补计费、退费
-//     *
-//     * @param accountItems
-//     * @return
-//     */
-//    @Transactional(rollbackFor = Exception.class)
-//    public ReturnMsg saveLisBooking(List<AccountItem> accountItems) throws Exception {
-//        if(accountItems==null || accountItems.size()<0){
-//            return new ReturnMsg(0, "参数不允许为空");
-//        }
-//        //收费
-//        String sql = "";
-//        List<AccountItem> accountItemList = new ArrayList<AccountItem>();
-//        try {
-//            //收费，根据诊疗项目查询具体收费项目
-//            if (accountItems.get(0).getQuantity() > 0) {
-//                final Map<String, AccountItem> accountItemMap = new HashMap<String, AccountItem>();
-//                String itemId = "";
-//                for (AccountItem accountItem : accountItems) {
-//                    if (!itemId.isEmpty()) itemId += ",";
-//                    itemId += accountItem.getTestPurposesCode();
-//                    accountItemMap.put(accountItem.getTestPurposesCode(), accountItem);
-//                }
-//                sql = "select zlxmid,sfxmid,sfxmmc,sfxmdj from V_HSBDI_ORDER2CHARGE where zlxmid in(" + itemId + ")";
-//                accountItemList = hisJdbcTemplate.query(sql,
-//                        new RowMapper<AccountItem>() {
-//                            public AccountItem mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                                AccountItem item  = accountItemMap.get(Util.null2String(rs.getString("zlxmid")));
-//                                AccountItem accountItem= new AccountItem();
-//                                accountItem.setAccountId(item.getAccountId());
-//                                accountItem.setBillingDeptNo(item.getBillingDeptNo());
-//                                accountItem.setBillingDoctorNo(item.getBillingDoctorNo());
-//                                accountItem.setDateTime(item.getDateTime());
-//                                accountItem.setOperatorNo(item.getOperatorNo());
-//                                accountItem.setPatientCode(item.getPatientCode());
-//                                accountItem.setPatientId(item.getPatientId());
-//                                accountItem.setPatientName(item.getPatientName());
-//                                accountItem.setPatientType(item.getPatientType());
-//                                accountItem.setQuantity(item.getQuantity());
-//                                accountItem.setTestDoctorDeptNo(item.getTestDoctorDeptNo());
-//                                accountItem.setTestDoctorNo(item.getTestDoctorNo());
-//                                accountItem.setTestPurposesCode(item.getTestPurposesCode());
-//                                accountItem.setTestPurposes(item.getTestPurposes());
-//                                accountItem.setFeeItemCode(Util.null2String(rs.getString("sfxmid")));
-//                                accountItem.setFeeItemName(Util.null2String(rs.getString("sfxmmc")));
-//                                accountItem.setPrice(rs.getDouble("sfxmdj"));
-//                                return accountItem;
-//                            }
-//                        });
-//            }else {
-//                accountItemList = accountItems;
-//            }
-//
-//            //插入收费记录
-//            sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYXMMC,FYTJID," +
-//                    "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID,ZZJGDM)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//            final List<AccountItem> accountItems1 = accountItemList;
-//            this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
-//                public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-//                    for (AccountItem accountItem : accountItems1) {
-//                        String sql_1 = "select  ETRACKHIS.SEQ_II_INPATICHARGE_JZJLID.Nextval as id from dual";
-//                        Long seqId = hisJdbcTemplate.queryForObject(sql_1, Long.class);
-//                        ps.setLong(1, seqId);                     //记账记录序号
-//                        ps.setObject(2, accountItem.getPatientId());                 //病人就诊序号
-//                        ps.setLong(3, 2);                                               //药品诊疗判别 1 药品 2 诊疗
-//                        ps.setString(4, accountItem.getFeeItemCode());              //费用项目序号 代码11266
-//                        ps.setString(5, accountItem.getFeeItemName());              //费用项目序号 代码11266
-//                        //ps.setObject(6, accountItem.getAge());                        //药品产地序号 诊疗不需要，药品需传入
-//                        ps.setLong(6, 14);                                              //费用途径序号 12 用血 14 LIS 15 物资
-//                        ps.setTimestamp(7, new java.sql.Timestamp(accountItem.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
-//                        ps.setInt(8, accountItem.getQuantity());                    //费用发生数量
-//                        ps.setString(9, accountItem.getBillingDoctorNo());                                 //开单医生序号
-//                        ps.setString(10, "21");                                      //开单科室序号
-//                        ps.setString(11, accountItem.getTestDoctorNo());                                //执行用户序号
-//                        ps.setString(12, "21");                                     //执行科室序号
-//                        ps.setString(13, accountItem.getOperatorNo());                                //操作用户序号
-//                        if (accountItem.getQuantity() < 0) {
-//                            ps.setLong(14, accountItem.getAccountId());                                //操作用户序号
-//                        } else {
-//                            ps.setObject(14, null);
-//                            accountItem.setAccountId(seqId);
-//                        }
-//                        ps.setString(15, "1001");
-//                        ps.addBatch();
-//                    }
-//                    Object o = ps.executeBatch();
-//                    return o;
-//                }
-//            });
-//            return new ReturnMsg(1, accountItems1);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            log.error("计费异常", e);
-//            return new ReturnMsg(0, e.getMessage());
-//        }
-//    }
 
     /**
      * 申请状态更新
@@ -435,7 +389,7 @@ public class HisInfoDao extends BaseDao {
                         int sex = Util.getIntValue(rs.getString("BRDAXB"), 3);
                         sex = (sex == 0 ? 3 : sex);
                         info.setSex("" + sex);
-                        info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
+                        info.setBirthday(Util.null2String(rs.getDate("BRCSRQ")));
                         info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setWard(Util.null2String(rs.getString("DQBQID")));
                         info.setWardName(Util.null2String(rs.getString("DQBQMC")));
@@ -447,7 +401,7 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestDoctorName(Util.null2String(rs.getString("KDYSXM")));
                         info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
                         info.setRequestDepartmentName(Util.null2String(rs.getString("KDKSMC")));
-                        info.setRequestDateTime(rs.getDate("SQKDRQ"));
+                        info.setRequestDateTime(rs.getTimestamp("SQKDRQ"));
                         info.setItemCode(Util.null2String(rs.getString("JCXMID")));
                         info.setItemName(Util.null2String(rs.getString("JCXMMC")));
                         info.setItemPrintName(Util.null2String(rs.getString("XMDYMC")));
@@ -522,7 +476,7 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
                         info.setSex("" + Util.getIntValue(rs.getString("BRDAXB"), 3));
-                        info.setBirthday(Util.null2String(rs.getString("BRCSRQ")));
+                        info.setBirthday(Util.null2String(rs.getDate("BRCSRQ")));
                         //info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
                         info.setRequestType(Util.null2String(rs.getString("BRSQLX")));
@@ -531,7 +485,7 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestDoctorName(Util.null2String(rs.getString("KDYSXM")));
                         info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
                         info.setRequestDepartmentName(Util.null2String(rs.getString("")));
-                        info.setRequestDateTime(rs.getDate("SQKDRQ"));
+                        info.setRequestDateTime(rs.getTimestamp("SQKDRQ"));
                         info.setItemCode(Util.null2String(rs.getString("JCXMID")));
                         info.setItemName(Util.null2String(rs.getString("JCXMMC")));
                         info.setItemPrintName(Util.null2String(rs.getString("XMDYMC")));

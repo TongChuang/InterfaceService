@@ -37,6 +37,9 @@ public class Patient  implements Serializable {
     @JSONField(name = "Age")
     private String age;        //病人就诊年龄
 
+    @JSONField(name = "AgeUnit")
+    private String ageUnit;        //病人就诊年龄
+
     @JSONField(name = "Department")
     private String department;        //就诊科室
 
@@ -58,6 +61,9 @@ public class Patient  implements Serializable {
     @JSONField(name = "InpatientDepartment")
     private String inpatientDepartment; //住院科室
 
+    @JSONField(name = "InpatientWardId")
+    private String inpatientWardId;        //住院病区Id
+
     @JSONField(name = "InpatientWard")
     private String inpatientWard;        //住院病区
 
@@ -73,7 +79,7 @@ public class Patient  implements Serializable {
     @JSONField(name = "PatientFileCode")
     private String patientFileCode;        //病人档案编号
 
-    @JSONField(name = "InDateTime",format = "yyyy-MM-dd hh:mm:ss.SSS")
+    @JSONField(name = "InDateTime",format = "yyyy-MM-dd hh:mm:ss")
     private Date inDateTime;        //就诊时间
 
     @JSONField(name = "PatientAddress")
@@ -256,5 +262,21 @@ public class Patient  implements Serializable {
 
     public void setPatientType(String patientType) {
         this.patientType = patientType;
+    }
+
+    public String getInpatientWardId() {
+        return inpatientWardId;
+    }
+
+    public void setInpatientWardId(String inpatientWardId) {
+        this.inpatientWardId = inpatientWardId;
+    }
+
+    public String getAgeUnit() {
+        return ageUnit;
+    }
+
+    public void setAgeUnit(String ageUnit) {
+        this.ageUnit = ageUnit;
     }
 }

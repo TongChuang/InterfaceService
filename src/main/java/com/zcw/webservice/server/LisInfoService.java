@@ -101,6 +101,18 @@ public interface LisInfoService {
     @Path(value = "/getPatientInfoList")
     String getPatientInfoList(@QueryParam("patientType") String patientType, @QueryParam("patientCode") String patientCode, @QueryParam("patientId")  @DefaultValue("") String patientId);
 
+
+    /**
+     * 获取所有住院病人信息
+     *
+     * @param ward 病区
+     * @return 返回Json病人信息[{key:value},{...}]
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getInPatientList")
+    String getInPatientList( @QueryParam("ward") String ward);
+
     /**
      * 获取病区信息列表
      *

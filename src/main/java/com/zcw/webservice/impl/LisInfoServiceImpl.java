@@ -279,6 +279,20 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return JSON.toJSONString(msg,filter);
     }
 
+    @Override
+    public String getInPatientList(String ward) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(hisInfoDao.getInPatientList(ward));
+        } catch (Exception e) {
+            log.error("获取信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
     /**
      *
      * @param report    检验结果信息

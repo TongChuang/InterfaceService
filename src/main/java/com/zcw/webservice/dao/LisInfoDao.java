@@ -674,5 +674,47 @@ public class LisInfoDao extends BaseDao {
         });
         return new ReturnMsg(1, "保存成功");
     }
+
+    /**
+     * LIS结果 用于电子病历结果查询(临时)
+     *
+     * @param info
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ReturnMsg getSampllingTime(final List<InspectionItem> info) throws Exception {
+        if (info == null || info.size() == 0)
+            return new ReturnMsg(0, "参数不能为空");
+
+        //删除样本信息
+        String sql = "delete from EHR_inspection_item where barcode=?";
+        lisJdbcTemplate.update(sql, new Object[] { info.get(0).getBarcode()});
+
+        //插入结果信息
+        sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
+                "testItemName_EN,testItemName_CN,unit,orderNum,reference,resultFlag,barcode,testresult) " +
+                "values(?,?,?,?,?,?,?,?,?,?)";
+        this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+            public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                for (InspectionItem inspectionItem : info) {
+                    ps.setString(1, inspectionItem.getInspectionId());
+                    ps.setString(2, inspectionItem.getTestItemId());
+                    ps.setString(3, inspectionItem.getTestItemName_EN());
+                    ps.setString(4, inspectionItem.getGetTestItemName_CN());
+                    ps.setString(5, inspectionItem.getUnit());
+                    ps.setString(6, inspectionItem.getOrderNum());
+                    ps.setString(7, inspectionItem.getReference());
+                    ps.setString(8, inspectionItem.getResultFlag());
+                    ps.setString(9, inspectionItem.getBarcode());
+                    ps.setString(10,inspectionItem.getTestResult());
+                    ps.addBatch();
+                }
+                Object o = ps.executeBatch();
+                return o;
+            }
+        });
+        return new ReturnMsg(1, "保存成功");
+    }
 }
 
