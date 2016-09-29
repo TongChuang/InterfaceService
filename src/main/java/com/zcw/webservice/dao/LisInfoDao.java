@@ -425,7 +425,7 @@ public class LisInfoDao extends BaseDao {
             this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                     boolean flag = false;
-                    flag = (drugResults.size()>0 && Util.getIntValue(drugResults.get(0).getResultCode()) > 1);
+                    flag = (drugResults.size() > 0 && Util.getIntValue(drugResults.get(0).getResultCode()) > 1);
                     for (DrugResult drugResult : drugResults) {
                         ps.setString(1, sampleInfo.getSampleId());                          //样本号
                         ps.setString(2, "ym");                                              //结果类型
@@ -504,7 +504,7 @@ public class LisInfoDao extends BaseDao {
         final List<TestResult> results = report.getResults();
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                for (TestResult testResult: results) {
+                for (TestResult testResult : results) {
                     ps.setString(1, "微生物");                                             //仪器代号
                     ps.setTimestamp(2, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime())); //测定日期
                     ps.setString(3, sampleInfo.getSampleId());                              //样本编号
@@ -647,7 +647,7 @@ public class LisInfoDao extends BaseDao {
 
         //删除样本信息
         String sql = "delete from EHR_inspection_item where barcode=?";
-        lisJdbcTemplate.update(sql, new Object[] { info.get(0).getBarcode()});
+        lisJdbcTemplate.update(sql, new Object[]{info.get(0).getBarcode()});
 
         //插入结果信息
         sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
@@ -665,7 +665,7 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(7, inspectionItem.getReference());
                     ps.setString(8, inspectionItem.getResultFlag());
                     ps.setString(9, inspectionItem.getBarcode());
-                    ps.setString(10,inspectionItem.getTestResult());
+                    ps.setString(10, inspectionItem.getTestResult());
                     ps.addBatch();
                 }
                 Object o = ps.executeBatch();
@@ -689,7 +689,7 @@ public class LisInfoDao extends BaseDao {
 
         //删除样本信息
         String sql = "delete from EHR_inspection_item where barcode=?";
-        lisJdbcTemplate.update(sql, new Object[] { info.get(0).getBarcode()});
+        lisJdbcTemplate.update(sql, new Object[]{info.get(0).getBarcode()});
 
         //插入结果信息
         sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
@@ -707,13 +707,117 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(7, inspectionItem.getReference());
                     ps.setString(8, inspectionItem.getResultFlag());
                     ps.setString(9, inspectionItem.getBarcode());
-                    ps.setString(10,inspectionItem.getTestResult());
+                    ps.setString(10, inspectionItem.getTestResult());
                     ps.addBatch();
                 }
                 Object o = ps.executeBatch();
                 return o;
             }
         });
+        return new ReturnMsg(1, "保存成功");
+    }
+
+
+    /**
+     * 保存结果至LIS PDA信息，用于PDA标本采集
+     *
+     * @param info
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ReturnMsg savePdaInfo(final PdaSampleInfo info) throws Exception {
+        if (info == null)
+            return new ReturnMsg(0, "参数不能为空");
+
+        //删除样本信息
+        String sql = "select count(1) cnt from T_TAT_EWELL where REPORT_ID=? AND PATIENT_ID=?";
+        int cnt = lisJdbcTemplate.queryForObject(sql, new Object[]{info.getBarcode(), info.getPatientId()}, Integer.class);
+        if (cnt > 0) {
+            sql = "UPDATE T_TAT_EWELL SET REPORT_TIME=?,REPORT_NAME=?,REQUEST_TIME=?,REQUEST_NAME=?,RECERIVE_TIME=?,RECERIVE_NAME=?" +
+                    " WHERE REPORT_ID=? AND PATIENT_ID=?";
+            this.lisJdbcTemplate.update(sql,
+                    new PreparedStatementSetter() {
+                        @Override
+                        public void setValues(PreparedStatement ps) throws SQLException {
+                            ps.setTimestamp(1, new java.sql.Timestamp(info.getReportTime().getTime()));
+                            ps.setString(2, Util.null2String(info.getReportName()));
+                            ps.setTimestamp(3, new java.sql.Timestamp(info.getRequestTime().getTime()));
+                            ps.setString(4, Util.null2String(info.getRequestName()));
+                            ps.setTimestamp(5, new java.sql.Timestamp(info.getReceiveTime().getTime()));
+                            ps.setString(6, Util.null2String(info.getReceiveName()));
+                            ps.setString(8, Util.null2String(info.getBarcode()));
+                            ps.setString(9, Util.null2String(info.getPatientId()));
+                        }
+                    });
+        } else {
+            //插入结果信息
+            sql = "insert into T_TAT_EWELL(PATIENT_ID,PATIENT_NUMBER," +
+                    "REPORT_ID,REPORT_ITEMID,REPORT_ITEMNAME,REQUEST_TIME,REQUEST_NAME,BQDM,BQMC) " +
+                    "values(?,?,?,?,?,?,?,?,?)";
+
+            this.lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps) throws SQLException {
+                    ps.setString(1, Util.null2String(info.getPatientId()));
+                    ps.setString(2, Util.null2String(info.getPatientNo()));
+                    ps.setString(3, Util.null2String(info.getBarcode()));
+                    ps.setString(4, Util.null2String(info.getItemId()));
+                    ps.setString(5, Util.null2String(info.getItemName()));
+                    ps.setTimestamp(6, new java.sql.Timestamp(info.getRequestTime().getTime()));
+                    ps.setString(7, Util.null2String(info.getRequestName()));
+                    ps.setString(8, Util.null2String(info.getWardId()));
+                    ps.setString(9, Util.null2String(info.getWardName()));
+                }
+            });
+        }
+
+        return new ReturnMsg(1, "保存成功");
+    }
+
+    /**
+     * 获取PDA 采集时间及送出时间等信息、用于更新LIS相关时间信息
+     *
+     * @return
+     */
+    public List<PdaSampleInfo> getPdaInfo() {
+        List<PdaSampleInfo> pdaSampleInfoList = new ArrayList<PdaSampleInfo>();
+        String sql = "select inspectionid,execute_time,execute_name,send_time,send_name " +
+                " from T_Sample_Trans_Time where (flag is null or flag=0) " +
+                " and InspectionId like 'A12006%' and Send_Time is not null ";
+        pdaSampleInfoList = lisJdbcTemplate.query(sql,
+                new RowMapper<PdaSampleInfo>() {
+                    public PdaSampleInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        PdaSampleInfo pdaSampleInfo = new PdaSampleInfo();
+                        pdaSampleInfo.setBarcode(Util.null2String(rs.getString("inspectionid")));
+                        pdaSampleInfo.setExecuteTime(rs.getTimestamp("execute_time"));
+                        pdaSampleInfo.setExecuteName(Util.null2String(rs.getString("execute_name")));
+                        pdaSampleInfo.setSendTime(rs.getTimestamp("send_time"));
+                        pdaSampleInfo.setSendName(Util.null2String(rs.getString("send_name")));
+                        return pdaSampleInfo;
+                    }
+                });
+        return pdaSampleInfoList;
+    }
+
+
+    /**
+     * 保存结果至LIS PDA信息，用于PDA标本采集
+     *
+     * @param ids
+     * @return
+     * @throws Exception
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public ReturnMsg updatePdaStatus(final String ids) throws Exception {
+        if (ids == null)
+            return new ReturnMsg(0, "参数不能为空");
+
+        //删除样本信息
+        String sql = "UPDATE T_Sample_Trans_Time SET FLAG=1" +
+                " WHERE InspectionId in ("+ids+") AND flag=0";
+        this.lisJdbcTemplate.update(sql);
+
         return new ReturnMsg(1, "保存成功");
     }
 }

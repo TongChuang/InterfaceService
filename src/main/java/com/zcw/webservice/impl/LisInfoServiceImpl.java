@@ -9,6 +9,7 @@ import com.zcw.webservice.model.his.AccountItem;
 import com.zcw.webservice.model.his.HisTestInfo;
 import com.zcw.webservice.model.his.RequestUpdateParam;
 import com.zcw.webservice.model.lis.InspectionItem;
+import com.zcw.webservice.model.lis.PdaSampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
@@ -526,6 +527,51 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
             msg.setMessage(e.getMessage());
         }
         log.info("saveLisResult================================END");
+        return JSON.toJSONString(msg,filter);
+    }
+
+    @Override
+    public String savePdaInfo(PdaSampleInfo info) {
+        log.info("savePdaInfo================================START");
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = lisInfoDao.savePdaInfo(info);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info("savePdaInfo================================END");
+        return JSON.toJSONString(msg,filter);
+    }
+    @Override
+    public String updatePdaStatus(String ids) {
+        log.info("savePdaInfo================================START");
+        ReturnMsg msg = new ReturnMsg();
+        try{
+            msg = lisInfoDao.updatePdaStatus(ids);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info("savePdaInfo================================END");
+        return JSON.toJSONString(msg,filter);
+    }
+
+
+    public String getPdaInfo(){
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(lisInfoDao.getPdaInfo());
+        } catch (Exception e) {
+            log.error("获取信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
         return JSON.toJSONString(msg,filter);
     }
 }

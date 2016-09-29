@@ -25,9 +25,14 @@ public class JsonDateFormateFull extends JsonSerializer<Date> {
             IOException, JsonProcessingException {
         SimpleDateFormat formatter = new SimpleDateFormat(
                 "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        String formattedDate = formatter.format(value);
+        String formattedDate = "";
+        try{
+            formattedDate = formatter.format(value);
+        }catch (Exception e){
+            formattedDate="";
+            e.printStackTrace();
+        }
         jgen.writeString(formattedDate);
-
     }
 
 }

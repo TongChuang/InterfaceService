@@ -4,6 +4,7 @@ package com.zcw.webservice.server;
         import com.zcw.webservice.model.his.*;
         import com.zcw.webservice.model.lis.Bacteria;
         import com.zcw.webservice.model.lis.InspectionItem;
+        import com.zcw.webservice.model.lis.PdaSampleInfo;
         import com.zcw.webservice.model.lis.SampleLog;
         import com.zcw.webservice.model.vo.Report;
         import com.zcw.webservice.model.vo.ReturnMsg;
@@ -331,4 +332,37 @@ public interface LisInfoService {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/saveLisResult")
     String saveLisResult(List<InspectionItem> info);
+
+    /**
+     *  LIS将检样本信息写入OldliS系统 用于PDA
+     *
+     * @param info 样本信息
+     * @return 返回Json成功失败信息[{key:value},{...}]
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Path(value = "/savePdaInfo")
+    String savePdaInfo(PdaSampleInfo info);
+
+    /**
+     * 获取PDA 采集送出时间相关信息
+     * @return
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getPdaInfo")
+    String getPdaInfo();
+
+
+    /**
+     * 更新读取状态
+     * @param ids
+     * @return
+     */
+    @POST
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
+    @Path(value = "/updatePdaStatus")
+    String updatePdaStatus(String ids);
 }
