@@ -11,6 +11,7 @@ import com.zcw.webservice.model.his.RequestUpdateParam;
 import com.zcw.webservice.model.lis.InspectionItem;
 import com.zcw.webservice.model.lis.PdaSampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
+import com.zcw.webservice.model.vo.InspectionVo;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
 import com.zcw.webservice.server.LisInfoService;
@@ -515,7 +516,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      * @throws Exception
      */
     @Override
-    public String saveLisResult(List<InspectionItem> info) {
+    public String saveLisResult(InspectionVo info) {
         log.info("saveLisResult================================START");
         ReturnMsg msg = new ReturnMsg();
         try{

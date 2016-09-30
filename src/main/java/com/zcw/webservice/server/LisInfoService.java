@@ -6,6 +6,7 @@ package com.zcw.webservice.server;
         import com.zcw.webservice.model.lis.InspectionItem;
         import com.zcw.webservice.model.lis.PdaSampleInfo;
         import com.zcw.webservice.model.lis.SampleLog;
+        import com.zcw.webservice.model.vo.InspectionVo;
         import com.zcw.webservice.model.vo.Report;
         import com.zcw.webservice.model.vo.ReturnMsg;
 
@@ -331,7 +332,7 @@ public interface LisInfoService {
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/saveLisResult")
-    String saveLisResult(List<InspectionItem> info);
+    String saveLisResult(InspectionVo info);
 
     /**
      *  LIS将检样本信息写入OldliS系统 用于PDA

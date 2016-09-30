@@ -5,6 +5,7 @@ import com.zcw.webservice.common.Util;
 import com.zcw.webservice.model.lis.*;
 import com.zcw.webservice.model.vo.*;
 import com.zcw.webservice.model.vo.TestResult;
+import org.apache.cxf.aegis.type.basic.SqlDateType;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,10 +13,9 @@ import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Title:LisInfoDao
@@ -641,13 +641,66 @@ public class LisInfoDao extends BaseDao {
      * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
-    public ReturnMsg saveLisResult(final List<InspectionItem> info) throws Exception {
-        if (info == null || info.size() == 0)
+    public ReturnMsg saveLisResult(final InspectionVo info) throws Exception {
+        if (info == null)
             return new ReturnMsg(0, "参数不能为空");
 
+        //删除原有样本信息
+        String sql = "delete from EHR_inspection_Info where ybid=?";
+        lisJdbcTemplate.update(sql, new Object[]{info.getInspectionInfo().getBarcode()});
+
+        //保存样本信息
+        sql = "insert into EHR_inspection_Info(id,inspection_Id,brxh,patientid,brxm,brxb,brnl,dept_name,ward_name," +
+                "brch,bbzl,sjys,cdrq,his_id,operator,recordtime,report_name,shrq,shys,bgrq,jymd,ybid)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        this.lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, Util.null2String(info.getInspectionInfo().getInspectionId()));
+                ps.setString(2, Util.null2String(info.getInspectionInfo().getInspectionId()));
+                ps.setString(3, Util.null2String(info.getInspectionInfo().getPatientId()));
+                ps.setString(4, Util.null2String(info.getInspectionInfo().getPatientNo()));
+                ps.setString(5, Util.null2String(info.getInspectionInfo().getPatientName()));
+                ps.setString(6, Util.null2String(info.getInspectionInfo().getSex()));
+                ps.setString(7, Util.null2String(info.getInspectionInfo().getAge()));
+                ps.setString(8, Util.null2String(info.getInspectionInfo().getDepartment()));
+                ps.setString(9, Util.null2String(info.getInspectionInfo().getWardName()));
+                ps.setString(10, Util.null2String(info.getInspectionInfo().getBedNo()));
+                ps.setString(11, Util.null2String(info.getInspectionInfo().getSampleType()));
+                ps.setString(12, Util.null2String(info.getInspectionInfo().getRequestName()));
+                if(info.getInspectionInfo().getTestTime()==null){
+                    ps.setNull(13, Types.DATE);
+                }else{
+                    ps.setTimestamp(13,new java.sql.Timestamp(info.getInspectionInfo().getTestTime().getTime()));
+                }
+                ps.setString(14, Util.null2String(info.getInspectionInfo().getTesterHisId()));
+                ps.setString(15, Util.null2String(info.getInspectionInfo().getTesterName()));
+                if(info.getInspectionInfo().getRequestTime()==null){
+                    ps.setNull(16, Types.DATE);
+                }else{
+                    ps.setTimestamp(16,new java.sql.Timestamp(info.getInspectionInfo().getRequestTime().getTime()));
+                }
+                ps.setString(17, Util.null2String(info.getInspectionInfo().getReportName()));
+                if(info.getInspectionInfo().getAuditTime()==null){
+                    ps.setNull(18, Types.DATE);
+                }else{
+                    ps.setTimestamp(18,new java.sql.Timestamp(info.getInspectionInfo().getAuditTime().getTime()));
+                }
+                ps.setString(19, Util.null2String(info.getInspectionInfo().getAuditName()));
+                if(info.getInspectionInfo().getAuditTime()==null){
+                    ps.setNull(20, Types.DATE);
+                }else{
+                    ps.setTimestamp(20,new java.sql.Timestamp(info.getInspectionInfo().getReportTime().getTime()));
+                }
+                ps.setString(21, Util.null2String(info.getInspectionInfo().getTestName()));
+                ps.setString(22, Util.null2String(info.getInspectionInfo().getBarcode()));
+            }
+        });
+
+
         //删除样本信息
-        String sql = "delete from EHR_inspection_item where barcode=?";
-        lisJdbcTemplate.update(sql, new Object[]{info.get(0).getBarcode()});
+        sql = "delete from EHR_inspection_item where barcode=?";
+        lisJdbcTemplate.update(sql, new Object[]{info.getInspectionInfo().getBarcode()});
 
         //插入结果信息
         sql = "insert into EHR_inspection_item(inspectionId,testItemId," +
@@ -655,7 +708,7 @@ public class LisInfoDao extends BaseDao {
                 "values(?,?,?,?,?,?,?,?,?,?)";
         this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                for (InspectionItem inspectionItem : info) {
+                for (InspectionItem inspectionItem : info.getInspectionItemList()) {
                     ps.setString(1, inspectionItem.getInspectionId());
                     ps.setString(2, inspectionItem.getTestItemId());
                     ps.setString(3, inspectionItem.getTestItemName_EN());
@@ -746,8 +799,8 @@ public class LisInfoDao extends BaseDao {
                             ps.setString(4, Util.null2String(info.getRequestName()));
                             ps.setTimestamp(5, new java.sql.Timestamp(info.getReceiveTime().getTime()));
                             ps.setString(6, Util.null2String(info.getReceiveName()));
-                            ps.setString(8, Util.null2String(info.getBarcode()));
-                            ps.setString(9, Util.null2String(info.getPatientId()));
+                            ps.setString(7, Util.null2String(info.getBarcode()));
+                            ps.setString(8, Util.null2String(info.getPatientId()));
                         }
                     });
         } else {
