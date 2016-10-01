@@ -651,15 +651,16 @@ public class LisInfoDao extends BaseDao {
 
         //保存样本信息
         sql = "insert into EHR_inspection_Info(id,inspection_Id,brxh,patientid,brxm,brxb,brnl,dept_name,ward_name," +
-                "brch,bbzl,sjys,cdrq,his_id,operator,recordtime,report_name,shrq,shys,bgrq,jymd,ybid)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "brch,bbzl,sjys,cdrq,his_id,operator,recordtime,report_name,shrq,shys,bgrq,jymd," +
+                "ybid,filedir,filedir1,filestate,patienttype,samplestatus)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         this.lisJdbcTemplate.update(sql, new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, Util.null2String(info.getInspectionInfo().getInspectionId()));
                 ps.setString(2, Util.null2String(info.getInspectionInfo().getInspectionId()));
-                ps.setString(3, Util.null2String(info.getInspectionInfo().getPatientId()));
-                ps.setString(4, Util.null2String(info.getInspectionInfo().getPatientNo()));
+                ps.setString(3, Util.null2String(info.getInspectionInfo().getPatientNo()));
+                ps.setString(4, Util.null2String(info.getInspectionInfo().getPatientId()));
                 ps.setString(5, Util.null2String(info.getInspectionInfo().getPatientName()));
                 ps.setString(6, Util.null2String(info.getInspectionInfo().getSex()));
                 ps.setString(7, Util.null2String(info.getInspectionInfo().getAge()));
@@ -694,6 +695,12 @@ public class LisInfoDao extends BaseDao {
                 }
                 ps.setString(21, Util.null2String(info.getInspectionInfo().getTestName()));
                 ps.setString(22, Util.null2String(info.getInspectionInfo().getBarcode()));
+                ps.setString(23, "E:\\GenerateReport\\ReportTemp\\" + info.getInspectionInfo().getBarcode() + ".pdf");
+                ps.setString(24, "\\\\10.31.96.39\\GenerateReport\\ReportTemp\\" + info.getInspectionInfo().getBarcode() + ".pdf");
+                ps.setString(25, "可打");
+                ps.setString(26, info.getInspectionInfo().getPatientType());
+                ps.setString(27, info.getInspectionInfo().getSampleStatus());
+
             }
         });
 

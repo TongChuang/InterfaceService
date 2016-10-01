@@ -71,7 +71,11 @@ public class InspectionInfo implements Serializable {
     private String testName;        //检验目的名称
     private String barcode;         //条码号（医嘱号）
     private String sampleNo;        //样本号
-
+    private String fileState;       //文件状态 可打、已打
+    private String filePath;        //文件路径
+    private String filePath1;        //文件路径1
+    private String patientType;     //病人类型
+    private String sampleStatus;    //样本状态
 
     public String getInspectionId() {
         return inspectionId;
@@ -287,5 +291,45 @@ public class InspectionInfo implements Serializable {
 
     public void setRequestName(String requestName) {
         this.requestName = requestName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getFilePath1() {
+        return filePath1;
+    }
+
+    public void setFilePath1(String filePath1) {
+        this.filePath1 = filePath1;
+    }
+
+    public String getFileState() {
+        return fileState;
+    }
+
+    public void setFileState(String fileState) {
+        this.fileState = fileState;
+    }
+
+    public String getPatientType() {
+        return patientType;
+    }
+
+    public void setPatientType(String patientType) {
+        this.patientType = patientType;
+    }
+
+    public String getSampleStatus() {
+        return sampleStatus;
+    }
+
+    public void setSampleStatus(String sampleStatus) {
+        this.sampleStatus = sampleStatus;
     }
 }
