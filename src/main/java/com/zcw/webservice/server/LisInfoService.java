@@ -136,6 +136,16 @@ public interface LisInfoService {
     String getDepartMentList();
 
     /**
+     * 获取医院用户信息列表
+     *
+     * @return 返回Json医院用户信息[{key:value},{...}]
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON + ";charset=UTF-8"})
+    @Path(value = "/getHospitalUserList")
+    String getHospitalUserList();
+
+    /**
      * 获取样本号
      *
      * @return 返回Json样本号[{key:value},{...}]

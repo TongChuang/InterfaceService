@@ -621,4 +621,28 @@ public class HisInfoDao extends BaseDao {
         }*/
         return new ReturnMsg(1, "保存成功");
     }
+
+    /**
+     * 获取His用户信息
+     *
+     * @return
+     */
+    public List<HospitalUser> getHospitalUserList() throws Exception {
+        String sql = "select * from V_HSBHI_WORKERINFO";
+
+        Object[] params = new Object[]{};
+        List<HospitalUser> hospitalUserList = null;
+        hospitalUserList = hisJdbcTemplate.query(sql,
+                new RowMapper<HospitalUser>() {
+                    public HospitalUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        HospitalUser hospitalUser = new HospitalUser();
+                        hospitalUser.setId(Util.null2String(rs.getString("ZZZGID")));
+                        hospitalUser.setWorkId(Util.null2String(rs.getString("ZZZGGH")));
+                        hospitalUser.setName(Util.null2String(rs.getString("ZZZGXM")));
+                        return hospitalUser;
+                    }
+                });
+
+        return hospitalUserList;
+    }
 }

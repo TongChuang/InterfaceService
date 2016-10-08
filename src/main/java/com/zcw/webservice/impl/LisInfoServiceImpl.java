@@ -207,6 +207,23 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     /**
+     * 医院用户信息
+     * @return
+     */
+    public String getHospitalUserList() {
+        ReturnMsg msg = new ReturnMsg();;
+        try {
+            msg.setState(1);
+            msg.setMessage(hisInfoDao.getHospitalUserList());
+        } catch (Exception e) {
+            log.error("获取医院用户信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
      * 获取样本号
      * @param barcode
      * @return

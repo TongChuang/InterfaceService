@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @Date:2016/8/3 14:26
  * @Version:
  */
-public class Department  implements Serializable {
+public class Department implements Serializable {
 
     private static final long serialVersionUID = 4728135225309467951L;
     @JSONField(name = "Id")
