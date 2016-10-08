@@ -36,6 +36,20 @@ public class LisInfoDao extends BaseDao {
      * @return
      */
     public List<TestInfo> getTestInfo(String barcode) throws Exception {
+        if(barcode !=null && !barcode.isEmpty()){
+
+            if(barcode.indexOf("A12006")>=0){   //新LIS条码号
+                return getNewLisTestInfo(barcode);
+            }else {
+                return getOldTestInfo(barcode);
+            }
+        }else {
+            return null;
+        }
+
+    }
+    private List<TestInfo> getOldTestInfo(String barcode) throws Exception {
+
         //SELECT * FROM t_lis_sampletransPro where ybid ='' and Trans='已计费' 已经计费 状态
         String sql = "select * from vw_testinfo_micro where Barcode =?";
         List<TestInfo> testInfoList = null;
@@ -126,6 +140,83 @@ public class LisInfoDao extends BaseDao {
 //                    })
 //
         }
+        return testInfoList;
+    }
+
+
+
+    private List<TestInfo> getNewLisTestInfo(String barcode){
+        //SELECT * FROM t_lis_sampletransPro where ybid ='' and Trans='已计费' 已经计费 状态
+        String sql = "select * from vw_requestinfo where barcode = ? ";
+        List<TestInfo> testInfoList = null;
+        testInfoList = newLisJdbcTemplate.query(sql, new Object[]{barcode},
+                new RowMapper<TestInfo>() {
+                    public TestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        TestInfo testInfo = new TestInfo();
+                        testInfo.setBarcode(Util.null2String(rs.getString("Barcode")));
+
+                        String patientType = Util.null2String(rs.getString("stayhospitalmode"));
+                        String patientName = "";
+
+                        if("1".equals(patientType))
+                            patientName="门诊";
+                        else if("2".equals(patientType)){
+                            patientName="住院";
+                        }else {
+                            patientName="其他";
+                        }
+                        testInfo.setPatientTypeCode(patientType);
+                        testInfo.setPatientTypeName(patientName);
+                        testInfo.setPatientCode(Util.null2String(rs.getString("patientBLH")));
+                        testInfo.setPatientName(Util.null2String(rs.getString("PatientName")));
+                        testInfo.setPatientSex(Util.null2String(rs.getString("sex")));
+                        testInfo.setPatientAge(Util.null2String(rs.getString("age")));
+                        testInfo.setPatientAgeUnit(Util.null2String(rs.getString("ageunit")));
+                        testInfo.setDepartmentCode(Util.null2String(rs.getString("hossection")));
+                        testInfo.setDepartmentName(Util.null2String(rs.getString("hossectionname")));
+                        testInfo.setInpatientAreaCode(Util.null2String(rs.getString("wardid")));
+                        testInfo.setInpatientAreaName(Util.null2String(rs.getString("wardname")));
+                        testInfo.setBedNo(Util.null2String(rs.getString("bed")));
+                        testInfo.setDoctorCode(Util.null2String(rs.getString("requester")));
+                        testInfo.setDoctorName(Util.null2String(rs.getString("requestername")));
+                        testInfo.setSpecimenTypeCode(Util.null2String(rs.getString("specimen")));
+                        testInfo.setSpecimenTypeName(Util.null2String(rs.getString("SpecimenTypeName")));
+                        testInfo.setApplyDate(Util.null2String(rs.getString("requesttime")));
+                        testInfo.setCollectDate(Util.null2String(rs.getString("executetime")));
+                        testInfo.setCollectAccount(Util.null2String(rs.getString("executor")));
+//                        testInfo.setChargeTypeCode(Util.null2String(rs.getString("ChargeTypeCode")));
+//                        testInfo.setChargeTypeName(Util.null2String(rs.getString("ChargeTypeName")));
+                        testInfo.setDiagnosis(Util.null2String(rs.getString("diagnostic")));
+                        testInfo.setSignDate(Util.null2String(rs.getString("receivetime")));
+                        testInfo.setSignerAccount(Util.null2String(rs.getString("receiver")));
+                        String tmpItemCode = Util.null2String(rs.getString("YLXH"));
+                        String inspectionName = Util.null2String(rs.getString("InspectionName"));
+                        List<TestItem> testItems = new ArrayList<TestItem>();
+                        if (!tmpItemCode.equals("")) {
+                            if (tmpItemCode.lastIndexOf(",") > 0) {
+                                tmpItemCode = tmpItemCode.substring(0, tmpItemCode.lastIndexOf(","));
+                            }
+                            String[] itemCodes = tmpItemCode.split(",");
+                            String[] itemNames = inspectionName.split(",");
+                            for(int i=0;i<itemCodes.length;i++){
+                                TestItem testItem = new TestItem();
+                                testItem.setId(itemCodes[i]);
+                                testItem.setCode(itemCodes[i]);
+                                testItem.setName(itemNames[i]);
+                                testItem.setRequestItemId(Util.null2String(rs.getString("laborderorg")));
+                                testItems.add(testItem);
+                            }
+                            testInfo.setTestItems(testItems);
+                        }
+                        testInfo.setRemark(Util.null2String(rs.getString("Remark")));
+                        testInfo.setSampleNo(Util.null2String(rs.getString("SampleNo")));
+                        testInfo.setPatientPhone(Util.null2String(rs.getString("phone")));
+                        testInfo.setPatientId(Util.null2String(rs.getString("patientid")));
+                        testInfo.setRequestId(Util.null2String(rs.getString("requestId")));
+                        testInfo.setPatientFileNo(Util.null2String(rs.getString("patientBLH")));
+                        return testInfo;
+                    }
+                });
         return testInfoList;
     }
 
@@ -335,6 +426,7 @@ public class LisInfoDao extends BaseDao {
         }
 
         if(info.getSampleInfo().getBarcode().indexOf("A12006")>=0){
+            //保存信息至新LIS系统
             msg = saveNewLisTestResult(info);
         }else {
             if (info.getReportType() == 0) {
@@ -542,7 +634,7 @@ public class LisInfoDao extends BaseDao {
         String sql = "insert into l_testresult(sampleno,testid,measuretime,operator,refhi," +
                 "reflo,resultflag,sampletype,teststatus,unit,testname,hint) " +
                 " values(?,?,?,?,?,?,?,?,?,?,?,?)";
-        this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+        this.newLisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 int i=0;
                 for (TestResult testResult : results) {
@@ -574,7 +666,7 @@ public class LisInfoDao extends BaseDao {
             sql = "insert into l_testresult(sampleno,testid,measuretime,operator,refhi," +
                     "reflo,resultflag,sampletype,testresult,teststatus,unit,testname,hint) " +
                     " values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+            this.newLisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                     int i = 0;
                     for (DrugResult drugResult : drugResults) {
