@@ -46,6 +46,9 @@ public class DrugResult implements Serializable {
     @JSONField(name = "Method")
     private int method;             //MAC:0 KB:1
 
+    @JSONField(name = "Unit")
+    private String unit;             //单位
+
     public String getCode() {
         return code;
     }
@@ -116,5 +119,13 @@ public class DrugResult implements Serializable {
 
     public void setMethod(int method) {
         this.method = method;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

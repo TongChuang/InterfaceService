@@ -13,4 +13,7 @@ public class BaseDao {
     @Autowired
     protected JdbcTemplate lisJdbcTemplate;        //LIS系统连接池
 
+    @Autowired
+    protected JdbcTemplate newLisJdbcTemplate;        //New LIS系统连接池
+
 }

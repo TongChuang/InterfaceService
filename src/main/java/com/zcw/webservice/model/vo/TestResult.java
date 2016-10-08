@@ -21,6 +21,9 @@ public class TestResult implements Serializable {
     @JSONField(name = "TestItemCode")
     private String testItemCode;    //检测项目编号
 
+    @JSONField(name = "TestItemName")
+    private String testItemName;    //检测项目名称
+
     @JSONField(name = "TestItemOrder")
     private String testItemOrder;   //检测项目排序号
 
@@ -53,6 +56,14 @@ public class TestResult implements Serializable {
 
     public String getTestItemCode() {
         return testItemCode;
+    }
+
+    public String getTestItemName() {
+        return testItemName;
+    }
+
+    public void setTestItemName(String testItemName) {
+        this.testItemName = testItemName;
     }
 
     public void setTestItemCode(String testItemCode) {
@@ -138,4 +149,6 @@ public class TestResult implements Serializable {
     public void setCount(String count) {
         this.count = count;
     }
+
+
 }

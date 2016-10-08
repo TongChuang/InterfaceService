@@ -334,12 +334,16 @@ public class LisInfoDao extends BaseDao {
             return new ReturnMsg(0, "没有记录或病人信息不一致！");
         }
 
-        if (info.getReportType() == 0) {
-            //普通培养报告
-            msg = saveTestResult1(info);
-        } else {
-            //真菌D、内毒素报告
-            msg = saveTestResult2(info);
+        if(info.getSampleInfo().getBarcode().indexOf("A12006")>=0){
+            msg = saveNewLisTestResult(info);
+        }else {
+            if (info.getReportType() == 0) {
+                //普通培养报告
+                msg = saveTestResult1(info);
+            } else {
+                //真菌D、内毒素报告
+                msg = saveTestResult2(info);
+            }
         }
         return msg;
     }
@@ -521,6 +525,82 @@ public class LisInfoDao extends BaseDao {
                 return o;
             }
         });
+        return new ReturnMsg(1, "保存成功");
+    }
+
+
+    /**
+     * 保存微生物结果至新Lis系统
+     * @param report
+     * @return
+     */
+    private ReturnMsg saveNewLisTestResult(Report report){
+        final SampleInfo sampleInfo = report.getSampleInfo();
+
+        //普通报告
+        final List<TestResult> results = report.getResults();
+        String sql = "insert into l_testresult(sampleno,testid,measuretime,operator,refhi," +
+                "reflo,resultflag,sampletype,teststatus,unit,testname,hint) " +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?)";
+        this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+            public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                int i=0;
+                for (TestResult testResult : results) {
+                    i++;
+                    ps.setString(1, sampleInfo.getSampleId());              //样本号
+                    ps.setString(2, testResult.getTestItemCode());                  //结果类型
+                    ps.setTimestamp(3, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
+                    ps.setString(4, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
+                    String []  reference =   Util.getRefernce(testResult.getReference());
+                    ps.setString(5, reference[0]);                                          //结果
+                    ps.setString(6, reference[1]);                                          //菌量计数
+                    ps.setString(7,"B"+String.format("%03d",i));
+                    ps.setString(8,sampleInfo.getSampleType());
+                    ps.setInt(9,5);
+                    ps.setString(10,testResult.getUnit());
+                    ps.setString(11,testResult.getResult());
+                    ps.setString(12,testResult.getCount());
+                    // ps.setString(5, results.get(i).getDrugResistance());  //耐药标志
+                    ps.addBatch();
+                }
+                Object o = ps.executeBatch();
+                return o;
+            }
+        });
+
+        //更新药敏信息
+        final List<DrugResult> drugResults = report.getDrugResults();
+        if (drugResults != null && drugResults.size() > 0) {
+            sql = "insert into l_testresult(sampleno,testid,measuretime,operator,refhi," +
+                    "reflo,resultflag,sampletype,testresult,teststatus,unit,testname,hint) " +
+                    " values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            this.lisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
+                public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                    int i = 0;
+                    for (DrugResult drugResult : drugResults) {
+                        i++;
+                        ps.setString(1, sampleInfo.getSampleId());              //样本号
+                        ps.setString(2, drugResult.getCode());                  //结果类型
+                        ps.setTimestamp(3, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
+                        ps.setString(4, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
+                        String []  reference =   Util.getRefernce(drugResult.getReference());
+                        ps.setString(5, reference[0]);                                          //结果
+                        ps.setString(6, reference[1]);                                          //菌量计数
+                        ps.setString(7,"A"+String.format("%03d",i));
+                        ps.setString(8,sampleInfo.getSampleType());
+                        ps.setString(8,drugResult.getAbnormalResult());
+                        ps.setInt(9,5);
+                        ps.setString(10,drugResult.getUnit());
+                        ps.setString(11,drugResult.getName());
+                        ps.setString(12,drugResult.getResultValue());
+                        // ps.setString(5, results.get(i).getDrugResistance());  //耐药标志
+                        ps.addBatch();
+                    }
+                    Object o = ps.executeBatch();
+                    return o;
+                }
+            });
+        }
         return new ReturnMsg(1, "保存成功");
     }
 

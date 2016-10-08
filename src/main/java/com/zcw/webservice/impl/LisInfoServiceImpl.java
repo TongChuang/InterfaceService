@@ -362,6 +362,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         log.info("requestUpdate================================START");
         try{
+            log.info(param);
             msg = hisInfoDao.requestUpdate(param);
         }catch (Exception e){
             e.printStackTrace();
