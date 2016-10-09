@@ -176,10 +176,10 @@ public class LisInfoDao extends BaseDao {
                         testInfo.setDepartmentName(Util.null2String(rs.getString("hossectionname")));
                         testInfo.setInpatientAreaCode(Util.null2String(rs.getString("wardid")));
                         testInfo.setInpatientAreaName(Util.null2String(rs.getString("wardname")));
-                        testInfo.setBedNo(Util.null2String(rs.getString("bed")));
+                        testInfo.setBedNo(Util.null2String(rs.getString("depart_bed")));
                         testInfo.setDoctorCode(Util.null2String(rs.getString("requester")));
                         testInfo.setDoctorName(Util.null2String(rs.getString("requestername")));
-                        testInfo.setSpecimenTypeCode(Util.null2String(rs.getString("specimen")));
+                        testInfo.setSpecimenTypeCode(Util.null2String(rs.getString("sampletype")));
                         testInfo.setSpecimenTypeName(Util.null2String(rs.getString("SpecimenTypeName")));
                         testInfo.setApplyDate(Util.null2String(rs.getString("requesttime")));
                         testInfo.setCollectDate(Util.null2String(rs.getString("executetime")));
@@ -191,6 +191,7 @@ public class LisInfoDao extends BaseDao {
                         testInfo.setSignerAccount(Util.null2String(rs.getString("receiver")));
                         String tmpItemCode = Util.null2String(rs.getString("YLXH"));
                         String inspectionName = Util.null2String(rs.getString("InspectionName"));
+                        String laborderorg = Util.null2String(rs.getString("laborderorg"));
                         List<TestItem> testItems = new ArrayList<TestItem>();
                         if (!tmpItemCode.equals("")) {
                             if (tmpItemCode.lastIndexOf(",") > 0) {
@@ -203,14 +204,14 @@ public class LisInfoDao extends BaseDao {
                                 testItem.setId(itemCodes[i]);
                                 testItem.setCode(itemCodes[i]);
                                 testItem.setName(itemNames[i]);
-                                testItem.setRequestItemId(Util.null2String(rs.getString("laborderorg")));
+                                testItem.setRequestItemId(laborderorg);
                                 testItems.add(testItem);
                             }
                             testInfo.setTestItems(testItems);
                         }
-                        testInfo.setRemark(Util.null2String(rs.getString("Remark")));
+                        //testInfo.setRemark(Util.null2String(rs.getString("Remark")));
                         testInfo.setSampleNo(Util.null2String(rs.getString("SampleNo")));
-                        testInfo.setPatientPhone(Util.null2String(rs.getString("phone")));
+                        //testInfo.setPatientPhone(Util.null2String(rs.getString("phone")));
                         testInfo.setPatientId(Util.null2String(rs.getString("patientid")));
                         testInfo.setRequestId(Util.null2String(rs.getString("requestId")));
                         testInfo.setPatientFileNo(Util.null2String(rs.getString("patientBLH")));
