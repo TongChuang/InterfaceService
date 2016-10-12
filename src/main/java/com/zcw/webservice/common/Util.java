@@ -76,7 +76,17 @@ public final class Util {
         }
         return null;
     }
-
+    public static String  getFormatDate(Object v, String format) {
+        try {
+            //if(v==null) v= new Date();
+            if(format==null || format.isEmpty()) format="yyyy-MM-dd HH:mm:ss";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            // simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return simpleDateFormat.format(v);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
     public static String[] getRefernce(String reference) {
         String[]  str = new String[]{};
         try {

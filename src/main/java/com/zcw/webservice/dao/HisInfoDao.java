@@ -376,6 +376,7 @@ public class HisInfoDao extends BaseDao {
             sql += " and BRZYID=?";
             parms.add(patientId);
         }
+        sql += " order by BQCWHM,sqkdrq ";
         patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
                 new RowMapper<PatientRequestInfo>() {
                     public PatientRequestInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

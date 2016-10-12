@@ -417,27 +417,33 @@ public class LisInfoDao extends BaseDao {
             return new ReturnMsg(0, "参数不能为空！");
         }
         //判断病人是否相同
-        sql = "select count(0) as cnt from f_k_ybxx " +
-                "where ybid =? and brxm=? and brxb =? and bbzl=? and brbq=?";
-        log.info(sql);
-        Long count = lisJdbcTemplate.queryForObject(sql, new Object[]{barcode, patientName, sex, sampleType, partientCode}, Long.class);
-        if (count <= 0) {
-            log.info("没有记录或病人信息不一致！");
-            return new ReturnMsg(0, "没有记录或病人信息不一致！");
-        }
+//        sql = "select count(0) as cnt from f_k_ybxx " +
+//                "where ybid =? and brxm=? and brxb =? and bbzl=? and brbq=?";
+//        log.info(sql);
+//        Long count = lisJdbcTemplate.queryForObject(sql, new Object[]{barcode, patientName, sex, sampleType, partientCode}, Long.class);
+//        if (count <= 0) {
+//            log.info("没有记录或病人信息不一致！");
+//            return new ReturnMsg(0, "没有记录或病人信息不一致！");
+//        }
 
-        if(info.getSampleInfo().getBarcode().indexOf("A12006")>=0){
-            //保存信息至新LIS系统
-            msg = saveNewLisTestResult(info);
-        }else {
-            if (info.getReportType() == 0) {
-                //普通培养报告
-                msg = saveTestResult1(info);
-            } else {
-                //真菌D、内毒素报告
-                msg = saveTestResult2(info);
-            }
+        //保存结果至新LIS系统
+//        if(info.getSampleInfo().getBarcode().indexOf("A12006")>=0){
+//            saveNewLisTestResult(info);
+//        }
+
+        if (info.getReportType() == 0) {
+            //普通培养报告
+            msg = saveTestResult1(info);
+        } else {
+            //真菌D、内毒素报告
+            msg = saveTestResult2(info);
         }
+//        if(info.getSampleInfo().getBarcode().indexOf("A12006")>=0){
+//            //保存信息至新LIS系统
+//            msg = saveNewLisTestResult(info);
+//        }else {
+//
+//        }
         return msg;
     }
 
@@ -452,10 +458,11 @@ public class LisInfoDao extends BaseDao {
     private ReturnMsg saveTestResult1(Report report) throws Exception {
         final SampleInfo sampleInfo = report.getSampleInfo();
         final int sex = (sampleInfo.getSex().equals("女")) ? 2 : 1;
-
+        log.info(report);
         //获取医院(客户名称)
         String custCode = sampleInfo.getBarcode().length() > 6 ? sampleInfo.getBarcode().substring(0, 6) : "";
         final String custName = lisJdbcTemplate.queryForObject("select mc from xt_yymc_print where dh=?", new Object[]{custCode}, String.class);
+
 
         String sql = "insert into xj_ybxx(byh,ybbh,cdrq,brxm,brxb," +
                 "brnl,nllx,brch,bbzl,cyrq,lczd,sjys,jyys,shys,jymd" +
@@ -470,17 +477,28 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(4, sampleInfo.getPatientName());       //病人姓名
                 ps.setInt(5, sex);                                  //病人性别
                 ps.setString(6, Util.null2String(sampleInfo.getAge()));               //年龄
-                ps.setString(7, Util.null2String(sampleInfo.getAgeType()));           //年龄类型
+
+                String agetType =  Util.null2String(sampleInfo.getAgeType());
+                int iType = 0 ;
+                if(agetType.equals("岁")){
+                    iType = 1;
+                }else {
+                    iType=0;
+                }
+                ps.setInt(7,iType);           //年龄类型
                 ps.setString(8, Util.null2String(sampleInfo.getBedNo()));             //病人床号
                 ps.setString(9, Util.null2String((sampleInfo.getSampleType())));        //标本类型
-                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //接收时间
+//                System.out.print(Util.getFormatDate(sampleInfo.getSamplingTime(),""));
+//
+//                System.out.println(sampleInfo.getSamplingTime());
+                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //接收时间
                 ps.setString(11, Util.null2String(sampleInfo.getClinicalDiagnosis())); //临床诊断
                 ps.setString(12, Util.null2String(sampleInfo.getInspectDoctor()));     //送检医生
                 ps.setString(13, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
                 ps.setString(14, Util.null2String(sampleInfo.getAuditDoctor()));       //审核医生
                 ps.setString(15, Util.null2String(sampleInfo.getTestDestinationNo()));   //检验目的编号
                 ps.setString(16, Util.null2String(sampleInfo.getTestDestinationName()));  //检验目的
-                ps.setTimestamp(17, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime()));       //报告日期
+                ps.setTimestamp(17, new java.sql.Timestamp(sampleInfo.getOperateTime().getTime()));       //报告日期
                 ps.setString(18, Util.null2String(sampleInfo.getPatientCode()));       //住院号
                 ps.setString(19, Util.null2String(sampleInfo.getBillDepartment()));    //开单科室
                 ps.setString(20, Util.null2String(sampleInfo.getPatientPhone()));      //病人电话
@@ -489,7 +507,7 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(23, "d");                              //样本状态(初审)
                 ps.setString(24, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setString(25, "外观正常");                       //标本外观
-                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime())); //采样时间
+                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime())); //采样时间
             }
         });
 
@@ -502,7 +520,7 @@ public class LisInfoDao extends BaseDao {
                     ps.setString(1, sampleInfo.getSampleId());              //样本号
                     ps.setString(2, testResult.getResultType());            //结果类型
                     ps.setInt(3, testResult.getResultTypeId());             //结果类型序号
-                    ps.setString(4, testResult.getResult());                //结果
+                    ps.setString(4, testResult.getResult()+testResult.getCount());                //结果
                     ps.setString(5, testResult.getCount());                 //菌量计数
                     // ps.setString(5, results.get(i).getDrugResistance());  //耐药标志
                     ps.addBatch();
@@ -550,6 +568,7 @@ public class LisInfoDao extends BaseDao {
      */
     @Transactional(rollbackFor = Exception.class)
     private ReturnMsg saveTestResult2(Report report) throws Exception {
+        log.info(report);
         String sql = "insert into lis_ybxx(yqdh,ybid,ybbh,byh,cdrq,brxm,brxb," +
                 "brnl,nllx,brkb,brch,bbzl,cyrq,lczd,sjys,jyys,shys,jymd" +
                 ",jymdmc,bgrq,brbq,khks,brphone,papersize,bingrenlb,ybzt,cjtime) " +
@@ -1052,6 +1071,37 @@ public class LisInfoDao extends BaseDao {
         this.lisJdbcTemplate.update(sql);
 
         return new ReturnMsg(1, "保存成功");
+    }
+
+    /**
+     * 获取输血相关检验结果
+     * @param patientCode
+     * @return
+     */
+    public  List<BloodTestResult>getTestResult(String patientCode,String patientId){
+        List<BloodTestResult> bloodTestResults = new ArrayList<BloodTestResult>();
+        String sql = "select *  from  vw_bloodTestResult where 1=1 ";
+        if(patientCode != null && !patientCode.isEmpty()){
+            sql += " and patientBlh ='"+ patientCode+"'";
+        }
+        if(patientId != null && !patientId.isEmpty()){
+            sql += " and patientid ='"+ patientId+"'";
+        }
+        bloodTestResults = newLisJdbcTemplate.query(sql,
+                new RowMapper<BloodTestResult>() {
+                    public BloodTestResult mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        BloodTestResult bloodTestResult = new BloodTestResult();
+                        bloodTestResult.setPatientId(Util.null2String(rs.getString("patientid")));
+                        bloodTestResult.setPatientCode(Util.null2String(rs.getString("patientBlh")));
+                        bloodTestResult.setTestItemCode(Util.null2String(rs.getString("test_item_id")));
+                        bloodTestResult.setTestItemName(Util.null2String(rs.getString("testname")));
+                        bloodTestResult.setSampleNo(Util.null2String(rs.getString("sampleno")));
+                        bloodTestResult.setResult(Util.null2String(rs.getString("testresult")));
+                        bloodTestResult.setTestTime(rs.getTimestamp("measuretime"));
+                        return bloodTestResult;
+                    }
+                });
+        return bloodTestResults;
     }
 }
 

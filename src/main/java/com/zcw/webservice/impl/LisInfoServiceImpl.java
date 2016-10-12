@@ -11,6 +11,7 @@ import com.zcw.webservice.model.his.RequestUpdateParam;
 import com.zcw.webservice.model.lis.InspectionItem;
 import com.zcw.webservice.model.lis.PdaSampleInfo;
 import com.zcw.webservice.model.lis.SampleLog;
+import com.zcw.webservice.model.vo.BloodTestResult;
 import com.zcw.webservice.model.vo.InspectionVo;
 import com.zcw.webservice.model.vo.Report;
 import com.zcw.webservice.model.vo.ReturnMsg;
@@ -586,6 +587,20 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         try {
             msg.setState(1);
             msg.setMessage(lisInfoDao.getPdaInfo());
+        } catch (Exception e) {
+            log.error("获取信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
+
+    public  String getTestResult(String patientCode, String patientId){
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(lisInfoDao.getTestResult(patientCode,patientId));
         } catch (Exception e) {
             log.error("获取信息异常",e);
             msg.setState(0);

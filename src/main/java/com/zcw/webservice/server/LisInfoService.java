@@ -376,4 +376,15 @@ public interface LisInfoService {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML,MediaType.TEXT_HTML })
     @Path(value = "/updatePdaStatus")
     String updatePdaStatus(String ids);
+
+    /**
+     * 获取PDA 采集送出时间相关信息
+     * @return
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getTestResult")
+    String getTestResult(@QueryParam("patientCode") @DefaultValue("") String patientCode,
+                         @QueryParam("patientId") @DefaultValue("") String patientId);
+
 }

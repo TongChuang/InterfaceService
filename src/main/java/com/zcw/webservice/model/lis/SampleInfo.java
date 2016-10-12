@@ -5,6 +5,8 @@
 package com.zcw.webservice.model.lis;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zcw.webservice.common.JsonDateFormateFull;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -32,6 +34,7 @@ public class SampleInfo  implements Serializable {
     private String patientId;           //就诊卡号（唯一号、病历号会重复）
 
     @JSONField(name = "TestDateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     private Date testDateTime;          //测定日期
 
     @JSONField(name = "PatientName")
@@ -65,6 +68,7 @@ public class SampleInfo  implements Serializable {
     private String sampleStatus;        //标本状态
 
     @JSONField(name = "SamplingTime",format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     private Date samplingTime;          //采样时间
 
     @JSONField(name = "ClinicalDiagnosis")
@@ -95,6 +99,7 @@ public class SampleInfo  implements Serializable {
     private String operator;            //操作人
 
     @JSONField(name = "OperateTime",format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     private Date operateTime;           //操作时间
 
     @JSONField(name = "AuditDoctorCode")
@@ -104,6 +109,7 @@ public class SampleInfo  implements Serializable {
     private String auditDoctor;         //审核医生
 
     @JSONField(name = "AuditTime",format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     private Date auditTime;             //审核时间
 
     @JSONField(name = "ReportDoctorCode")
@@ -113,6 +119,7 @@ public class SampleInfo  implements Serializable {
     private String reportDoctor;        //报告医生
 
     @JSONField(name ="ReportDateTime" ,format="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonSerialize(using = JsonDateFormateFull.class)
     private Date reportDateTime;        //报告日期
 
     @JSONField(name = "TestDestinationNo")
