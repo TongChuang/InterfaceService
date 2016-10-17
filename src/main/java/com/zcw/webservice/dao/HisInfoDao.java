@@ -713,6 +713,7 @@ public class HisInfoDao extends BaseDao {
                         hospitalUser.setId(Util.null2String(rs.getString("ZZZGID")));
                         hospitalUser.setWorkId(Util.null2String(rs.getString("ZZZGGH")));
                         hospitalUser.setName(Util.null2String(rs.getString("ZZZGXM")));
+                        hospitalUser.setPhone(Util.null2String(rs.getString("ZZZGXM")));
                         return hospitalUser;
                     }
                 });

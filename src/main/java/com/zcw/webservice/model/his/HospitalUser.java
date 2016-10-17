@@ -21,6 +21,9 @@ public class HospitalUser implements Serializable {
     @JSONField(name = "Name")
     private String name;        //名姓名
 
+    @JSONField(name = "Phone")
+    private String phone;       //电话
+
     public String getId() {
         return id;
     }
@@ -43,5 +46,13 @@ public class HospitalUser implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
