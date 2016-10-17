@@ -187,7 +187,9 @@ public class LisInfoDao extends BaseDao {
 //                        testInfo.setChargeTypeCode(Util.null2String(rs.getString("ChargeTypeCode")));
 //                        testInfo.setChargeTypeName(Util.null2String(rs.getString("ChargeTypeName")));
                         testInfo.setDiagnosis(Util.null2String(rs.getString("diagnostic")));
-                        testInfo.setSignDate(Util.null2String(rs.getString("receivetime")));
+                        String receiveTime = Util.null2String(rs.getString("receivetime"));
+                        String printTime = Util.null2String(rs.getString("printtime"));
+                        testInfo.setSignDate(receiveTime.equals("")?printTime:receiveTime);
                         testInfo.setSignerAccount(Util.null2String(rs.getString("receiver")));
                         String tmpItemCode = Util.null2String(rs.getString("YLXH"));
                         String inspectionName = Util.null2String(rs.getString("InspectionName"));
@@ -591,7 +593,15 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(6, sampleInfo.getPatientName());                                   //病人姓名
                 ps.setInt(7, sex);                                                              //病人性别
                 ps.setObject(8, sampleInfo.getAge());                                           //年龄
-                ps.setObject(9, sampleInfo.getAgeType());                                       //年龄类型
+                String agetType =  Util.null2String(sampleInfo.getAgeType());
+                int iType = 0 ;
+                if(agetType.equals("岁")){
+                    iType = 1;
+                }else {
+                    iType=0;
+                }
+                ps.setInt(9,iType);           //年龄类型
+
                 ps.setString(10, "外观正常");                                                   //标本性状
                 ps.setObject(11, sampleInfo.getBedNo());                                         //病人床号
                 ps.setObject(12, sampleInfo.getSampleTypeCode());                               //标本类型
@@ -767,8 +777,11 @@ public class LisInfoDao extends BaseDao {
         } else if (reportType == 1) {
             sql = "select ybzt from lis_ybxx where ybid = ? and ybbh = ?";
         }
-        String status = lisJdbcTemplate.queryForObject(sql, new Object[]{barcode, sampleNo}, String.class);
-        if (status != null && !status.isEmpty()) {
+        String status = Util.null2String(lisJdbcTemplate.queryForObject(sql, new Object[]{barcode, sampleNo}, String.class));
+
+        if(status==null || status.isEmpty()){
+            return new ReturnMsg(0, "报告记录不存在，不允许删除");
+        }else if (status != null && !status.isEmpty()) {
             if (status.equals("p") || status.equals("s")) {
                 return new ReturnMsg(0, "样本已审核或打印，不允许删除");
             }
