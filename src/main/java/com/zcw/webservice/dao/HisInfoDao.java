@@ -286,7 +286,7 @@ public class HisInfoDao extends BaseDao {
                         ps.setString(8, item.getBillingDoctorNo());                                 //开单医生序号
                         ps.setString(9, item.getBillingDeptNo());                                      //开单科室序号
                         ps.setString(10, item.getTestDoctorNo());                                //执行用户序号
-                        ps.setString(11, "21");                                     //执行科室序号
+                        ps.setString(11, item.getTestDoctorDeptNo());                                     //执行科室序号
                         ps.setString(12, item.getOperatorNo());                                //操作用户序号
                         if (item.getQuantity() < 0) {
                             ps.setLong(13, item.getAccountId());                                //操作用户序号
