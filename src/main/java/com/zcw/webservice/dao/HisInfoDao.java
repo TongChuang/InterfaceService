@@ -485,7 +485,7 @@ public class HisInfoDao extends BaseDao {
                         info.setRequestDoctor(Util.null2String(rs.getString("KDYSID")));
                         info.setRequestDoctorName(Util.null2String(rs.getString("KDYSXM")));
                         info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
-                        info.setRequestDepartmentName(Util.null2String(rs.getString("")));
+                        info.setRequestDepartmentName(Util.null2String(rs.getString("KDKDMC")));
                         info.setRequestDateTime(rs.getTimestamp("SQKDRQ"));
                         info.setItemCode(Util.null2String(rs.getString("JCXMID")));
                         info.setItemName(Util.null2String(rs.getString("JCXMMC")));
@@ -704,6 +704,7 @@ public class HisInfoDao extends BaseDao {
                         hospitalUser.setId(Util.null2String(rs.getString("ZZZGID")));
                         hospitalUser.setWorkId(Util.null2String(rs.getString("ZZZGGH")));
                         hospitalUser.setName(Util.null2String(rs.getString("ZZZGXM")));
+                        hospitalUser.setPhone(Util.null2String(rs.getString("ZZZGXM")));
                         return hospitalUser;
                     }
                 });
