@@ -506,39 +506,28 @@ public class HisInfoDao extends BaseDao {
         return patientRequestInfoList;
     }
 
-    public List<PatientRequestInfo> getExaminationRequestInfo(int requestType, String requestId, String requestDetailId, String testItemId, int executeStatus, String patientId, String fromDate, String toDate)throws Exception {
+    public List<PatientRequestInfo> getExaminationRequestInfo(String barcode, String patientId, String fromDate, String toDate)throws Exception {
         List<PatientRequestInfo> patientRequestInfoList = null;
-        String sql = "select * from V_HSBTJ_REQUESTINFO where BRSQHM =? and SQZTBZ=? ";
+        String sql = "select * from V_HSBTJ_REQUESTINFO where 1=1 ";
+
         List<Object> parms = new ArrayList<Object>();
-        parms.add(requestType);
-        if (requestType == 2) {
-            executeStatus = 0;
+        if (barcode != null && !barcode.isEmpty()) {
+            sql += " and BRSQHM=?";
+            parms.add(barcode);
         }
-        parms.add(executeStatus);
         if (patientId != null && !patientId.isEmpty()) {
-            sql += " and BRJZHM=?";
+            sql += " and TIJIANBM=?";
             parms.add(patientId);
         }
         if (!fromDate.isEmpty()) {
             fromDate += " 00:00:00";
-            sql += " and SQKDRQ>=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
+            sql += " and TIJIANRQ >= to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(fromDate);
         }
         if (!toDate.isEmpty()) {
             toDate += " 23:59:59";
-            sql += "and SQKDRQ<=to_date(?,'yyyy-MM-dd hh24:mi:ss')";
+            sql += "and TIJIANRQ <= to_date(?,'yyyy-MM-dd hh24:mi:ss')";
             parms.add(toDate);
-        }
-        if (!requestId.isEmpty()) {
-            sql += "and SQJLID=?";
-            parms.add(requestId);
-        }
-        if (!testItemId.isEmpty()) {
-            sql += "and JCXMID=?";
-            parms.add(testItemId);
-        }
-        if (!requestDetailId.isEmpty()) {
-            sql += "and SQMXID in (" + requestDetailId + ")";
         }
 
         patientRequestInfoList = hisJdbcTemplate.query(sql, parms.toArray(),
@@ -550,34 +539,36 @@ public class HisInfoDao extends BaseDao {
                         info.setPatientCode(Util.null2String(rs.getString("TIJIANBM")));
                         info.setPatientId(Util.null2String(rs.getString("TIJIANBM")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
-                        info.setName(Util.null2String(rs.getString("BRDAXM")));
-                        info.setSex("" + Util.getIntValue(rs.getString("BRDAXB"), 3));
-                        info.setBirthday(Util.null2String(rs.getDate("BRCSRQ")));
+                        info.setName(Util.null2String(rs.getString("XINGMING")));
+                        info.setSex("" + Util.getIntValue(rs.getString("XINGBIE"), 3));
+                        info.setBirthday(Util.null2String(rs.getDate("CHUSHENGRQ")));
                         //info.setDepartment(Util.null2String(rs.getString("DQKSID")));
-                        info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
-                        info.setRequestType(Util.null2String(rs.getString("BRSQLX")));
+                        //info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
+                        info.setRequestType("4");   //体检
                         //info.setRequestItemType(Util.null2String(rs.getString("SQXMLX")));
-                        info.setRequestDoctor(Util.null2String(rs.getString("KDYSID")));
-                        info.setRequestDoctorName(Util.null2String(rs.getString("KDYSXM")));
-                        info.setRequestDepartment(Util.null2String(rs.getString("KDKSID")));
-                        info.setRequestDepartmentName(Util.null2String(rs.getString("")));
-                        info.setRequestDateTime(rs.getTimestamp("SQKDRQ"));
-                        info.setItemCode(Util.null2String(rs.getString("JCXMID")));
-                        info.setItemName(Util.null2String(rs.getString("JCXMMC")));
-                        info.setItemPrintName(Util.null2String(rs.getString("XMDYMC")));
-                        info.setQuantity(Util.getIntValue(rs.getString("XMSQSL")));
-                        info.setStatus(Util.getIntValue(rs.getString("SQZTBZ")));
-                        info.setTestDept(Util.null2String(rs.getString("ZXKSID")));
-                        info.setEmergency(Util.getIntValue(rs.getString("SFJZPB")));
-                        info.setAmount((rs.getFloat("FYHJJE")));
-                        info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
-                        info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
-                        info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
-                        info.setAge(Util.null2String(rs.getString("BRJZNL")));
-                        info.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
+                        info.setRequestDoctor(Util.null2String(rs.getString("SONGJIANYSGH")));
+                        info.setRequestDoctorName(Util.null2String(rs.getString("SONGJIANYSGH")));
+                        info.setRequestDepartment(Util.null2String(rs.getString("SONGJIANKSDM")));
+                        info.setRequestDepartmentName(Util.null2String(rs.getString("SONGJIANKSMC")));
+                        info.setRequestDateTime(rs.getTimestamp("TIJIANRQ"));
+                        info.setItemCode(Util.null2String(rs.getString("YLXH")));
+                        info.setItemName(Util.null2String(rs.getString("ZUHEXMMC")));
+                        //info.setItemPrintName(Util.null2String(rs.getString("XMDYMC")));
+                        info.setQuantity(1);
+                        info.setStatus(Util.getIntValue(rs.getString("TIJIANDZT")));
+//                        info.setTestDept(Util.null2String(rs.getString("ZXKSID")));
+//                        info.setEmergency(Util.getIntValue(rs.getString("SFJZPB")));
+                        info.setAmount((rs.getFloat("DANJIA")));
+                        //info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
+                        //info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
+                        //info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
+//                        info.setAge(Util.null2String(rs.getString("BRJZNL")));
+//                        info.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
                         return info;
                     }
                 });
+
+
         return patientRequestInfoList;
     }
     @Transactional(rollbackFor = Exception.class)

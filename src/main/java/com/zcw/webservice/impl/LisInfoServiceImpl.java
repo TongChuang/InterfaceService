@@ -343,10 +343,10 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
      */
     public String saveSampleFlowLog(SampleLog sampleLog) {
         log.info("saveSampleFlowLog================================START");
-        log.info(JSON.toJSONString(sampleLog));
         //{"OperatorName":"邵晓丽","OperatorNo":"77008","RecordTime":"2016-08-17 19:37:25","Remark":"入库打印条码","SampleNo":"A12008812374","SysName":"微生物系统"}
         ReturnMsg msg = new ReturnMsg();
         try{
+            log.info(JSON.toJSONString(sampleLog));
             msg = lisInfoDao.saveSampleFlowLog(sampleLog);
         }catch (Exception e){
             e.printStackTrace();
@@ -380,7 +380,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         ReturnMsg msg = new ReturnMsg();
         log.info("requestUpdate================================START");
         try{
-            log.info(param);
+            log.info(JSON.toJSONString(param));
             msg = hisInfoDao.requestUpdate(param);
         }catch (Exception e){
             e.printStackTrace();
@@ -403,6 +403,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         //System.out.println(JSON.toJSONString(accountItem));
         ReturnMsg msg = new ReturnMsg();
         try{
+            log.info(JSON.toJSONString(accountItem));
             msg = hisInfoDao.saveBooking(accountItem);
         }catch (Exception e){
             e.printStackTrace();
@@ -464,6 +465,28 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         return JSON.toJSONString(msg,filter);
     }
 
+    /**
+     * 住院病人申请信息获取
+     * @param barcode
+     * @param patientId
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    public String  getExaminationRequestInfo(String barcode, String patientId, String fromDate, String toDate) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(hisInfoDao.getExaminationRequestInfo(barcode, patientId, fromDate,toDate));
+        } catch (Exception e) {
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        log.info(JSON.toJSONString(msg,filter));
+        return JSON.toJSONString(msg,filter);
+    }
+
     @Override
     public String returnReport(int reportType,
                                String barcode,
@@ -516,6 +539,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         log.info("saveHisResult================================START");
         ReturnMsg msg = new ReturnMsg();
         try{
+            log.info(JSON.toJSONString(info));
             msg = hisInfoDao.saveHisResult(info);
         }catch (Exception e){
             e.printStackTrace();
@@ -539,6 +563,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         log.info("saveLisResult================================START");
         ReturnMsg msg = new ReturnMsg();
         try{
+            log.info(JSON.toJSONString(info));
             msg = lisInfoDao.saveLisResult(info);
         }catch (Exception e){
             e.printStackTrace();
@@ -555,6 +580,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         log.info("savePdaInfo================================START");
         ReturnMsg msg = new ReturnMsg();
         try{
+            log.info(JSON.toJSONString(info));
             msg = lisInfoDao.savePdaInfo(info);
         }catch (Exception e){
             e.printStackTrace();
@@ -570,6 +596,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         log.info("savePdaInfo================================START");
         ReturnMsg msg = new ReturnMsg();
         try{
+            log.info(JSON.toJSONString(ids));
             msg = lisInfoDao.updatePdaStatus(ids);
         }catch (Exception e){
             e.printStackTrace();

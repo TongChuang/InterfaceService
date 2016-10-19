@@ -282,6 +282,24 @@ public interface LisInfoService {
                                     @QueryParam("patientCode")String patientCode,
                                     @QueryParam("fromDate")@DefaultValue("")String fromDate,
                                     @QueryParam("toDate")@DefaultValue("")String toDate);
+
+
+    /**
+     * 体检申请信息查询
+     * @param barcode         条码号
+     * @param patientId      体检病人编号
+     * @param fromDate       开始时间
+     * @param toDate        截止时间
+     * @return
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getExaminationRequestInfo")
+    String getExaminationRequestInfo(@QueryParam("barcode") @DefaultValue("") String barcode,
+                                    @QueryParam("patientId") @DefaultValue("") String patientId,
+                                    @QueryParam("fromDate") @DefaultValue("") String fromDate,
+                                    @QueryParam("toDate") @DefaultValue("")String toDate);
+
     /**
      * 报告撤回
      * @param barcode        标本信息
