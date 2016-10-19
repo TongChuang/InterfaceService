@@ -284,7 +284,7 @@ public class HisInfoDao extends BaseDao {
                         ps.setTimestamp(6, new java.sql.Timestamp(item.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
                         ps.setInt(7, item.getQuantity());                    //费用发生数量
                         ps.setString(8, item.getBillingDoctorNo());                                 //开单医生序号
-                        ps.setString(9, "21");                                      //开单科室序号
+                        ps.setString(9, item.getBillingDeptNo());                                      //开单科室序号
                         ps.setString(10, item.getTestDoctorNo());                                //执行用户序号
                         ps.setString(11, "21");                                     //执行科室序号
                         ps.setString(12, item.getOperatorNo());                                //操作用户序号
