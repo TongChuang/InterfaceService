@@ -182,7 +182,8 @@ public class LisInfoDao extends BaseDao {
                         testInfo.setSpecimenTypeCode(Util.null2String(rs.getString("sampletype")));
                         testInfo.setSpecimenTypeName(Util.null2String(rs.getString("SpecimenTypeName")));
                         testInfo.setApplyDate(Util.null2String(rs.getString("requesttime")));
-                        testInfo.setCollectDate(Util.null2String(rs.getString("executetime")));
+                        String executeTime=Util.null2String(Util.null2String(rs.getString("executetime"))).isEmpty()?Util.null2String(rs.getString("printtime")):Util.null2String(rs.getString("executetime"));
+                        testInfo.setCollectDate(executeTime);
                         testInfo.setCollectAccount(Util.null2String(rs.getString("executor")));
 //                        testInfo.setChargeTypeCode(Util.null2String(rs.getString("ChargeTypeCode")));
 //                        testInfo.setChargeTypeName(Util.null2String(rs.getString("ChargeTypeName")));
@@ -1049,7 +1050,7 @@ public class LisInfoDao extends BaseDao {
         List<PdaSampleInfo> pdaSampleInfoList = new ArrayList<PdaSampleInfo>();
         String sql = "select inspectionid,execute_time,execute_name,send_time,send_name " +
                 " from T_Sample_Trans_Time where (flag is null or flag=0) " +
-                " and InspectionId like 'A12006%' and Send_Time is not null ";
+                " and InspectionId like 'A12006%'";
         pdaSampleInfoList = lisJdbcTemplate.query(sql,
                 new RowMapper<PdaSampleInfo>() {
                     public PdaSampleInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -1111,6 +1112,8 @@ public class LisInfoDao extends BaseDao {
                         bloodTestResult.setSampleNo(Util.null2String(rs.getString("sampleno")));
                         bloodTestResult.setResult(Util.null2String(rs.getString("testresult")));
                         bloodTestResult.setTestTime(rs.getTimestamp("measuretime"));
+                        bloodTestResult.setTestId(Util.null2String(rs.getString("ylxh")));
+                        bloodTestResult.setTestName(Util.null2String(rs.getString("inspectionname")));
                         return bloodTestResult;
                     }
                 });

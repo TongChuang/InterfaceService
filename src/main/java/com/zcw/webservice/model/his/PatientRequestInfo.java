@@ -44,7 +44,7 @@ public class PatientRequestInfo implements Serializable{
     private String sampleType;              //标本类型
     private String testPart;                //检查部位名称
     private String patientFileCode;         //病人档案号
-
+    private String specialFlag;             //特殊病人标志
     public Long getRequestId() {
         return requestId;
     }
@@ -307,5 +307,13 @@ public class PatientRequestInfo implements Serializable{
 
     public void setAgeUnit(String ageUnit) {
         this.ageUnit = ageUnit;
+    }
+
+    public String getSpecialFlag() {
+        return specialFlag;
+    }
+
+    public void setSpecialFlag(String specialFlag) {
+        this.specialFlag = specialFlag;
     }
 }

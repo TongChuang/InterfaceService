@@ -284,9 +284,13 @@ public class HisInfoDao extends BaseDao {
                         ps.setTimestamp(6, new java.sql.Timestamp(item.getDateTime().getTime()));   //费用发生日期 日期 yyyy-mm-dd hh24:mi:ss
                         ps.setInt(7, item.getQuantity());                    //费用发生数量
                         ps.setString(8, item.getBillingDoctorNo());                                 //开单医生序号
-                        ps.setString(9, item.getBillingDeptNo());                                      //开单科室序号
+                        String billDept = Util.null2String(item.getBillingDeptNo());
+                        String testDept = Util.null2String(item.getTestDoctorDeptNo());
+                        billDept = billDept.isEmpty()?"21":billDept;
+                        testDept = testDept.isEmpty()?"21":testDept;
+                        ps.setString(9, billDept);                                      //开单科室序号
                         ps.setString(10, item.getTestDoctorNo());                                //执行用户序号
-                        ps.setString(11, item.getTestDoctorDeptNo());                                     //执行科室序号
+                        ps.setString(11, testDept);                                     //执行科室序号
                         ps.setString(12, item.getOperatorNo());                                //操作用户序号
                         if (item.getQuantity() < 0) {
                             ps.setLong(13, item.getAccountId());                                //操作用户序号
@@ -359,7 +363,11 @@ public class HisInfoDao extends BaseDao {
      * @return
      * @throws Exception
      */
-    public List<PatientRequestInfo> getInPatientRequestInfo(int requestType, int executeStatus, String ward, String bedNo, String patientId) throws Exception {
+    public List<PatientRequestInfo> getInPatientRequestInfo(int requestType,
+                                                            int executeStatus,
+                                                            String ward,
+                                                            String bedNo,
+                                                            String patientId) throws Exception {
         List<PatientRequestInfo> patientRequestInfoList = null;
         String sql = "select * from V_HSBDI_REQUESTINFO where SFDYPB <> 1 AND BRSQLX =?  and DQBQID=?  and SQZTBZ=? ";
         List<Object> parms = new ArrayList<Object>();
@@ -498,8 +506,9 @@ public class HisInfoDao extends BaseDao {
                         info.setTestPart(Util.null2String(rs.getString("ZLBWMC")));
                         info.setPatientFileCode(Util.null2String(rs.getString("BRDABH")));
                         info.setSampleType(Util.null2String(rs.getString("YBLXMC")));
-                        info.setAge(Util.null2String(rs.getString("BRJZNL")));
+                        info.setAge(""+Util.getIntValue(rs.getString("BRJZNL"),0));
                         info.setAgeUnit(Util.null2String(rs.getString("BRNLDW")));
+                        info.setSpecialFlag(Util.null2String(rs.getString("TSBRPB")));
                         return info;
                     }
                 });

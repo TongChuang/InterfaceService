@@ -36,6 +36,9 @@ public class BloodTestResult implements Serializable {
     @JSONField(name = "TestTime",format = "yyyy-MM-dd hh:mm:ss")
     private Date testTime;
 
+    private String testId;
+    private String testName;
+
     public String getTestItemCode() {
         return testItemCode;
     }
@@ -98,5 +101,21 @@ public class BloodTestResult implements Serializable {
 
     public void setSampleNo(String sampleNo) {
         this.sampleNo = sampleNo;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public void setTestName(String testName) {
+        this.testName = testName;
     }
 }
