@@ -553,7 +553,7 @@ public class HisInfoDao extends BaseDao {
                         info.setBirthday(Util.null2String(rs.getDate("CHUSHENGRQ")));
                         //info.setDepartment(Util.null2String(rs.getString("DQKSID")));
                         //info.setDiagnose(Util.null2String(rs.getString("JBZDMC")));
-                        info.setRequestType("4");   //体检
+                        info.setRequestType("3");   //体检
                         //info.setRequestItemType(Util.null2String(rs.getString("SQXMLX")));
                         info.setRequestDoctor(Util.null2String(rs.getString("SONGJIANYSGH")));
                         info.setRequestDoctorName(Util.null2String(rs.getString("SONGJIANYSGH")));
