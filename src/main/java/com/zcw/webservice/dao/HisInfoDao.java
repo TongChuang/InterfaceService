@@ -225,8 +225,8 @@ public class HisInfoDao extends BaseDao {
                 new RowMapper<Patient>() {
                     public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Patient patient = new Patient();
-                        patient.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
-                        patient.setPatientId(Util.null2String(rs.getString("BRJZXH")));
+                        patient.setPatientCode(Util.null2String(rs.getString("BRJZXH")));
+                        patient.setPatientId(Util.null2String(rs.getString("BRJZHM")));
                         patient.setChargeType(Util.null2String(rs.getString("BRLBID")));
                         patient.setName(Util.null2String(rs.getString("BRDAXM")));
                         patient.setSex(Util.null2String(rs.getString("BRDAXB")));
