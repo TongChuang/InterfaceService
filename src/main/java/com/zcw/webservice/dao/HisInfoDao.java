@@ -611,7 +611,7 @@ public class HisInfoDao extends BaseDao {
                 ps.setString(3, Util.null2String(sampleInfo.getOrganizationId()));          //组织机构ID
                 ps.setInt(4, sampleInfo.getPatientType());          //病人类型
                 ps.setString(5, Util.null2String(sampleInfo.getPatientId()));          //病人ID
-                ps.setString(6, Util.null2String(sampleInfo.getPatientCode()));          //病人档案ID
+                ps.setString(6, sampleInfo.getPatientType() == 3 ? "" : Util.null2String(sampleInfo.getPatientCode()));          //病人档案ID
                 ps.setString(7, Util.null2String(sampleInfo.getPatientNo()));          //病人就诊号码：住院号、门诊号
                 ps.setString(8, Util.null2String(sampleInfo.getPatientName()));          //病人姓名
                 ps.setInt(9, sampleInfo.getSex());
