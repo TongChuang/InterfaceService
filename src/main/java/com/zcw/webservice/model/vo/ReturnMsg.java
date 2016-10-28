@@ -1,7 +1,6 @@
 package com.zcw.webservice.model.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import sun.util.cldr.CLDRLocaleDataMetaInfo;
 
 import java.io.Serializable;
 
