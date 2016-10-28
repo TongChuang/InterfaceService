@@ -7,6 +7,10 @@
 .settings/org.eclipse.wst.common.component
 .project
 *.container
+*.class
+*.jar
+*.log
+
 velocity.log
 *.1
 k101ffgk.5je.txt
@@ -14,5 +18,8 @@ lab.iml
 src/main/resources/applicationContext-resources.xml
 src/main/resources/applicationContext-resources.xml
 test/
+out/
+logs/
 .idea/
 lisservice.iml
+out/artifacts/lisservice_war_exploded/WEB-INF/logs/log.log.2

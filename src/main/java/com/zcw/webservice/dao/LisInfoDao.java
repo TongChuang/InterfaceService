@@ -476,25 +476,25 @@ public class LisInfoDao extends BaseDao {
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, Util.null2String(sampleInfo.getBarcode()));           //条码号
                 ps.setString(2, Util.null2String(sampleInfo.getSampleId()));          //样本ID
-                ps.setTimestamp(3, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
+                ps.setDate(3, new java.sql.Date(sampleInfo.getOperateTime().getTime()));      //测定日期
                 ps.setString(4, sampleInfo.getPatientName());       //病人姓名
                 ps.setInt(5, sex);                                  //病人性别
                 ps.setString(6, Util.null2String(sampleInfo.getAge()));               //年龄
 
-                String agetType =  Util.null2String(sampleInfo.getAgeType());
-                int iType = 0 ;
-                if(agetType.equals("岁")){
-                    iType = 1;
-                }else {
-                    iType=0;
-                }
-                ps.setInt(7,iType);           //年龄类型
+//                int agetType =  Util.getIntValue(sampleInfo.getAgeType(),0);
+//                int iType = 0 ;
+//                if(agetType<0){
+//                    iType = 1;
+//                }else {
+//                    iType=0;
+//                }
+                ps.setInt(7,Util.getIntValue(sampleInfo.getAgeType(),0));           //年龄类型
                 ps.setString(8, Util.null2String(sampleInfo.getBedNo()));             //病人床号
                 ps.setString(9, Util.null2String((sampleInfo.getSampleType())));        //标本类型
 //                System.out.print(Util.getFormatDate(sampleInfo.getSamplingTime(),""));
 //
 //                System.out.println(sampleInfo.getSamplingTime());
-                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //接收时间
+                ps.setTimestamp(10, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime())); //测验日期     //接收时间
                 ps.setString(11, Util.null2String(sampleInfo.getClinicalDiagnosis())); //临床诊断
                 ps.setString(12, Util.null2String(sampleInfo.getInspectDoctor()));     //送检医生
                 ps.setString(13, Util.null2String(sampleInfo.getTestDoctor()));        //检验医生
@@ -506,11 +506,11 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(19, Util.null2String(sampleInfo.getBillDepartment()));    //开单科室
                 ps.setString(20, Util.null2String(sampleInfo.getPatientPhone()));      //病人电话
                 ps.setString(21, "A5");                              //纸张大小
-                ps.setString(22, Util.null2String(sampleInfo.getPatientCode()));      //病人类别编号
+                ps.setString(22, Util.null2String(sampleInfo.getPatientTypeCode()));      //病人类别编号
                 ps.setString(23, "d");                              //样本状态(初审)
                 ps.setString(24, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setString(25, "外观正常");                       //标本外观
-                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime())); //采样时间
+                ps.setTimestamp(26, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime())); //采样时间
             }
         });
 
@@ -590,36 +590,36 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(2, sampleInfo.getBarcode());                                       //条码号
                 ps.setString(3, sampleInfo.getSampleId());                                       //样本ID
                 ps.setString(4, Util.null2String(custName));                         //客户名称(医院名称)
-                ps.setTimestamp(5, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));      //测定日期
+                ps.setDate(5, new java.sql.Date(sampleInfo.getOperateTime().getTime()));      //测定日期
                 ps.setString(6, sampleInfo.getPatientName());                                   //病人姓名
                 ps.setInt(7, sex);                                                              //病人性别
                 ps.setObject(8, sampleInfo.getAge());                                           //年龄
-                String agetType =  Util.null2String(sampleInfo.getAgeType());
-                int iType = 0 ;
-                if(agetType.equals("岁")){
-                    iType = 1;
-                }else {
-                    iType=0;
-                }
-                ps.setInt(9,iType);           //年龄类型
+//                String agetType =  Util.null2String(sampleInfo.getAgeType());
+//                int iType = 0 ;
+//                if(agetType.equals("岁")){
+//                    iType = 1;
+//                }else {
+//                    iType=0;
+//                }
+                ps.setInt(9,Util.getIntValue(sampleInfo.getAgeType(),0));           //年龄类型
 
                 ps.setString(10, "外观正常");                                                   //标本性状
                 ps.setObject(11, sampleInfo.getBedNo());                                         //病人床号
                 ps.setObject(12, sampleInfo.getSampleTypeCode());                               //标本类型
-                ps.setTimestamp(13, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime()));      //接收时间
+                ps.setTimestamp(13, new java.sql.Timestamp(sampleInfo.getTestDateTime().getTime()));  //接收时间
                 ps.setObject(14, sampleInfo.getClinicalDiagnosis());                            //临床诊断
                 ps.setObject(15, sampleInfo.getInspectDoctor());                                //送检医生
                 ps.setObject(16, sampleInfo.getTestDoctor());                                   //检验医生
                 ps.setObject(17, sampleInfo.getAuditDoctor());                                  //审核医生
                 ps.setObject(18, sampleInfo.getTestDestinationNo());                            //检验目的编号
                 ps.setObject(19, sampleInfo.getTestDestinationName());                          //检验目的
-                ps.setTimestamp(20, new java.sql.Timestamp(sampleInfo.getReportDateTime().getTime()));    //报告日期
+                ps.setTimestamp(20, new java.sql.Timestamp(sampleInfo.getOperateTime().getTime()));    //报告日期
                 ps.setObject(21, sampleInfo.getPatientCode());                                  //病人档案号
                 ps.setObject(22, sampleInfo.getBillDepartment());                               //开单科室
                 ps.setObject(23, sampleInfo.getPatientPhone());                                 //病人电话
                 //ps.setObject(22, sampleInfo.getCreateTime());                                 //创建日期
                 ps.setObject(24, "A5");
-                ps.setString(25, Util.null2String(sampleInfo.getPatientCode()));      //病人类别编号
+                ps.setString(25, Util.null2String(sampleInfo.getPatientTypeCode()));      //病人类别编号
                 ps.setString(26, "d");                              //样本状态(初审)
                 //ps.setString(27, "外观正常");                       //标本外观
                 ps.setTimestamp(27, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime())); //采样时间                              //样本状态(初审)
