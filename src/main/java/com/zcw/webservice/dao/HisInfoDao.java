@@ -480,8 +480,8 @@ public class HisInfoDao extends BaseDao {
                         PatientRequestInfo info = new PatientRequestInfo();
                         info.setRequestId(Util.getLongValue(rs.getString("SQJLID")));
                         info.setRequestDetailId(Util.getLongValue(rs.getString("SQMXID")));
-                        info.setPatientCode(Util.null2String(rs.getString("BRJZHM")));
-                        info.setPatientId(Util.null2String(rs.getString("BRJZXH")));
+                        info.setPatientCode(Util.null2String(rs.getString("BRJZXH")));
+                        info.setPatientId(Util.null2String(rs.getString("BRJZHM")));
                         info.setPatientRequestCode(Util.null2String(rs.getString("BRSQHM")));
                         info.setName(Util.null2String(rs.getString("BRDAXM")));
                         info.setSex("" + Util.getIntValue(rs.getString("BRDAXB"), 3));
