@@ -411,6 +411,7 @@ public class LisInfoDao extends BaseDao {
         String barcode = Util.null2String(info.getSampleInfo().getBarcode());               //条码号
         String sampleType = Util.null2String(info.getSampleInfo().getSampleTypeCode());        //样本类型
         String sexValue = Util.null2String(info.getSampleInfo().getSex());                      //性别
+
         int sex = (info.getSampleInfo().getSex().equals("女")) ? 2 : 1;
 
         String sql = "";
@@ -506,7 +507,10 @@ public class LisInfoDao extends BaseDao {
                 ps.setString(19, Util.null2String(sampleInfo.getBillDepartment()));    //开单科室
                 ps.setString(20, Util.null2String(sampleInfo.getPatientPhone()));      //病人电话
                 ps.setString(21, "A5");                              //纸张大小
-                ps.setString(22, Util.null2String(sampleInfo.getPatientTypeCode()));      //病人类别编号
+                String patientType = "";
+                if(Util.null2String(sampleInfo.getPatientTypeCode()).equals("1")) patientType ="2";
+                if(Util.null2String(sampleInfo.getPatientTypeCode()).equals("2")) patientType ="1";
+                ps.setString(22,patientType);      //病人类别编号
                 ps.setString(23, "d");                              //样本状态(初审)
                 ps.setString(24, Util.null2String(custName));                         //客户名称(医院名称)
                 ps.setString(25, "外观正常");                       //标本外观
@@ -619,7 +623,10 @@ public class LisInfoDao extends BaseDao {
                 ps.setObject(23, sampleInfo.getPatientPhone());                                 //病人电话
                 //ps.setObject(22, sampleInfo.getCreateTime());                                 //创建日期
                 ps.setObject(24, "A5");
-                ps.setString(25, Util.null2String(sampleInfo.getPatientTypeCode()));      //病人类别编号
+                String patientType = "";
+                if(Util.null2String(sampleInfo.getPatientTypeCode()).equals("1")) patientType ="2";
+                if(Util.null2String(sampleInfo.getPatientTypeCode()).equals("2")) patientType ="1";
+                ps.setString(25, patientType);      //病人类别编号
                 ps.setString(26, "d");                              //样本状态(初审)
                 //ps.setString(27, "外观正常");                       //标本外观
                 ps.setTimestamp(27, new java.sql.Timestamp(sampleInfo.getSamplingTime().getTime())); //采样时间                              //样本状态(初审)
