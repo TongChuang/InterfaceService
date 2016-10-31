@@ -38,7 +38,7 @@ public class LisInfoDao extends BaseDao {
     public List<TestInfo> getTestInfo(String barcode) throws Exception {
         if(barcode !=null && !barcode.isEmpty()){
 
-            if(barcode.indexOf("A12006")>=0){   //新LIS条码号
+            if(barcode.indexOf("A12006")>=0 || barcode.indexOf("A12001")>=0){   //新LIS条码号
                 return getNewLisTestInfo(barcode);
             }else {
                 return getOldTestInfo(barcode);
