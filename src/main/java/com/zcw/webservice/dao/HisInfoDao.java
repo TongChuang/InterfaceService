@@ -267,7 +267,7 @@ public class HisInfoDao extends BaseDao {
         String sql = "";
         //插入收费记录
         sql = "insert into II_INPATICHARGE(JZJLID,BRZYID,YPZLPB,FYXMID,FYTJID," +
-                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "FYFSRQ,FYFSSL,KDYSID,KDKSID,ZXYHID,ZXKSID,CZYHID,DYJZID,SYXMID)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             this.hisJdbcTemplate.execute(sql, new PreparedStatementCallback() {
                 public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -298,6 +298,7 @@ public class HisInfoDao extends BaseDao {
                             ps.setObject(13, null);
                             item.setAccountId(seqId);
                         }
+                        ps.setLong(14,item.getFitItemId());
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();

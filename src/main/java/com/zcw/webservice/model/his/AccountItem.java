@@ -85,7 +85,8 @@ public class AccountItem  implements Serializable {
     private String operatorNo;	    //操作用户序号
     @JSONField(name = "AccountId")
     private Long accountId;         //记账序号
-
+    @JSONField(name = "FitItemId")
+    private Long fitItemId;         //适应项目序号
     public String getPatientId() {
         return patientId;
     }
@@ -330,5 +331,13 @@ public class AccountItem  implements Serializable {
 
     public void setFeeItemName(String feeItemName) {
         this.feeItemName = feeItemName;
+    }
+
+    public Long getFitItemId() {
+        return fitItemId;
+    }
+
+    public void setFitItemId(Long fitItemId) {
+        this.fitItemId = fitItemId;
     }
 }
