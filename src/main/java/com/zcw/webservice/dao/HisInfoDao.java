@@ -298,7 +298,7 @@ public class HisInfoDao extends BaseDao {
                             ps.setObject(13, null);
                             item.setAccountId(seqId);
                         }
-                        ps.setLong(14,item.getFitItemId());
+                        ps.setLong(14,Util.getLongValue(""+item.getFitItemId(),0l));
                         ps.addBatch();
                     }
                     Object o = ps.executeBatch();
