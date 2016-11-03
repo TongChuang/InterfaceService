@@ -705,20 +705,39 @@ public class HisInfoDao extends BaseDao {
     public List<HospitalUser> getHospitalUserList() throws Exception {
         String sql = "select * from V_HSBHI_WORKERINFO";
 
-        Object[] params = new Object[]{};
         List<HospitalUser> hospitalUserList = null;
         hospitalUserList = hisJdbcTemplate.query(sql,
-                new RowMapper<HospitalUser>() {
-                    public HospitalUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        HospitalUser hospitalUser = new HospitalUser();
-                        hospitalUser.setId(Util.null2String(rs.getString("ZZZGID")));
-                        hospitalUser.setWorkId(Util.null2String(rs.getString("ZZZGGH")));
-                        hospitalUser.setName(Util.null2String(rs.getString("ZZZGXM")));
-                        hospitalUser.setPhone(Util.null2String(rs.getString("ZZZGXM")));
-                        return hospitalUser;
-                    }
-                });
-
+            new RowMapper<HospitalUser>() {
+                public HospitalUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    HospitalUser hospitalUser = new HospitalUser();
+                    hospitalUser.setId(Util.null2String(rs.getString("ZZZGID")));
+                    hospitalUser.setWorkId(Util.null2String(rs.getString("ZZZGGH")));
+                    hospitalUser.setName(Util.null2String(rs.getString("ZZZGXM")));
+                    hospitalUser.setPhone(Util.null2String(rs.getString("ZZZGXM")));
+                    return hospitalUser;
+                }
+            });
         return hospitalUserList;
+    }
+
+    public List<HisTestPurpose> getHisTestPurposeList(String id) {
+        String sql = "select * from V_HSBDI_ORDERITEM where ZLXMLB like 'L%' and ZLXMID>" + id ;
+        List<HisTestPurpose> hisTestPurposeList = null;
+        hisTestPurposeList = hisJdbcTemplate.query(sql,
+            new RowMapper<HisTestPurpose>() {
+                public HisTestPurpose mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    HisTestPurpose hisTestPurpose = new HisTestPurpose();
+                    hisTestPurpose.setId(Util.null2String(rs.getString("ZLXMID")));
+                    hisTestPurpose.setName(Util.null2String(rs.getString("ZLXMMC")));
+                    hisTestPurpose.setIsInPatient(Util.null2String(rs.getString("ZYSYPB")));
+                    hisTestPurpose.setIsOutPatient(Util.null2String(rs.getString("MZSYPB")));
+                    hisTestPurpose.setPinyin(Util.null2String(rs.getString("HZSRM1")));
+                    hisTestPurpose.setPrice(Util.null2String(rs.getString("SFXMDJ")));
+                    hisTestPurpose.setType(Util.null2String(rs.getString("ZLXMLB")));
+                    hisTestPurpose.setWubi(Util.null2String(rs.getString("HZSRM2")));
+                    return hisTestPurpose;
+                }
+            });
+        return hisTestPurposeList;
     }
 }

@@ -106,7 +106,7 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
     }
 
     /**
-     * 获取检验目的列表
+     * 获取检验目的列表,细菌用
      * @return
      */
     public String getTestPurposeList() {
@@ -114,6 +114,23 @@ public class LisInfoServiceImpl extends SpringBeanAutowiringSupport implements L
         try {
             msg.setState(1);
             msg.setMessage(lisInfoDao.getTestPurposeList());
+        } catch (Exception e) {
+            log.error("获取检验信息异常",e);
+            msg.setState(0);
+            msg.setMessage(e.getMessage());
+        }
+        return JSON.toJSONString(msg,filter);
+    }
+
+    /**
+     * 获取检验目的列表，LIS更新目的用
+     * @return
+     */
+    public String getHisTestPurposeList(String id) {
+        ReturnMsg msg = new ReturnMsg();
+        try {
+            msg.setState(1);
+            msg.setMessage(hisInfoDao.getHisTestPurposeList(id));
         } catch (Exception e) {
             log.error("获取检验信息异常",e);
             msg.setState(0);

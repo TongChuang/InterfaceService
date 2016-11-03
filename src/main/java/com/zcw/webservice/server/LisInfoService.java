@@ -52,7 +52,7 @@ public interface LisInfoService {
     String  getBacteriaList();
 
     /**
-     * 获取检验目的列表
+     * 获取检验目的列表，细菌用
      *
      * @return 返回Json检验目的[{key:value},{...}]
      */
@@ -60,6 +60,16 @@ public interface LisInfoService {
     @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
     @Path(value = "/getTestPurposeList")
     String getTestPurposeList();
+
+    /**
+     * 获取检验目的列表，更新LIS检验目的
+     * @param id  LIS最新检验目的ID
+     * @return 返回Json检验目的[{key:value},{...}]
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON+ ";charset=UTF-8"})
+    @Path(value = "/getHisTestPurposeList/{id}")
+    String getHisTestPurposeList(@PathParam("id") String id);
 
     /**
      * 获取药敏信息列表
